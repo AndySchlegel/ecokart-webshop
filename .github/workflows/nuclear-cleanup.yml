@@ -161,6 +161,55 @@ jobs:
           fi
         continue-on-error: true
 
+      - name: 🗑️ Delete API Gateway Custom Domains
+        run: |
+          echo "🗑️ Deleting API Gateway Custom Domains..."
+
+          # Liste alle Custom Domains für his4irness23.de
+          DOMAINS=$(aws apigateway get-domain-names \
+            --region ${{ env.AWS_REGION }} \
+            --query "items[?contains(domainName, 'his4irness23.de')].domainName" \
+            --output text)
+
+          if [ -z "$DOMAINS" ]; then
+            echo "   ℹ️  No API Gateway Custom Domains found"
+          else
+            for domain in $DOMAINS; do
+              echo "   - Deleting Custom Domain: $domain"
+
+              # Hole Base Path Mappings und lösche sie zuerst
+              echo "     - Checking for Base Path Mappings..."
+              BASE_PATHS=$(aws apigateway get-base-path-mappings \
+                --domain-name "$domain" \
+                --region ${{ env.AWS_REGION }} \
+                --query 'items[*].basePath' \
+                --output text 2>/dev/null || echo "")
+
+              if [ -n "$BASE_PATHS" ]; then
+                for base_path in $BASE_PATHS; do
+                  # Empty string für root path wird als "(none)" angezeigt
+                  if [ "$base_path" = "(none)" ]; then
+                    base_path=""
+                  fi
+                  echo "       - Deleting Base Path Mapping: ${base_path:-'/'}"
+                  aws apigateway delete-base-path-mapping \
+                    --domain-name "$domain" \
+                    --base-path "$base_path" \
+                    --region ${{ env.AWS_REGION }} || true
+                done
+              fi
+
+              # Lösche Custom Domain
+              echo "     - Deleting Domain..."
+              aws apigateway delete-domain-name \
+                --domain-name "$domain" \
+                --region ${{ env.AWS_REGION }} || true
+
+              echo "   ✅ Custom Domain deleted: $domain"
+            done
+          fi
+        continue-on-error: true
+
       - name: 🗑️ Delete API Gateways (REST APIs)
         run: |
           echo "🗑️ Deleting REST API Gateways for ${{ inputs.environment }}..."
