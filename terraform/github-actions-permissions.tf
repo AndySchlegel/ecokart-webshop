@@ -42,6 +42,18 @@ resource "aws_iam_role_policy" "custom_domain_permissions" {
           "acm:ListTagsForCertificate"
         ]
         Resource = "*"
+      },
+      {
+        Sid    = "Route53CustomDomain"
+        Effect = "Allow"
+        Action = [
+          "route53:ListHostedZones",
+          "route53:ChangeResourceRecordSets",
+          "route53:GetChange",
+          "route53:ListResourceRecordSets",
+          "route53:GetHostedZone"
+        ]
+        Resource = "*"
       }
     ]
   })
