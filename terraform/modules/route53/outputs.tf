@@ -87,6 +87,5 @@ output "registrar_setup_instructions" {
 
     ✅ Nach Name Server Änderung: DNS wird vollständig von AWS verwaltet
 
-  EOT
-  : null
+  EOT : null
 }
