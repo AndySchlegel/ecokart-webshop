@@ -368,6 +368,33 @@ variable "admin_subdomain" {
 }
 
 # ----------------------------------------------------------------------------
+# Route53 DNS Management (Optional)
+# ----------------------------------------------------------------------------
+
+variable "enable_route53" {
+  description = <<-EOT
+    Route53 Hosted Zone für vollständige DNS-Automatisierung aktivieren?
+
+    true  = Erstellt Route53 Hosted Zone + automatische DNS Records
+            → Eliminiert manuelle DNS-Konfiguration in Infomaniak
+            → 100% reproduzierbare Infrastruktur via Terraform
+            → Kosten: ~$0.50/Monat pro Hosted Zone
+
+    false = Manuelle DNS-Konfiguration in Infomaniak erforderlich
+            → ACM Validation Records manuell erstellen
+            → CNAME Records manuell erstellen
+            → Nicht reproduzierbar
+
+    WICHTIG: Bei enable_route53=true müssen Name Server bei Infomaniak
+             geändert werden (einmalig)! Siehe Terraform Outputs.
+
+    Empfehlung: true für Production (100% Automation)
+  EOT
+  type        = bool
+  default     = false
+}
+
+# ----------------------------------------------------------------------------
 # Tagging
 # ----------------------------------------------------------------------------
 

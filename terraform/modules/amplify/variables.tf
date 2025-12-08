@@ -122,6 +122,22 @@ variable "custom_domain_name" {
 }
 
 # ----------------------------------------------------------------------------
+# Route53 Integration (Optional)
+# ----------------------------------------------------------------------------
+
+variable "route53_zone_id" {
+  description = "Route53 Hosted Zone ID for automatic DNS record creation (optional)"
+  type        = string
+  default     = null
+}
+
+variable "enable_route53_records" {
+  description = "Whether to automatically create Route53 DNS records (requires route53_zone_id)"
+  type        = bool
+  default     = true
+}
+
+# ----------------------------------------------------------------------------
 # Tagging
 # ----------------------------------------------------------------------------
 

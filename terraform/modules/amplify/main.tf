@@ -161,6 +161,34 @@ resource "aws_amplify_domain_association" "custom_domain" {
 }
 
 # ----------------------------------------------------------------------------
+# Route53 DNS Records for Amplify Custom Domain (Optional)
+# ----------------------------------------------------------------------------
+# Automatische DNS Records für Amplify Custom Domain
+#
+# NOTE: ACM Certificate Validation für Amplify-managed Certificates kann
+#       NICHT automatisch via Terraform erstellt werden, da Amplify die
+#       Validation Records nicht als strukturierte Daten exposed.
+#       Die Validation muss entweder:
+#       1. Manuell in Route53 erstellt werden (einmalig)
+#       2. Amplify überlässt das Management (automatisch nach 24h)
+#
+# Hier erstellen wir NUR den CNAME Record für die Custom Domain selbst.
+
+# Custom Domain CNAME → Amplify CloudFront Distribution
+resource "aws_route53_record" "amplify_custom_domain" {
+  count = var.enable_custom_domain && var.route53_zone_id != null && var.enable_route53_records ? 1 : 0
+
+  zone_id = var.route53_zone_id
+  name    = var.custom_domain_name
+  type    = "CNAME"
+  ttl     = 300
+  records = [aws_amplify_domain_association.custom_domain[0].sub_domain[0].dns_target]
+
+  allow_overwrite = true
+  depends_on      = [aws_amplify_domain_association.custom_domain]
+}
+
+# ----------------------------------------------------------------------------
 # Automatic Initial Build Trigger
 # ----------------------------------------------------------------------------
 # Startet automatisch den ersten Build nach Terraform Apply

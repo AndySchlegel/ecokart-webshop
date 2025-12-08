@@ -105,6 +105,20 @@ admin_subdomain = "admin"  # → admin.his4irness23.de
 # Verwende: terraform output dns_records_for_infomaniak
 
 # ----------------------------------------------------------------------------
+# Route53 DNS Management
+# ----------------------------------------------------------------------------
+
+# Route53 aktivieren für 100% automatische DNS-Verwaltung
+# Eliminiert manuelle DNS-Schritte in Infomaniak
+enable_route53 = true
+
+# WICHTIG: Nach erstem Deploy mit enable_route53=true:
+# 1. Terraform zeigt Name Server in Outputs
+# 2. Diese Name Server bei Infomaniak eintragen (einmalig!)
+# 3. DNS Propagation abwarten (5-60 Minuten)
+# 4. Danach sind ALLE DNS-Changes automatisch via Terraform
+
+# ----------------------------------------------------------------------------
 # Zusätzliche Tags
 # ----------------------------------------------------------------------------
 

@@ -194,7 +194,37 @@ module "custom_domain" {
   environment = var.environment
   tags        = local.common_tags
 
-  depends_on = [module.lambda]
+  # Route53 Integration (Optional)
+  route53_zone_id      = var.enable_route53 ? module.route53[0].zone_id : null
+  enable_route53_records = var.enable_route53
+
+  depends_on = [module.lambda, module.route53]
+}
+
+# ----------------------------------------------------------------------------
+# Route53 Module - DNS Management (Optional)
+# ----------------------------------------------------------------------------
+# Erstellt Route53 Hosted Zone für vollständige DNS-Automatisierung
+# Eliminiert manuelle DNS-Konfiguration in Infomaniak
+#
+# WICHTIG: Nach Erstellung müssen Name Server bei Infomaniak geändert werden!
+#          Siehe: terraform output route53_nameserver_instructions
+
+module "route53" {
+  count  = var.enable_route53 ? 1 : 0
+  source = "./modules/route53"
+
+  # Domain Configuration
+  domain_name        = var.domain_name
+  create_hosted_zone = true
+
+  # ACM Certificate Validation Records
+  # Werden automatisch von Custom Domain und Amplify Modulen übergeben
+  acm_certificate_validation_options = []
+
+  # Metadata
+  environment = var.environment
+  tags        = local.common_tags
 }
 
 # ----------------------------------------------------------------------------
@@ -254,9 +284,13 @@ module "amplify" {
   enable_custom_domain = var.enable_custom_domain
   custom_domain_name   = var.enable_custom_domain ? "${var.shop_subdomain}.${var.domain_name}" : ""
 
+  # Route53 Integration (Optional)
+  route53_zone_id      = var.enable_route53 ? module.route53[0].zone_id : null
+  enable_route53_records = var.enable_route53
+
   tags = local.common_tags
 
-  depends_on = [module.lambda, module.cognito]
+  depends_on = [module.lambda, module.cognito, module.route53]
 }
 
 # ----------------------------------------------------------------------------
@@ -315,9 +349,13 @@ module "amplify_admin" {
   enable_custom_domain = var.enable_custom_domain
   custom_domain_name   = var.enable_custom_domain ? "${var.admin_subdomain}.${var.domain_name}" : ""
 
+  # Route53 Integration (Optional)
+  route53_zone_id      = var.enable_route53 ? module.route53[0].zone_id : null
+  enable_route53_records = var.enable_route53
+
   tags = local.common_tags
 
-  depends_on = [module.lambda, module.cognito]
+  depends_on = [module.lambda, module.cognito, module.route53]
 }
 
 # ----------------------------------------------------------------------------

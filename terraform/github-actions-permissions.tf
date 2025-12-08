@@ -44,14 +44,23 @@ resource "aws_iam_role_policy" "custom_domain_permissions" {
         Resource = "*"
       },
       {
-        Sid    = "Route53CustomDomain"
+        Sid    = "Route53Management"
         Effect = "Allow"
         Action = [
+          # Hosted Zone Management
+          "route53:CreateHostedZone",
+          "route53:DeleteHostedZone",
+          "route53:GetHostedZone",
+          "route53:GetHostedZoneCount",
           "route53:ListHostedZones",
+          "route53:UpdateHostedZoneComment",
+          # DNS Records Management
           "route53:ChangeResourceRecordSets",
           "route53:GetChange",
           "route53:ListResourceRecordSets",
-          "route53:GetHostedZone"
+          # Tagging
+          "route53:ChangeTagsForResource",
+          "route53:ListTagsForResource"
         ]
         Resource = "*"
       }
