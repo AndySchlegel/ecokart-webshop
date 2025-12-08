@@ -9,10 +9,10 @@ data "aws_iam_role" "github_actions" {
   name = "ecokart-github-actions-role"
 }
 
-# IAM Policy für Custom Domain Support
-resource "aws_iam_policy" "custom_domain_permissions" {
-  name        = "ecokart-custom-domain-permissions"
-  description = "Permissions für Amplify + API Gateway Custom Domains"
+# Inline Policy für Custom Domain Support (umgeht 10-Policy-Limit)
+resource "aws_iam_role_policy" "custom_domain_permissions" {
+  name = "ecokart-custom-domain-permissions"
+  role = data.aws_iam_role.github_actions.name
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -44,14 +44,6 @@ resource "aws_iam_policy" "custom_domain_permissions" {
       }
     ]
   })
-
-  tags = local.common_tags
-}
-
-# Attach Policy zur GitHub Actions Role
-resource "aws_iam_role_policy_attachment" "custom_domain_permissions" {
-  role       = data.aws_iam_role.github_actions.name
-  policy_arn = aws_iam_policy.custom_domain_permissions.arn
 }
 
 # Data Source für Account ID (wird in Policy verwendet)
