@@ -58,34 +58,34 @@ output "custom_records" {
 
 output "registrar_setup_instructions" {
   description = "Instructions for updating name servers at domain registrar (Infomaniak)"
-  value = var.create_hosted_zone ? <<-EOT
+  value       = var.create_hosted_zone ? format(<<-EOT
+╔═══════════════════════════════════════════════════════════════════╗
+║          Route53 Hosted Zone Created - Action Required!          ║
+╚═══════════════════════════════════════════════════════════════════╝
 
-    ╔═══════════════════════════════════════════════════════════════════╗
-    ║          Route53 Hosted Zone Created - Action Required!          ║
-    ╚═══════════════════════════════════════════════════════════════════╝
+📋 Domain: %s
 
-    📋 Domain: ${var.domain_name}
+🔧 WICHTIG: Name Server bei Domain-Registrar (Infomaniak) ändern!
 
-    🔧 WICHTIG: Name Server bei Domain-Registrar (Infomaniak) ändern!
+Schritte:
+────────────────────────────────────────────────────────────────────
+1. Login bei Infomaniak (manager.infomaniak.com)
 
-    Schritte:
-    ────────────────────────────────────────────────────────────────────
-    1. Login bei Infomaniak (manager.infomaniak.com)
+2. Domain "%s" auswählen
 
-    2. Domain "${var.domain_name}" auswählen
+3. DNS/Nameserver Einstellungen öffnen
 
-    3. DNS/Nameserver Einstellungen öffnen
+4. Diese AWS Route53 Name Server eintragen:
+   %s
 
-    4. Diese AWS Route53 Name Server eintragen:
-       ${join("\n       ", var.create_hosted_zone ? aws_route53_zone.main[0].name_servers : [])}
+5. Speichern & DNS Propagation abwarten (5-60 Minuten)
 
-    5. Speichern & DNS Propagation abwarten (5-60 Minuten)
+⚠️  ACHTUNG: Alle existierenden DNS-Records in Infomaniak werden
+   ungültig sobald Name Server geändert sind! Alle Records müssen
+   in Terraform/Route53 konfiguriert werden.
 
-    ⚠️  ACHTUNG: Alle existierenden DNS-Records in Infomaniak werden
-       ungültig sobald Name Server geändert sind! Alle Records müssen
-       in Terraform/Route53 konfiguriert werden.
+✅ Nach Name Server Änderung: DNS wird vollständig von AWS verwaltet
 
-    ✅ Nach Name Server Änderung: DNS wird vollständig von AWS verwaltet
-
-  EOT : null
+EOT
+    , var.domain_name, var.domain_name, join("\n   ", aws_route53_zone.main[0].name_servers)) : null
 }
