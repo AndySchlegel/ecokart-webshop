@@ -163,31 +163,23 @@ resource "aws_amplify_domain_association" "custom_domain" {
 # ----------------------------------------------------------------------------
 # Route53 DNS Records for Amplify Custom Domain (Optional)
 # ----------------------------------------------------------------------------
-# Automatische DNS Records für Amplify Custom Domain
+# WICHTIG: Amplify Custom Domains managen DNS automatisch!
 #
-# NOTE: ACM Certificate Validation für Amplify-managed Certificates kann
-#       NICHT automatisch via Terraform erstellt werden, da Amplify die
-#       Validation Records nicht als strukturierte Daten exposed.
-#       Die Validation muss entweder:
-#       1. Manuell in Route53 erstellt werden (einmalig)
-#       2. Amplify überlässt das Management (automatisch nach 24h)
+# Wenn Route53 Hosted Zone verwendet wird UND Name Server korrekt gesetzt sind,
+# erstellt Amplify automatisch:
+# - ACM Certificate (managed by Amplify)
+# - DNS Validation Records (automatisch in Route53)
+# - CNAME zu CloudFront (automatisch in Route53)
 #
-# Hier erstellen wir NUR den CNAME Record für die Custom Domain selbst.
-
-# Custom Domain CNAME → Amplify CloudFront Distribution
-resource "aws_route53_record" "amplify_custom_domain" {
-  count = var.enable_custom_domain && var.enable_route53_records ? 1 : 0
-
-  zone_id = var.route53_zone_id
-  name    = var.custom_domain_name
-  type    = "CNAME"
-  ttl     = 300
-  # sub_domain is a set, convert to list to access first element
-  records = [tolist(aws_amplify_domain_association.custom_domain[0].sub_domain)[0].dns_record]
-
-  allow_overwrite = true
-  depends_on      = [aws_amplify_domain_association.custom_domain]
-}
+# Wir müssen KEINE manuellen CNAME Records erstellen!
+# Der Domain Association Prozess:
+# 1. Route53 Hosted Zone erstellen (via route53 module)
+# 2. Name Server bei Registrar (Infomaniak) ändern
+# 3. DNS Propagation abwarten (5-60 Min)
+# 4. Amplify Domain Association erstellen
+# 5. Amplify verifiziert DNS und erstellt Records automatisch
+#
+# REMOVED: Manuelle CNAME Erstellung führte zu Konflikten und "value contains spaces" Errors
 
 # ----------------------------------------------------------------------------
 # Automatic Initial Build Trigger
