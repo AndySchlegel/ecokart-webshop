@@ -38,7 +38,8 @@ resource "aws_iam_role_policy" "custom_domain_permissions" {
           "acm:DeleteCertificate",
           "acm:AddTagsToCertificate",
           "acm:ListCertificates",
-          "acm:GetCertificate"
+          "acm:GetCertificate",
+          "acm:ListTagsForCertificate"
         ]
         Resource = "*"
       }
