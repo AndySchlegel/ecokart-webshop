@@ -182,7 +182,8 @@ resource "aws_route53_record" "amplify_custom_domain" {
   name    = var.custom_domain_name
   type    = "CNAME"
   ttl     = 300
-  records = [aws_amplify_domain_association.custom_domain[0].sub_domain[0].dns_target]
+  # sub_domain is a set, convert to list to access first element
+  records = [tolist(aws_amplify_domain_association.custom_domain[0].sub_domain)[0].dns_target]
 
   allow_overwrite = true
   depends_on      = [aws_amplify_domain_association.custom_domain]
