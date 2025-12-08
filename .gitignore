@@ -43,6 +43,24 @@ Project Info Claude Code/
 .terraform/
 .terraform.lock.hcl
 
+# Terraform Secrets (CRITICAL: Never commit secrets!)
+*.auto.tfvars
+secrets.tfvars
+secrets.auto.tfvars
+terraform.tfvars
+**/terraform.tfvars
+# Exception: Example tfvars in environments/ are OK (no secrets)
+!terraform/environments/*.tfvars
+!terraform/examples/**/*.tfvars
+
 # Misc
 *.tsbuildinfo
 .cache/
+
+# Lambda Deployment
+backend/lambda-deployment.zip
+backend/*.zip
+
+# Terraform Plans
+terraform/tfplan*
+terraform/**/*.tfplan

@@ -2180,8 +2180,362 @@ describe('CartController', () => {
 
 ---
 
+### 30. Stripe Webhook Handler - Complete Payment Flow
+
+**Date:** 3. Dezember 2025
+**Context:** Nach Stripe Checkout redirect (gestern gelöst), jetzt Webhook Handler für Order Creation
+**Category:** Payment Integration, Webhooks, Debugging
+
+**Das Problem:**
+Nach erfolgreichem Stripe Checkout:
+1. ❌ Cart wurde nicht geleert
+2. ❌ Order wurde nicht erstellt (oder wurde sie?)
+3. ❌ Stock wurde nicht abgezogen (oder wurde er?)
+
+**Root Cause Analysis:**
+
+**Problem 1: Webhook Signature Verification Failed**
+```
+ERROR: Webhook signature verification failed
+Error: No signatures found matching the expected signature for payload
+```
+
+**Ursache:**
+- `STRIPE_WEBHOOK_SECRET` in Lambda stimmte nicht mit Secret in Stripe Dashboard überein
+- Old Secret: `whsec_f240268...` (in Lambda via GitHub Secrets)
+- New Secret: `whsec_ehbDaRPdS9nOhvTg9JnTbpC5LTBWFd3R` (in Stripe Dashboard)
+- **Mismatch** → Signature Verification fails → Webhook aborted
+
+**Problem 2: Cart wurde nicht geleert (trotz Success Log!)**
+```typescript
+// ❌ FALSCH - cart.id existiert nicht als Key!
+await database.updateCart(cart.id, { items: [] });
+
+// Table Key Schema: userId (not id!)
+```
+
+**Die Logs sagten:**
+```
+✅ Cart cleared after order creation
+```
+
+**Aber DynamoDB zeigte:**
+```
+Cart still has items!
+```
+
+**Warum?**
+- `ecokart-carts` Table hat `userId` als Primary Key
+- Code verwendete `cart.id` → Item nicht gefunden
+- `updateCart()` schlug fehl aber **warf keinen sichtbaren Error!**
+- Logger.info() lief trotzdem → irreführende Success Message
+
+**Die Lösung:**
+
+**1. Webhook Secret synchronisieren:**
+```bash
+# In GitHub Repo Settings → Secrets → Actions
+STRIPE_WEBHOOK_SECRET=whsec_ehbDaRPdS9nOhvTg9JnTbpC5LTBWFd3R
+# (Exact value from Stripe Dashboard)
+
+# Deploy → Lambda bekommt neuen Secret
+```
+
+**2. Cart Clear Bug fixen:**
+```typescript
+// ✅ RICHTIG - userId ist der Primary Key!
+await database.updateCart(userId, { items: [] });
+```
+
+**Systematisches Debugging:**
+```
+1. CloudWatch Logs checken → Signature Error!
+2. Lambda Env Var checken → Old secret
+3. Stripe Dashboard checken → New secret
+4. Secret update → Deploy → Test
+
+5. Logs sagen "Cart cleared" → Aber ist er wirklich?
+6. DynamoDB query → Cart NOT empty!
+7. Code review → cart.id vs userId Problem!
+8. Table schema checken → Key is userId
+9. Fix → Deploy → Test → SUCCESS!
+```
+
+**Complete Payment Flow:**
+```
+User → Add to Cart → Checkout
+  ↓
+Stripe Checkout Session
+  ↓ (payment successful)
+Stripe sends Webhook: checkout.session.completed
+  ↓
+Lambda: webhookController.handleStripeWebhook()
+  ↓
+1. Verify signature (STRIPE_WEBHOOK_SECRET)
+2. Extract metadata (userId, cartId, shippingAddress)
+3. Get cart from DynamoDB
+4. Create order
+5. Deduct stock (reserved → actual)
+6. Clear cart (userId!)
+7. Return 200 OK to Stripe
+```
+
+**Incremental Deploys FTW:**
+```
+Früher: Nuclear cleanup → Alles neu aufbauen
+Jetzt:  Code ändern → Deploy → UPDATE! (kein destroy!)
+
+Warum? State ist korrekt vom letzten erfolgreichen Deploy
+Terraform macht incrementelles Update:
+  - Lambda Code changed → Update Lambda
+  - API Gateway unchanged → Skip
+  - DynamoDB unchanged → Skip
+```
+
+**Best Practices:**
+
+**1. Webhook Secret Management:**
+```
+✅ DO: Store in GitHub Secrets (or AWS Secrets Manager)
+✅ DO: Sync with Stripe Dashboard webhook secret
+✅ DO: Update both when rotating secrets
+❌ DON'T: Hardcode in code
+❌ DON'T: Commit to git
+```
+
+**2. DynamoDB Key Schema:**
+```typescript
+// ALWAYS check table key schema first!
+const tableSchema = await dynamodb.describeTable('ecokart-carts');
+// Key: userId (HASH)
+
+// Then use correct key in queries:
+await database.updateCart(userId, ...);  // ✅
+await database.updateCart(cart.id, ...); // ❌
+```
+
+**3. Logging vs Reality:**
+```typescript
+// ❌ BAD: Log before verification
+await database.updateCart(...);
+logger.info('Cart cleared'); // Might be false!
+
+// ✅ BETTER: Log after verification or add error handling
+try {
+  await database.updateCart(userId, { items: [] });
+  logger.info('Cart cleared successfully');
+} catch (err) {
+  logger.error('Failed to clear cart', err);
+  throw err; // Propagate error
+}
+```
+
+**4. Systematic Debugging:**
+```
+Step 1: Read Logs (CloudWatch)
+Step 2: Check State (DynamoDB)
+Step 3: Compare (Logs say X, State shows Y → Bug!)
+Step 4: Find Root Cause (Code Review + Schema Check)
+Step 5: Fix + Test + Verify
+```
+
+**Key Takeaways:**
+1. **Secret Sync is Critical:** Webhook secrets MUST match exactly
+2. **Trust but Verify:** Logs können lügen - check actual state!
+3. **Know Your Schema:** Table key schema bestimmt wie du queries machst
+4. **Incremental Deploys:** Kein Nuclear mehr nötig! (solange State korrekt)
+5. **Slow Down:** "Manchmal bist du zu schnell" - systematisch debuggen!
+
+**Timing & Effort:**
+- Webhook Handler Implementation: ~1 Stunde
+- Secret Debugging: ~30 Minuten
+- Cart Clear Bug Finding: ~1 Stunde (durch systematic debugging)
+- Total: ~2.5 Stunden
+
+**Files Modified:**
+- `backend/src/controllers/webhookController.ts` - Added stock deduction, fixed cart clear
+- GitHub Secrets - Updated STRIPE_WEBHOOK_SECRET
+- Deployed via GitHub Actions (incremental!)
+
+**Learned from:** 3. Dezember 2025 - Stripe Webhook Complete Payment Flow
+
+---
+
+### 31. Incremental Deploys - Der Game Changer
+
+**Date:** 3. Dezember 2025
+**Context:** Zweiter Deploy heute - kein Nuclear notwendig!
+**Category:** DevOps, Terraform, Workflow Optimization
+
+**Das Problem (in der Vergangenheit):**
+```
+Jeder Deploy = Nuclear Cleanup + Alles neu aufbauen
+Warum? State war korrupt/inkonsistent
+Resultat: 10-15 Minuten pro Deploy, API Gateway URL ändert sich
+```
+
+**Die Entdeckung:**
+```bash
+# Heute: Code geändert (webhookController.ts)
+git commit && git push
+
+# GitHub Actions triggered
+# Terraform Plan zeigt: Lambda Function will be UPDATED (not destroyed!)
+# Terraform Apply: SUCCESS in 2 minutes!
+
+# API Gateway URL: UNCHANGED! ✅
+# DynamoDB: UNCHANGED! ✅
+# Nur Lambda: UPDATED! ✅
+```
+
+**Warum funktioniert das jetzt?**
+
+**Vorher:**
+```
+State: Korrupt oder fehlte
+Terraform: "Ich weiß nicht was existiert"
+→ CREATE fails (already exists)
+→ Nuclear cleanup nötig
+```
+
+**Jetzt:**
+```
+State: Korrekt (vom letzten erfolgreichen Deploy)
+Terraform: "Ich weiß was existiert"
+→ Erkennt Änderungen
+→ UPDATE! (kein CREATE/DESTROY)
+```
+
+**Der Workflow:**
+
+**Development Session:**
+```
+1. Session Start (optional: Nuclear wenn nach langer Pause)
+2. Code ändern → Commit → Push → Deploy (incremental!)
+3. Weitere Änderungen → Deploy (incremental!)
+4. Weitere Änderungen → Deploy (incremental!)
+5. Session End → Nuclear (Kosten sparen)
+```
+
+**Nächste Session:**
+```
+1. Session Start → Deploy (erstellt alles neu)
+2. Ab jetzt: Incremental deploys! ✅
+```
+
+**Benefits:**
+
+**1. Zeit:**
+```
+Nuclear + Rebuild: ~10-15 Minuten
+Incremental Update: ~2-3 Minuten
+Zeitersparnis: ~70-80%!
+```
+
+**2. Reproducibility:**
+```
+API Gateway URL: bleibt gleich! ✅
+Webhook in Stripe: muss nicht geändert werden! ✅
+Frontend URLs: bleiben gleich! ✅
+```
+
+**3. Confidence:**
+```
+Weniger moving parts → Weniger kann schiefgehen
+State ist vertrauenswürdig
+Deployments sind vorhersagbar
+```
+
+**Was wird wann deployed?**
+
+**Backend Changes (backend/**):**
+```yaml
+# .github/workflows/deploy.yml triggers on:
+paths:
+  - 'backend/**'
+
+# Result:
+- Lambda: UPDATED ✅
+- API Gateway: UNCHANGED
+- DynamoDB: UNCHANGED
+- Amplify: NO REDEPLOY (Frontend unverändert)
+```
+
+**Frontend Changes (frontend/**):**
+```yaml
+# Amplify watches GitHub Branch
+paths:
+  - 'frontend/**'
+
+# Result:
+- Amplify: AUTO REDEPLOY ✅
+- Lambda: UNCHANGED
+- Other resources: UNCHANGED
+```
+
+**Infrastructure Changes (terraform/**):**
+```yaml
+paths:
+  - 'terraform/**'
+
+# Result:
+- Terraform: PLAN + APPLY
+- Changed resources: UPDATED
+- Unchanged resources: SKIPPED
+```
+
+**Best Practices:**
+
+**1. Protect Your State:**
+```bash
+# State ist heilig!
+# NEVER manually edit state
+# NEVER delete state (unless Nuclear cleanup)
+# ALWAYS backup before risky operations
+```
+
+**2. Commit Frequently:**
+```bash
+# Small, atomic commits
+# Each commit = deployable
+# Easy to revert if needed
+```
+
+**3. Use Nuclear Cleanup Strategically:**
+```bash
+# WHEN:
+- End of session (save costs)
+- State is corrupted
+- Major architectural changes
+
+# NOT:
+- During development
+- For code changes
+- For bug fixes
+```
+
+**Key Takeaways:**
+1. **Incremental Deploys sind möglich!** (State muss nur korrekt sein)
+2. **Massive Zeitersparnis** (2 min vs 15 min)
+3. **API URLs bleiben gleich** (100% reproducibility during session)
+4. **Nuclear nur am Session-Ende** (Kosten sparen)
+5. **Vertrauen in Terraform State** (ist nicht mehr unser Feind!)
+
+**User Feedback:**
+> "Bisher hat der workflow bei bestehenden Resourcen immer ein failed geworfen"
+→ Jetzt nicht mehr! State ist korrekt, incremental updates work!
+
+**Timing & Impact:**
+- First Deploy (after Nuclear): ~10 minutes (creates everything)
+- Subsequent Deploys: ~2 minutes (updates only changed resources)
+- **Impact:** 5x faster iteration during development!
+
+**Learned from:** 3. Dezember 2025 - Incremental Deploy Discovery
+
+---
+
 **Erstellt:** 19. November 2025
-**Letzte Updates:** 25. November 2025 (Phase 2 - Automated Testing)
+**Letzte Updates:** 3. Dezember 2025 (Stripe Payment Flow Complete + Incremental Deploys)
 **Autor:** Andy Schlegel
 **Projekt:** Ecokart E-Commerce Platform
 **Status:** Living Document (wird kontinuierlich erweitert)

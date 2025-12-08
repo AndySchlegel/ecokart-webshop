@@ -61,6 +61,30 @@ output "webhook_arn" {
 }
 
 # ----------------------------------------------------------------------------
+# Custom Domain Outputs
+# ----------------------------------------------------------------------------
+
+output "custom_domain_enabled" {
+  description = "Ist Custom Domain aktiviert?"
+  value       = var.enable_custom_domain
+}
+
+output "custom_domain_name" {
+  description = "Custom Domain Name"
+  value       = var.enable_custom_domain ? var.custom_domain_name : null
+}
+
+output "custom_domain_certificate_verification_records" {
+  description = "DNS Records für Zertifikat-Validierung"
+  value       = var.enable_custom_domain ? aws_amplify_domain_association.custom_domain[0].certificate_verification_dns_record : null
+}
+
+output "custom_domain_sub_domains" {
+  description = "Sub-Domain DNS Records (CNAME Targets)"
+  value       = var.enable_custom_domain ? aws_amplify_domain_association.custom_domain[0].sub_domain : null
+}
+
+# ----------------------------------------------------------------------------
 # Helpful Commands
 # ----------------------------------------------------------------------------
 

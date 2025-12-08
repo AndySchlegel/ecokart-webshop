@@ -135,21 +135,30 @@ resource "aws_amplify_webhook" "main" {
 }
 
 # ----------------------------------------------------------------------------
-# Amplify Domain Association (optional)
+# Amplify Domain Association (Custom Domain)
 # ----------------------------------------------------------------------------
-# Aktuell nicht implementiert, da Custom Domain optional ist
-# Bei Bedarf kann hier aws_amplify_domain_association hinzugefügt werden
+# Verbindet Custom Domain mit Amplify App
+# Amplify erstellt automatisch:
+# - ACM Certificate (managed by Amplify)
+# - DNS Validation Records (müssen in Infomaniak erstellt werden)
+# - CNAME Target für Production Domain
 
-# resource "aws_amplify_domain_association" "custom_domain" {
-#   count = var.custom_domain != "" ? 1 : 0
-#   app_id      = aws_amplify_app.frontend.id
-#   domain_name = var.custom_domain
-#
-#   sub_domain {
-#     branch_name = aws_amplify_branch.main.branch_name
-#     prefix      = ""
-#   }
-# }
+resource "aws_amplify_domain_association" "custom_domain" {
+  count = var.enable_custom_domain ? 1 : 0
+
+  app_id      = aws_amplify_app.frontend.id
+  domain_name = var.custom_domain_name
+
+  # Main Domain (ohne Subdomain-Prefix)
+  # z.B. shop.his4irness23.de → direkter Zugriff ohne zusätzlichen Prefix
+  sub_domain {
+    branch_name = aws_amplify_branch.main.branch_name
+    prefix      = ""
+  }
+
+  # Warte auf Branch-Erstellung
+  depends_on = [aws_amplify_branch.main]
+}
 
 # ----------------------------------------------------------------------------
 # Automatic Initial Build Trigger

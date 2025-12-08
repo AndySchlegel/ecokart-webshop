@@ -106,6 +106,22 @@ variable "aws_region" {
 }
 
 # ----------------------------------------------------------------------------
+# Custom Domain
+# ----------------------------------------------------------------------------
+
+variable "enable_custom_domain" {
+  description = "Custom Domain für Amplify aktivieren"
+  type        = bool
+  default     = false
+}
+
+variable "custom_domain_name" {
+  description = "Custom Domain Name (z.B. shop.his4irness23.de)"
+  type        = string
+  default     = ""
+}
+
+# ----------------------------------------------------------------------------
 # Tagging
 # ----------------------------------------------------------------------------
 

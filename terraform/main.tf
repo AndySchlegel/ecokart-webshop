@@ -161,6 +161,43 @@ module "lambda" {
 }
 
 # ----------------------------------------------------------------------------
+# Custom Domain Module - API Gateway Custom Domain (Optional)
+# ----------------------------------------------------------------------------
+# Erstellt nur wenn enable_custom_domain=true:
+# - ACM Certificate (SSL/TLS in us-east-1)
+# - API Gateway Custom Domain
+# - Base Path Mapping
+#
+# WICHTIG: Nach Deploy DNS CNAME Records in Infomaniak erstellen!
+#          Verwende: terraform output dns_records_for_infomaniak
+
+module "custom_domain" {
+  count  = var.enable_custom_domain ? 1 : 0
+  source = "./modules/custom-domain"
+
+  # Provider Aliases (us-east-1 für ACM Certificate erforderlich!)
+  providers = {
+    aws           = aws
+    aws.us-east-1 = aws.us-east-1
+  }
+
+  # Domain Configuration
+  domain_name   = var.domain_name
+  api_subdomain = var.api_subdomain
+
+  # API Gateway Integration
+  api_gateway_id         = module.lambda.api_gateway_id
+  api_gateway_stage_name = var.api_gateway_stage_name
+
+  # Metadata
+  aws_region  = var.aws_region
+  environment = var.environment
+  tags        = local.common_tags
+
+  depends_on = [module.lambda]
+}
+
+# ----------------------------------------------------------------------------
 # Amplify Module - Frontend Hosting (Optional)
 # ----------------------------------------------------------------------------
 # Erstellt nur wenn enable_amplify=true:
@@ -212,6 +249,10 @@ module "amplify" {
     username = var.basic_auth_user
     password = var.basic_auth_password
   } : null
+
+  # Custom Domain (optional)
+  enable_custom_domain = var.enable_custom_domain
+  custom_domain_name   = var.enable_custom_domain ? "${var.shop_subdomain}.${var.domain_name}" : ""
 
   tags = local.common_tags
 
@@ -269,6 +310,10 @@ module "amplify_admin" {
     username = var.admin_basic_auth_user
     password = var.admin_basic_auth_password
   } : null
+
+  # Custom Domain (optional)
+  enable_custom_domain = var.enable_custom_domain
+  custom_domain_name   = var.enable_custom_domain ? "${var.admin_subdomain}.${var.domain_name}" : ""
 
   tags = local.common_tags
 

@@ -334,6 +334,40 @@ variable "enable_auto_seed" {
 }
 
 # ----------------------------------------------------------------------------
+# Custom Domain Configuration
+# ----------------------------------------------------------------------------
+
+variable "enable_custom_domain" {
+  description = "Custom Domain für API Gateway aktivieren?"
+  type        = bool
+  default     = false
+}
+
+variable "domain_name" {
+  description = "Base domain name (e.g., his4irness23.de)"
+  type        = string
+  default     = ""
+}
+
+variable "api_subdomain" {
+  description = "Subdomain for API (e.g., 'api' results in api.his4irness23.de)"
+  type        = string
+  default     = "api"
+}
+
+variable "shop_subdomain" {
+  description = "Subdomain for customer shop (e.g., 'shop' results in shop.his4irness23.de)"
+  type        = string
+  default     = "shop"
+}
+
+variable "admin_subdomain" {
+  description = "Subdomain for admin panel (e.g., 'admin' results in admin.his4irness23.de)"
+  type        = string
+  default     = "admin"
+}
+
+# ----------------------------------------------------------------------------
 # Tagging
 # ----------------------------------------------------------------------------
 

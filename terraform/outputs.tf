@@ -158,6 +158,57 @@ output "admin_amplify_branch_url" {
 }
 
 # ----------------------------------------------------------------------------
+# Custom Domain Outputs (conditional)
+# ----------------------------------------------------------------------------
+
+output "custom_domain_enabled" {
+  description = "Ist Custom Domain aktiviert?"
+  value       = var.enable_custom_domain
+}
+
+output "api_custom_domain_name" {
+  description = "API Custom Domain Name (z.B. api.his4irness23.de)"
+  value       = var.enable_custom_domain ? module.custom_domain[0].api_domain_name : null
+}
+
+output "api_certificate_arn" {
+  description = "ARN des SSL Zertifikats für API Domain"
+  value       = var.enable_custom_domain ? module.custom_domain[0].certificate_arn : null
+}
+
+output "dns_records_for_infomaniak" {
+  description = "DNS Records die in Infomaniak erstellt werden müssen"
+  value = var.enable_custom_domain ? {
+    api = {
+      name  = module.custom_domain[0].dns_record_for_infomaniak.name
+      type  = module.custom_domain[0].dns_record_for_infomaniak.type
+      value = module.custom_domain[0].dns_record_for_infomaniak.value
+      note  = "CNAME Record für API Gateway Custom Domain"
+    }
+    shop = var.enable_amplify && var.enable_custom_domain ? {
+      name  = "${var.shop_subdomain}.${var.domain_name}"
+      type  = "CNAME"
+      value = try(module.amplify[0].custom_domain_sub_domains[0].dns_target, "pending...")
+      note  = "CNAME Record für Shop Custom Domain (Amplify)"
+      certificate_validation = try(module.amplify[0].custom_domain_certificate_verification_records, "pending...")
+    } : null
+    admin = var.enable_admin_amplify && var.enable_custom_domain ? {
+      name  = "${var.admin_subdomain}.${var.domain_name}"
+      type  = "CNAME"
+      value = try(module.amplify_admin[0].custom_domain_sub_domains[0].dns_target, "pending...")
+      note  = "CNAME Record für Admin Custom Domain (Amplify)"
+      certificate_validation = try(module.amplify_admin[0].custom_domain_certificate_verification_records, "pending...")
+    } : null
+  } : null
+}
+
+output "certificate_validation_options" {
+  description = "Zertifikat-Validierung DNS Records (falls manuell benötigt)"
+  value       = var.enable_custom_domain ? module.custom_domain[0].certificate_domain_validation_options : null
+  sensitive   = false
+}
+
+# ----------------------------------------------------------------------------
 # Setup Instructions
 # ----------------------------------------------------------------------------
 

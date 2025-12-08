@@ -87,6 +87,24 @@ enable_cognito_auth = true
 enable_auto_seed = true
 
 # ----------------------------------------------------------------------------
+# Custom Domain Konfiguration
+# ----------------------------------------------------------------------------
+
+# Custom Domain aktivieren (für 100% reproduzierbare URLs)
+enable_custom_domain = true
+
+# Basis-Domain (bei Infomaniak registriert)
+domain_name = "his4irness23.de"
+
+# Subdomains (optional - defaults sind bereits gesetzt)
+api_subdomain   = "api"    # → api.his4irness23.de
+shop_subdomain  = "shop"   # → shop.his4irness23.de
+admin_subdomain = "admin"  # → admin.his4irness23.de
+
+# WICHTIG: Nach Deploy DNS CNAME Records in Infomaniak erstellen!
+# Verwende: terraform output dns_records_for_infomaniak
+
+# ----------------------------------------------------------------------------
 # Zusätzliche Tags
 # ----------------------------------------------------------------------------
 

@@ -37,3 +37,18 @@ provider "aws" {
     }
   }
 }
+
+# AWS Provider für us-east-1 (für ACM Certificates)
+# ACM Certificates für API Gateway MÜSSEN in us-east-1 sein!
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
+
+  default_tags {
+    tags = {
+      Project     = var.project_name
+      Environment = var.environment
+      ManagedBy   = "Terraform"
+    }
+  }
+}
