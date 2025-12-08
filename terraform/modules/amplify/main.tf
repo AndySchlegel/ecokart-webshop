@@ -176,7 +176,7 @@ resource "aws_amplify_domain_association" "custom_domain" {
 
 # Custom Domain CNAME → Amplify CloudFront Distribution
 resource "aws_route53_record" "amplify_custom_domain" {
-  count = var.enable_custom_domain && var.route53_zone_id != null && var.enable_route53_records ? 1 : 0
+  count = var.enable_custom_domain && var.enable_route53_records ? 1 : 0
 
   zone_id = var.route53_zone_id
   name    = var.custom_domain_name
