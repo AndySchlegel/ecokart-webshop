@@ -28,22 +28,23 @@ terraform {
   backend "s3" {
     # S3 Bucket Name für State Storage
     # WICHTIG: Muss global eindeutig sein!
-    bucket = "ecokart-terraform-state-729403197965"
+    # Personal AWS Account (805160323349)
+    bucket = "ecokart-terraform-state-805160323349"
 
     # Key = Pfad im Bucket wo State gespeichert wird
     # Format: {environment}/terraform.tfstate
     # Erlaubt mehrere Environments im selben Bucket
     key    = "development/terraform.tfstate"
 
-    # AWS Region
-    region = "eu-north-1"
+    # AWS Region - Personal Account
+    region = "eu-central-1"
 
     # Encryption at Rest
     encrypt = true
 
     # DynamoDB Table für State Locking
     # Verhindert dass 2 Workflows gleichzeitig State ändern
-    dynamodb_table = "ecokart-terraform-state-lock"
+    dynamodb_table = "terraform-state-lock"
 
     # ----------------------------------------------------------------
     # Wichtige Features:

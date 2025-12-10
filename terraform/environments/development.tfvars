@@ -10,7 +10,7 @@
 # Allgemeine Konfiguration
 # ----------------------------------------------------------------------------
 
-aws_region   = "eu-north-1"  # Stockholm (günstigste EU-Region)
+aws_region   = "eu-central-1"  # Frankfurt (näher zu Deutschland, Personal Account)
 project_name = "ecokart"
 environment  = "development"
 
@@ -91,7 +91,8 @@ enable_auto_seed = true
 # ----------------------------------------------------------------------------
 
 # Custom Domain aktivieren (für 100% reproduzierbare URLs)
-enable_custom_domain = true
+# ITERATION 1: Disabled - nutzen Random Amplify URLs zum Testen
+enable_custom_domain = false
 
 # Basis-Domain (bei Infomaniak registriert)
 domain_name = "his4irness23.de"
@@ -110,7 +111,8 @@ admin_subdomain = "admin"  # → admin.his4irness23.de
 
 # Route53 aktivieren für 100% automatische DNS-Verwaltung
 # Eliminiert manuelle DNS-Schritte in Infomaniak
-enable_route53 = true
+# ITERATION 1: Disabled - erst nach Basic Stack Test aktivieren
+enable_route53 = false
 
 # WICHTIG: Nach erstem Deploy mit enable_route53=true:
 # 1. Terraform zeigt Name Server in Outputs
