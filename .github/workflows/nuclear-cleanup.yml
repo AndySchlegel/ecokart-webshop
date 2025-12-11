@@ -355,25 +355,54 @@ jobs:
           fi
         continue-on-error: true
 
+      - name: 🗑️ Delete CloudWatch Metric Alarms
+        run: |
+          echo "🗑️ Deleting CloudWatch Metric Alarms for ${{ inputs.environment }}..."
+
+          # Liste alle Alarms die mit "ecokart-" beginnen
+          ALARMS=$(aws cloudwatch describe-alarms \
+            --region ${{ env.AWS_REGION }} \
+            --query "MetricAlarms[?starts_with(AlarmName, 'ecokart-')].AlarmName" \
+            --output text)
+
+          if [ -z "$ALARMS" ]; then
+            echo "   ℹ️  No CloudWatch Metric Alarms found"
+          else
+            echo "   Found alarms to delete:"
+            for alarm in $ALARMS; do
+              echo "   - Deleting alarm: $alarm"
+              aws cloudwatch delete-alarms \
+                --alarm-names "$alarm" \
+                --region ${{ env.AWS_REGION }} || true
+            done
+            echo "   ✅ All CloudWatch Metric Alarms deleted"
+          fi
+        continue-on-error: true
+
       - name: 🗑️ Delete Terraform State from S3
         run: |
-          echo "🗑️ Deleting Terraform state file..."
+          echo "🗑️ Deleting Terraform state files..."
 
           BUCKET_NAME="ecokart-terraform-state-805160323349"
-          STATE_KEY="development/terraform.tfstate"
+          STATE_KEYS=(
+            "development/terraform.tfstate"
+            "personal-development/terraform.tfstate"
+          )
 
-          if aws s3api head-object \
-            --bucket "$BUCKET_NAME" \
-            --key "$STATE_KEY" \
-            --region ${{ env.AWS_REGION }} &>/dev/null; then
+          for STATE_KEY in "${STATE_KEYS[@]}"; do
+            if aws s3api head-object \
+              --bucket "$BUCKET_NAME" \
+              --key "$STATE_KEY" \
+              --region ${{ env.AWS_REGION }} &>/dev/null; then
 
-            echo "   - Deleting state file: s3://$BUCKET_NAME/$STATE_KEY"
-            aws s3 rm "s3://$BUCKET_NAME/$STATE_KEY" --region ${{ env.AWS_REGION }}
+              echo "   - Deleting state file: s3://$BUCKET_NAME/$STATE_KEY"
+              aws s3 rm "s3://$BUCKET_NAME/$STATE_KEY" --region ${{ env.AWS_REGION }}
 
-            echo "   ✅ State file deleted"
-          else
-            echo "   ℹ️  State file already deleted or doesn't exist"
-          fi
+              echo "   ✅ State file deleted: $STATE_KEY"
+            else
+              echo "   ℹ️  State file already deleted or doesn't exist: $STATE_KEY"
+            fi
+          done
         continue-on-error: true
 
       - name: 🗑️ Delete SSM Parameters
