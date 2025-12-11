@@ -475,7 +475,7 @@ aws amplify list-apps --region eu-north-1 | grep -i ecokart
 
 - **URL:** Aus `terraform output amplify_app_url`
 - **Registration:** Eigene Email-Adresse verwenden
-- **Test-User:** `demo@ecokart.com` / `Demo1234!` (auto-created)
+- **Test-User:** `<removed - use Cognito signup>` / `<removed - use Cognito signup>` (auto-created)
 
 ### Admin Frontend
 

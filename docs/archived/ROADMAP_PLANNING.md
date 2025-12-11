@@ -15,7 +15,7 @@
 | ONE-CLICK Deployment | ✅ | `./deploy.sh` |
 | Serverless Architektur | ✅ | Lambda + DynamoDB + Amplify |
 | Product Catalog | ✅ | 31 Produkte mit Bildern |
-| Basic Auth | ✅ | Amplify-Level (`demo:test1234`) |
+| Basic Auth | ✅ | Amplify-Level (`demo:<configured via Terraform>`) |
 | JWT Auth | ✅ | User Login (aber simpel) |
 | Admin Panel | ✅ | Produkt-CRUD |
 | Cart System | ✅ | Add to Cart, View Cart |

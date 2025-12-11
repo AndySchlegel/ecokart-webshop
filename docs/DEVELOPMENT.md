@@ -427,7 +427,7 @@ availableStock = stock - reserved
 ```typescript
 {
   id: string;                  // UUID
-  email: string;               // "demo@ecokart.com"
+  email: string;               // "<removed - use Cognito signup>"
   password: string;            // bcrypt hash
   role: string;                // "user" | "admin"
   createdAt: string;
@@ -788,8 +788,8 @@ Production:  https://zzz.execute-api.eu-north-1.amazonaws.com/Prod
 - [ ] Customer Frontend deployed on Amplify
 - [ ] Admin Frontend deployed on Amplify
 - [ ] Database seeded with 31 products
-- [ ] Test user created: demo@ecokart.com
-- [ ] Admin user created: admin@ecokart.com
+- [ ] Test user created: <removed - use Cognito signup>
+- [ ] Admin user created: <ADMIN_EMAIL from ENV>
 
 ---
 

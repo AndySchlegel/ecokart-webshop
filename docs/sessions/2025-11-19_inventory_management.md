@@ -137,7 +137,7 @@ const apiUrl = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
 
 ### Fix 6: Credentials Update
 **Problem:** Dokumentation hatte falsche Credentials (dev/dev1234)
-**Lösung:** Update auf demo/test1234 in allen Docs
+**Lösung:** Update auf demo/<configured via Terraform> in allen Docs
 
 ---
 

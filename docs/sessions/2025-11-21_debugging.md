@@ -53,7 +53,7 @@
 
 ### 3. Admin User "Force Change Password"
 **Problem:**
-- Admin User (`admin@ecokart.com`) hat Status "Force change password"
+- Admin User (`<ADMIN_EMAIL from ENV>`) hat Status "Force change password"
 - Login schlägt fehl mit "Login konnte nicht abgeschlossen werden"
 - AuthContext behandelt diesen Cognito-Step nicht
 
@@ -133,7 +133,7 @@ Status:   Confirmed (manuell in AWS Console)
 
 ### Admin User
 ```
-Email:    admin@ecokart.com
+Email:    <ADMIN_EMAIL from ENV>
 Password: EcokartAdmin2025! (muss geändert werden)
 Status:   Force change password
 ```

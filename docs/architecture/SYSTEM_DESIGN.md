@@ -472,7 +472,7 @@ Wie eine große Excel-Tabelle in der Cloud:
 ```javascript
 {
   "id": "user-123",                    // Primary Key
-  "email": "demo@ecokart.com",         // GSI Key (für Login)
+  "email": "<removed - use Cognito signup>",         // GSI Key (für Login)
   "password": "$2a$10$...",            // bcrypt Hash
   "role": "user",                      // "user" oder "admin"
   "createdAt": "2025-11-01T10:00:00Z"
@@ -484,7 +484,7 @@ Wie eine große Excel-Tabelle in der Cloud:
 // Schnelles Login via Email
 GSI: email-index
   Key: email
-  Use: SELECT * WHERE email = 'demo@ecokart.com'
+  Use: SELECT * WHERE email = '<removed - use Cognito signup>'
 ```
 
 #### 3. ecokart-carts (Warenkörbe)
@@ -830,7 +830,7 @@ Access-Control-Allow-Origin:
 ```javascript
 // NIEMALS Plaintext!
 // Falsch:
-{ password: "test1234" }
+{ password: "<configured via Terraform>" }
 
 // Richtig (bcrypt):
 { password: "$2a$10$Xyz..." }

@@ -84,9 +84,9 @@ terraform apply -auto-approve
 
 **Was passiert automatisch:**
 - ✅ Infrastruktur deployed (DynamoDB, Lambda, API Gateway, Amplify)
-- ✅ Basic Auth gesetzt (`demo:test1234`, `admin:admin1234`)
+- ✅ Basic Auth gesetzt (`demo:<configured via Terraform>`, `admin:<configured via Terraform>`)
 - ✅ DynamoDB mit 31 Produkten befüllt
-- ✅ Test-User erstellt (`demo@ecokart.com / Demo1234!`)
+- ✅ Test-User erstellt (`<removed - use Cognito signup> / <removed - use Cognito signup>`)
 
 **Was noch manuell ist:**
 - ⚠️ GitHub OAuth Reconnect (nur beim ERSTEN Deployment, dann nie wieder)
@@ -203,12 +203,12 @@ terraform output
 
 ### Customer Frontend
 - **URL:** `terraform output amplify_app_url`
-- **Basic Auth:** `demo` / `test1234`
+- **Basic Auth:** `demo` / `<configured via Terraform>`
 - **App Login:** Registriere dich mit deiner Email-Adresse
 
 ### Admin Frontend
 - **URL:** `terraform output admin_amplify_app_url`
-- **Basic Auth:** `admin` / `admin1234`
+- **Basic Auth:** `admin` / `<configured via Terraform>`
 - **App Login:** Registriere dich mit deiner Email-Adresse
 
 ---

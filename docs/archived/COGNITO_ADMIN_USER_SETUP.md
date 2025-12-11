@@ -11,7 +11,7 @@
 >
 > **Standard Admin Credentials** (nach Deployment):
 > ```
-> Email:    admin@ecokart.com
+> Email:    <ADMIN_EMAIL from ENV>
 > Password: EcokartAdmin2025! (muss beim ersten Login geändert werden)
 > Role:     admin
 > ```
@@ -54,7 +54,7 @@ Nach dem Deployment von Cognito hast du:
 
 **Benutzer-Informationen:**
 ```
-Email address (Username): admin@ecokart.com
+Email address (Username): <ADMIN_EMAIL from ENV>
 ```
 
 **Temporary password:**
@@ -73,7 +73,7 @@ Ecokart2025!
 
 Jetzt hat der User noch die Standard-Role "customer". Wir müssen ihm die "admin"-Role geben:
 
-1. In der User-Liste: **Klick auf den User** (`admin@ecokart.com`)
+1. In der User-Liste: **Klick auf den User** (`<ADMIN_EMAIL from ENV>`)
 2. Im User-Detail: Scrolle runter zu **"User attributes"**
 3. Klicke auf **"Edit"**
 4. Suche das Attribut: **`custom:role`**
@@ -89,7 +89,7 @@ Jetzt hat der User noch die Standard-Role "customer". Wir müssen ihm die "admin
 2. Klicke auf **"JETZT ANMELDEN"**
 3. Login mit:
    ```
-   Email: admin@ecokart.com
+   Email: <ADMIN_EMAIL from ENV>
    Password: Ecokart2025!
    ```
 4. Du wirst aufgefordert ein **neues Passwort** zu setzen (first login)
@@ -104,7 +104,7 @@ Nach dem Setup hast du folgende Test-User:
 
 ### Admin User
 ```
-Email:    admin@ecokart.com
+Email:    <ADMIN_EMAIL from ENV>
 Password: <dein gewähltes Passwort nach first login>
 Role:     admin
 ```
@@ -182,7 +182,7 @@ Dein Cognito User Pool hat folgende Einstellungen:
 
 1. **Admin Users sollten persönliche Emails haben**
    - ✅ `andy@ecokart.com`, `maria@ecokart.com`
-   - ❌ Nicht: `admin@ecokart.com` für mehrere Personen teilen
+   - ❌ Nicht: `<ADMIN_EMAIL from ENV>` für mehrere Personen teilen
 
 2. **Starke Passwörter verwenden**
    - Mindestens 12 Zeichen
@@ -256,7 +256,7 @@ terraform apply
 
 # 5. Admin User wird AUTOMATISCH erstellt! 🎉
 # → Terraform Provisioner Script läuft automatisch
-# → admin@ecokart.com mit Role=admin wird erstellt
+# → <ADMIN_EMAIL from ENV> mit Role=admin wird erstellt
 # → Manuelles Setup nur nötig falls Script fehlschlägt
 ```
 

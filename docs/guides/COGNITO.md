@@ -143,7 +143,7 @@ module "lambda" {
 **Environment Variables (Terraform):**
 ```hcl
 # terraform/environments/development.tfvars
-cognito_admin_email         = "admin@ecokart.com"
+cognito_admin_email         = "<ADMIN_EMAIL from ENV>"
 cognito_admin_temp_password = "EcokartAdmin2025!"
 enable_admin_provisioning   = true
 ```
@@ -422,15 +422,15 @@ export const useAuth = () => {
    ```bash
    aws cognito-idp admin-create-user \
      --user-pool-id <pool-id> \
-     --username admin@ecokart.com \
+     --username <ADMIN_EMAIL from ENV> \
      --temporary-password "EcokartAdmin2025!" \
-     --user-attributes Name=email,Value=admin@ecokart.com Name=email_verified,Value=true Name=custom:role,Value=admin
+     --user-attributes Name=email,Value=<ADMIN_EMAIL from ENV> Name=email_verified,Value=true Name=custom:role,Value=admin
    ```
 4. ✅ Admin User ist ready!
 
 **Standard Admin Credentials:**
 ```
-Email:    admin@ecokart.com
+Email:    <ADMIN_EMAIL from ENV>
 Password: EcokartAdmin2025! (muss beim ersten Login geändert werden)
 Role:     admin
 ```
@@ -439,7 +439,7 @@ Role:     admin
 ```hcl
 # terraform/variables.tf
 variable "cognito_admin_email" {
-  default = "admin@ecokart.com"
+  default = "<ADMIN_EMAIL from ENV>"
 }
 
 variable "cognito_admin_temp_password" {
@@ -471,7 +471,7 @@ variable "enable_admin_provisioning" {
 # 3. "Create user" klicken
 
 # 4. Formular ausfüllen:
-# Email: admin@ecokart.com
+# Email: <ADMIN_EMAIL from ENV>
 # Password: EcokartAdmin2025!
 # ✅ Mark email address as verified
 

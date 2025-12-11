@@ -256,7 +256,7 @@ terraform output
 
 **Teste:**
 - 🌐 **Customer Frontend:** Öffne URL im Browser
-- 🔐 **Basic Auth:** demo / test1234
+- 🔐 **Basic Auth:** demo / <configured via Terraform>
 - 👤 **Login:** testuser@example.com / SecurePass123!
 - 🛒 **Add to Cart:** Funktioniert?
 

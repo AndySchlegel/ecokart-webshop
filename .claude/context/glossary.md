@@ -87,7 +87,7 @@ Authorization: User role "customer" → darf Cart nutzen, nicht Admin-Panel
 **Definition:** Einfacher Username/Password Schutz auf HTTP-Ebene
 **Ecokart Context:**
 - Layer 1 Protection auf Amplify
-- Development: demo / test1234
+- Development: demo / <configured via Terraform>
 - Production: Sollte deaktiviert werden
 
 ---

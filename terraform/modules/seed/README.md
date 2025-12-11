@@ -5,8 +5,8 @@ Automatisches Befüllen der DynamoDB Tabellen mit Test-Daten beim `terraform app
 ## Features
 
 - ✅ Automatisches Seeding bei Deployment
-- ✅ Erstellt Test-User (`demo@ecokart.com`)
-- ✅ Erstellt Admin-User (`admin@ecokart.com`)
+- ✅ Erstellt Test-User (`<removed - use Cognito signup>`)
+- ✅ Erstellt Admin-User (`<ADMIN_EMAIL from ENV>`)
 - ✅ Befüllt Products Tabelle (31 Produkte)
 - ✅ Optional aktivierbar/deaktivierbar
 - ✅ Unterstützt AWS Profile
@@ -51,10 +51,10 @@ module "database_seeding" {
 ### DynamoDB Daten:
 - **31 Produkte** (Shoes, Running, etc.)
 - **2 Test-User:**
-  - `demo@ecokart.com` / `Demo1234!`
+  - `<removed - use Cognito signup>` / `<removed - use Cognito signup>`
   - `test@ecokart.com` / `Test1234!`
 - **1 Admin-User:**
-  - `admin@ecokart.com` / `ecokart2025`
+  - `<ADMIN_EMAIL from ENV>` / `<ADMIN_PASSWORD from ENV>`
 - **2 Test-Warenkörbe**
 - **7 Test-Bestellungen**
 

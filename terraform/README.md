@@ -140,7 +140,7 @@ curl https://YOUR_API_ID.execute-api.eu-north-1.amazonaws.com/Prod/api/products
 
 # Frontend öffnen
 open https://main.YOUR_APP_ID.amplifyapp.com
-# Login: demo@ecokart.com / Demo1234!
+# Login: <removed - use Cognito signup> / <removed - use Cognito signup>
 ```
 
 ---

@@ -214,8 +214,8 @@ provisioner "local-exec" {
 "Nach jedem Deployment wird die Datenbank **automatisch befüllt**:
 
 - ✅ 31 Produkte aus JSON importiert
-- ✅ Test-User: `demo@ecokart.com`
-- ✅ Admin-User: `admin@ecokart.com`
+- ✅ Test-User: `<removed - use Cognito signup>`
+- ✅ Admin-User: `<ADMIN_EMAIL from ENV>`
 
 **Das heißt: Deploy fertig → Shop sofort nutzbar!**"
 
@@ -435,11 +435,11 @@ api_gateway_url = "https://zzz.execute-api.eu-north-1.amazonaws.com/Prod"
 "Das ist der **Customer Shop**. Geschützt mit Basic Auth:
 
 - Username: `demo`
-- Password: `test1234`
+- Password: `<configured via Terraform>`
 
 Nach Login:
-- E-Mail: `demo@ecokart.com`
-- Password: `Demo1234!`"
+- E-Mail: `<removed - use Cognito signup>`
+- Password: `<removed - use Cognito signup>`"
 
 **Zeigen:**
 - Produktliste (31 Produkte)
@@ -457,8 +457,8 @@ Nach Login:
 
 "Das **Admin Panel** für Produktverwaltung:
 
-- Basic Auth: `admin` / `admin1234`
-- App Login: `admin@ecokart.com` / `ecokart2025`"
+- Basic Auth: `admin` / `<configured via Terraform>`
+- App Login: `<ADMIN_EMAIL from ENV>` / `<ADMIN_PASSWORD from ENV>`"
 
 **Zeigen:**
 - Produktverwaltung

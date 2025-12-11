@@ -70,9 +70,9 @@ Development URLs:
 - API: https://...execute-api.eu-north-1.amazonaws.com/dev/
 
 Credentials:
-- Basic Auth: demo / test1234
-- Test User: demo@ecokart.com / Demo1234!
-- Admin User: admin@ecokart.com / ecokart2025
+- Basic Auth: demo / <configured via Terraform>
+- Test User: <removed - use Cognito signup> / <removed - use Cognito signup>
+- Admin User: <ADMIN_EMAIL from ENV> / <ADMIN_PASSWORD from ENV>
 ```
 
 **Quick Test:**

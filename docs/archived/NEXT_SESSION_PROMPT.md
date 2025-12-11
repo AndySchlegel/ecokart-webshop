@@ -110,12 +110,12 @@ https://github.com/AndySchlegel/Ecokart-Webshop/actions/workflows/cleanup-lambda
 ## 🧪 Testing Checklist (nach Deploy)
 
 - [ ] Customer Frontend: https://main.dyoqwczz7hfmn.amplifyapp.com
-  - [ ] Login: demo / test1234
+  - [ ] Login: demo / <configured via Terraform>
   - [ ] Stock-Anzeige sichtbar (grün/orange/rot)
   - [ ] Add to Cart bei ausverkauftem Produkt disabled
 
 - [ ] Admin Frontend: https://main.d3ds92499cafzo.amplifyapp.com
-  - [ ] Login: admin / admin1234
+  - [ ] Login: admin / <configured via Terraform>
   - [ ] Stock-Spalte in Tabelle sichtbar
   - [ ] Produkt bearbeiten → Stock ändern → Speichern
   - [ ] Customer Frontend: Änderung sichtbar

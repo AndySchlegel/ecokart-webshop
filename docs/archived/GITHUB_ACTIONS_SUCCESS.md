@@ -261,13 +261,13 @@ Nach erfolgreichem Deployment findest du im Workflow Output:
 
 ### Customer Frontend
 - **URL:** `https://main.d24vohk4kdcb6j.amplifyapp.com`
-- **Basic Auth:** `demo / test1234`
-- **Test User:** `demo@ecokart.com / Demo1234!`
+- **Basic Auth:** `demo / <configured via Terraform>`
+- **Test User:** `<removed - use Cognito signup> / <removed - use Cognito signup>`
 
 ### Admin Frontend
 - **URL:** `https://main.d33xkxzhnpx537.amplifyapp.com`
-- **Basic Auth:** `admin / admin1234`
-- **Admin User:** `admin@ecokart.com / ecokart2025`
+- **Basic Auth:** `admin / <configured via Terraform>`
+- **Admin User:** `<ADMIN_EMAIL from ENV> / <ADMIN_PASSWORD from ENV>`
 
 ### Backend API
 - **URL:** `https://7uu0dza4r8.execute-api.eu-north-1.amazonaws.com/Prod/`

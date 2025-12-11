@@ -315,7 +315,7 @@ DynamoDB
 5. ✅ **Lambda bauen** (TypeScript kompilieren, npm ci)
 6. ✅ **API Gateway konfigurieren** (REST API + Proxy Integration)
 7. ✅ **Amplify Apps erstellen** (Customer + Admin Frontend)
-8. ✅ **Basic Auth setzen** (`demo:test1234`, `admin:admin1234`)
+8. ✅ **Basic Auth setzen** (`demo:<configured via Terraform>`, `admin:<configured via Terraform>`)
 9. ✅ **DB Seeding** (31 Produkte, Demo-User, Admin-User)
 
 ### 3. GitHub OAuth verbinden (2 Minuten, nur beim ersten Mal)
@@ -560,10 +560,10 @@ resource "null_resource" "seed_database" {
       # Migrate products (31 Produkte)
       npm run dynamodb:migrate:single -- --region ${var.aws_region}
 
-      # Create test user (demo@ecokart.com)
+      # Create test user (<removed - use Cognito signup>)
       node scripts/create-test-user.js
 
-      # Create admin user (admin@ecokart.com)
+      # Create admin user (<ADMIN_EMAIL from ENV>)
       node scripts/create-admin-user.js
 
       echo "✅ Database seeding completed!"
@@ -583,8 +583,8 @@ resource "null_resource" "seed_database" {
 **Erklärung für Vortrag:**
 - **Automatisch**: Nach jedem Deployment
 - **31 Produkte**: Aus JSON-Datei importiert
-- **Test-User**: `demo@ecokart.com / Demo1234!`
-- **Admin-User**: `admin@ecokart.com / ecokart2025`
+- **Test-User**: `<removed - use Cognito signup> / <removed - use Cognito signup>`
+- **Admin-User**: `<ADMIN_EMAIL from ENV> / <ADMIN_PASSWORD from ENV>`
 
 ---
 
@@ -673,8 +673,8 @@ echo "  ✅ API Gateway konfigurieren"
 echo "  ✅ Amplify Apps erstellen"
 echo "  ✅ Basic Auth setzen"
 echo "  ✅ DynamoDB mit Produkten befüllen (31 Stück)"
-echo "  ✅ Test-User erstellen (demo@ecokart.com)"
-echo "  ✅ Admin-User erstellen (admin@ecokart.com)"
+echo "  ✅ Test-User erstellen (<removed - use Cognito signup>)"
+echo "  ✅ Admin-User erstellen (<ADMIN_EMAIL from ENV>)"
 echo ""
 
 terraform apply -auto-approve
@@ -721,11 +721,11 @@ environment_variables = {
 
 **Customer Frontend:**
 - User: `demo`
-- Password: `test1234`
+- Password: `<configured via Terraform>`
 
 **Admin Frontend:**
 - User: `admin`
-- Password: `admin1234`
+- Password: `<configured via Terraform>`
 
 **Wo definiert:** `terraform/examples/basic/main.tf` (Zeilen 13-16, 39-42)
 
@@ -834,8 +834,8 @@ Zeige:
 **5. Ergebnis zeigen (3 Minuten)**
 
 Zeige:
-- Customer Frontend URL (Login: `demo@ecokart.com / Demo1234!`)
-- Admin Frontend URL (Login: `admin@ecokart.com / ecokart2025`)
+- Customer Frontend URL (Login: `<removed - use Cognito signup> / <removed - use Cognito signup>`)
+- Admin Frontend URL (Login: `<ADMIN_EMAIL from ENV> / <ADMIN_PASSWORD from ENV>`)
 - API Gateway URL (`/health` Endpoint testen)
 - DynamoDB Tabellen in AWS Console
 
