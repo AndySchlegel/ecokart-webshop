@@ -24,6 +24,13 @@
 - **Früh eskalieren:** Nach 1-2 Fehlversuchen alternative Wege zeigen
 - **Dokumentieren:** Jeden Error in LESSONS_LEARNED.md aufnehmen
 
+### 4. ⚠️ KEIN Quick & Dirty!
+- **Strukturelle Lösungen** statt schnelle Hacks
+- **Prevention > Fixing** - Probleme an der Wurzel lösen
+- **Nicht wiederkehrende Fehler** - aus Fehlern lernen!
+- **User hat MEHRFACH gesagt:** "Wir wollen es reproduzierbar und sauber, nicht schneller!"
+- **Bei wiederkehrenden Problemen:** Root Cause fixen, nicht Symptome!
+
 ---
 
 ## 🛑 Circuit Breaker - Wann STOPPEN
@@ -146,6 +153,7 @@ Versuch 2: Automated Solution B
 
 ### Pre-Session Checklist
 Vor jeder Arbeits-Session:
+- [ ] **RECURRING_ISSUES.md lesen** (⚠️ KRITISCH - wiederkehrende Probleme vermeiden!)
 - [ ] README.md lesen (aktueller Projekt-Status)
 - [ ] ACTION_PLAN.md checken (next priorities)
 - [ ] LESSONS_LEARNED.md überfliegen (bekannte Issues)
