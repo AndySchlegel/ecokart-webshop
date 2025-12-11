@@ -405,6 +405,32 @@ jobs:
           done
         continue-on-error: true
 
+      - name: 🗑️ Delete DynamoDB State Lock Entries
+        run: |
+          echo "🗑️ Deleting DynamoDB state lock entries..."
+
+          # Scan for all lock entries (MD5 digests) in the lock table
+          LOCK_IDS=$(aws dynamodb scan \
+            --table-name terraform-state-lock \
+            --region ${{ env.AWS_REGION }} \
+            --query 'Items[*].LockID.S' \
+            --output text)
+
+          if [ -z "$LOCK_IDS" ]; then
+            echo "   ℹ️  No DynamoDB lock entries found"
+          else
+            echo "   Found lock entries to delete:"
+            for LOCK_ID in $LOCK_IDS; do
+              echo "   - Deleting lock entry: $LOCK_ID"
+              aws dynamodb delete-item \
+                --table-name terraform-state-lock \
+                --key "{\"LockID\": {\"S\": \"$LOCK_ID\"}}" \
+                --region ${{ env.AWS_REGION }} || true
+            done
+            echo "   ✅ All DynamoDB lock entries deleted"
+          fi
+        continue-on-error: true
+
       - name: 🗑️ Delete SSM Parameters
         run: |
           echo "🗑️ Deleting SSM Parameters for ${{ inputs.environment }}..."
@@ -453,8 +479,10 @@ jobs:
           echo "   - ✅ DynamoDB Tables (4)"
           echo "   - ✅ IAM Roles & Policies"
           echo "   - ✅ CloudWatch Log Groups"
+          echo "   - ✅ CloudWatch Metric Alarms"
+          echo "   - ✅ DynamoDB State Lock Entries"
           echo "   - ✅ SSM Parameters"
-          echo "   - ✅ Terraform State File"
+          echo "   - ✅ Terraform State Files"
           echo ""
           echo "✅ Environment is now completely clean!"
           echo ""
