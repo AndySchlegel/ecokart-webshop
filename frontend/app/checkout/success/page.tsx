@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { API_BASE_URL } from '../../../lib/config';
 import { fetchAuthSession } from 'aws-amplify/auth';
+import { useCart } from '../../../contexts/CartContext';
 
 interface SessionData {
   id: string;
@@ -19,6 +20,7 @@ function SuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams.get('session_id');
+  const { clearCart } = useCart();
 
   const [session, setSession] = useState<SessionData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,6 +59,9 @@ function SuccessContent() {
 
         const data = await response.json();
         setSession(data);
+
+        // Clear cart after successful payment
+        await clearCart();
       } catch (err: any) {
         console.error('Error fetching session:', err);
         // Don't set error - just show success without details
@@ -67,7 +72,7 @@ function SuccessContent() {
     };
 
     fetchSessionDetails();
-  }, [sessionId]);
+  }, [sessionId, clearCart]);
 
   if (loading) {
     return (
