@@ -2,10 +2,12 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
+  const { login } = useAuth();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -15,17 +17,10 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-      });
-      if (!response.ok) {
-        const payload = await response.json();
-        throw new Error(payload.message ?? 'Login fehlgeschlagen.');
-      }
+      // Login via Cognito mit Admin Group Check
+      await login(email, password);
+
+      // Redirect to dashboard on successful login
       router.push('/dashboard');
     } catch (err) {
       setIsLoading(false);
@@ -42,18 +37,18 @@ export default function LoginPage() {
             Melde dich an, um Produkte zu verwalten
           </p>
           <div className="message message--info" style={{ fontSize: '0.875rem' }}>
-            <strong>Demo-Login:</strong><br />
-            admin@ecokart.com / ecokart2025
+            <strong>Wichtig:</strong><br />
+            Nur Benutzer in der Cognito Group "admin" haben Zugriff
           </div>
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '2rem' }}>
             <label>
               <span>E-Mail</span>
               <input
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-                type="text"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                type="email"
                 required
-                placeholder="admin@ecokart.com"
+                placeholder="deine-email@example.com"
               />
             </label>
             <label>
