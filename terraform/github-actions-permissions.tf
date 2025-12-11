@@ -6,7 +6,7 @@
 
 # Data Source: Existierende GitHub Actions Role
 data "aws_iam_role" "github_actions" {
-  name = "ecokart-github-actions-role"
+  name = "GitHubActionsRole-EcokartDeploy"
 }
 
 # Inline Policy für Custom Domain Support (umgeht 10-Policy-Limit)
