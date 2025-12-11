@@ -18,7 +18,7 @@ on:
         default: 'development'
 
 env:
-  AWS_REGION: eu-north-1
+  AWS_REGION: eu-central-1
 
 permissions:
   id-token: write
@@ -359,7 +359,7 @@ jobs:
         run: |
           echo "🗑️ Deleting Terraform state file..."
 
-          BUCKET_NAME="ecokart-terraform-state-729403197965"
+          BUCKET_NAME="ecokart-terraform-state-805160323349"
           STATE_KEY="development/terraform.tfstate"
 
           if aws s3api head-object \
