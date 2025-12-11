@@ -232,7 +232,33 @@ resource "aws_cognito_user_pool_client" "frontend" {
 # }
 
 # ----------------------------------------------------------------
-# 4. DEFAULT ADMIN USER (OPTIONAL)
+# 4. COGNITO USER GROUP - Admin
+# ----------------------------------------------------------------
+# Erstellt eine User Group für Admin-Zugriffe
+# Users in dieser Group haben Admin-Rechte
+#
+# Vorteile gegenüber custom:role Attribute:
+# - Standardisiert (AWS Best Practice)
+# - Einfach zu checken via Amplify/Cognito APIs
+# - Kann mit IAM Policies verbunden werden
+# - Ein User kann in mehreren Groups sein
+
+resource "aws_cognito_user_group" "admin" {
+  name         = "admin"
+  user_pool_id = aws_cognito_user_pool.main.id
+  description  = "Admin users with full access to admin frontend"
+
+  # Optional: Precedence (niedrigere Zahl = höhere Priorität)
+  # Wichtig wenn User in mehreren Groups ist
+  precedence = 1
+
+  # Optional: IAM Role für diese Group
+  # Später: Kann für API Gateway Authorizer genutzt werden
+  # role_arn = aws_iam_role.admin_group_role.arn
+}
+
+# ----------------------------------------------------------------
+# 5. DEFAULT ADMIN USER (OPTIONAL)
 # ----------------------------------------------------------------
 # Erstellt einen Admin-User automatisch
 # Nützlich für Testing

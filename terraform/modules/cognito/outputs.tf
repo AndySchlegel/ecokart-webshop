@@ -116,6 +116,17 @@ output "region" {
 # }
 
 # ----------------------------------------------------------------
+# Admin User Group Name
+# ----------------------------------------------------------------
+# Name der Admin User Group
+# Wird gebraucht für: Group-Membership Check in Admin Frontend
+
+output "admin_group_name" {
+  description = "Name der Admin User Group"
+  value       = aws_cognito_user_group.admin.name
+}
+
+# ----------------------------------------------------------------
 # Frontend Environment Variables (Hilfe)
 # ----------------------------------------------------------------
 # Zusammenfassung aller Werte die das Frontend braucht
