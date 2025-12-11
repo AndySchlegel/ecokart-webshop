@@ -3,22 +3,23 @@ import { NextResponse } from 'next/server';
 import { createSessionToken, setSessionCookie } from '@/lib/auth';
 import { logger } from '@/lib/logger';
 
-// SECURITY: Credentials MUST be set via environment variables - NO DEFAULTS!
-const ADMIN_EMAIL = process.env.ADMIN_APP_EMAIL;
-const ADMIN_PASSWORD = process.env.ADMIN_APP_PASSWORD;
-
-// Fail fast if credentials are not configured
-if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
-  logger.error('SECURITY ERROR: Admin credentials not configured!', {
-    component: 'admin-login',
-    hasEmail: !!ADMIN_EMAIL,
-    hasPassword: !!ADMIN_PASSWORD
-  });
-  throw new Error('Admin credentials must be configured via ADMIN_APP_EMAIL and ADMIN_APP_PASSWORD environment variables');
-}
-
 export async function POST(request: Request) {
   try {
+    // SECURITY: Credentials MUST be set via environment variables - NO DEFAULTS!
+    const ADMIN_EMAIL = process.env.ADMIN_APP_EMAIL;
+    const ADMIN_PASSWORD = process.env.ADMIN_APP_PASSWORD;
+
+    // Check if credentials are configured (inside handler to return proper JSON error)
+    if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+      logger.error('SECURITY ERROR: Admin credentials not configured!', {
+        component: 'admin-login',
+        hasEmail: !!ADMIN_EMAIL,
+        hasPassword: !!ADMIN_PASSWORD
+      });
+      return NextResponse.json({
+        message: 'Server configuration error. Admin credentials not configured.'
+      }, { status: 500 });
+    }
     logger.debug('Admin login environment check', {
       hasEmail: !!process.env.ADMIN_APP_EMAIL,
       hasPassword: !!process.env.ADMIN_APP_PASSWORD,
