@@ -30,8 +30,22 @@ export default function LoginPage() {
       // Redirect to dashboard on successful login
       router.push('/dashboard');
     } catch (err) {
-      setIsLoading(false);
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler beim Login.');
+      // If already signed in, sign out and try again
+      if (err instanceof Error && err.message.includes('already a signed in user')) {
+        try {
+          const { signOut: amplifySignOut } = await import('aws-amplify/auth');
+          await amplifySignOut();
+          // Retry login
+          await login(email, password);
+          router.push('/dashboard');
+        } catch (retryErr) {
+          setIsLoading(false);
+          setError(retryErr instanceof Error ? retryErr.message : 'Unbekannter Fehler beim Login.');
+        }
+      } else {
+        setIsLoading(false);
+        setError(err instanceof Error ? err.message : 'Unbekannter Fehler beim Login.');
+      }
     }
   }
 
