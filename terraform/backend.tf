@@ -32,9 +32,9 @@ terraform {
     bucket = "ecokart-terraform-state-805160323349"
 
     # Key = Pfad im Bucket wo State gespeichert wird
-    # Format: personal-{environment}/terraform.tfstate
-    # "personal-" prefix für saubere Trennung vom alten Sandbox State
-    key    = "personal-development/terraform.tfstate"
+    # Format: development-v2/terraform.tfstate
+    # "v2" nach Nuclear Cleanup für fresh start
+    key    = "development-v2/terraform.tfstate"
 
     # AWS Region - Personal Account
     region = "eu-central-1"
