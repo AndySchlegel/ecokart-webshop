@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 import type { Article } from '@/lib/articles';
 import { ArticleForm } from './components/ArticleForm';
@@ -9,6 +10,7 @@ import { ArticleTable } from './components/ArticleTable';
 
 export default function DashboardPage() {
   const router = useRouter();
+  const { signOut } = useAuth();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +20,8 @@ export default function DashboardPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/articles', { cache: 'no-store' });
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+      const response = await fetch(`${apiUrl}/products`, { cache: 'no-store' });
       const payload = await response.json();
       if (!response.ok) {
         throw new Error(payload.message ?? 'Artikel konnten nicht geladen werden.');
@@ -70,7 +73,8 @@ export default function DashboardPage() {
     if (Number.isNaN(payload.stock) || payload.stock < 0) {
       throw new Error('Bitte einen gültigen Lagerbestand hinterlegen.');
     }
-    const request = await fetch('/api/articles', {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+    const request = await fetch(`${apiUrl}/products`, {
       method: articleId ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -88,7 +92,8 @@ export default function DashboardPage() {
   }
 
   async function handleDeleteArticle(id: string) {
-    const request = await fetch('/api/articles', {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+    const request = await fetch(`${apiUrl}/products`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -103,8 +108,7 @@ export default function DashboardPage() {
   }
 
   async function handleLogout() {
-    await fetch('/api/logout', { method: 'POST' });
-    router.push('/login');
+    await signOut();
   }
 
   return (
