@@ -386,6 +386,7 @@ jobs:
           BUCKET_NAME="ecokart-terraform-state-805160323349"
           STATE_KEYS=(
             "development/terraform.tfstate"
+            "development-v2/terraform.tfstate"
             "personal-development/terraform.tfstate"
           )
 

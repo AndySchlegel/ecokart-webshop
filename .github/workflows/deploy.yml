@@ -309,7 +309,7 @@ jobs:
           echo "🔓 Clearing lock entries only (keeping state for incremental update)..."
 
           BUCKET_NAME="ecokart-terraform-state-805160323349"
-          STATE_KEY="development/terraform.tfstate"
+          STATE_KEY="development-v2/terraform.tfstate"
           LOCK_TABLE="terraform-state-lock"
           LOCK_ID="$BUCKET_NAME/$STATE_KEY"
 
