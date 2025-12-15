@@ -28,6 +28,9 @@ export default function LoginPage() {
       // (SignOut wird jetzt automatisch im AuthContext aufgerufen - kein Error Handling mehr nötig)
       await login(email, password);
 
+      // Success! Reset loading state before redirect
+      setIsLoading(false);
+
       // Redirect to dashboard on successful login
       router.push('/dashboard');
     } catch (err) {
