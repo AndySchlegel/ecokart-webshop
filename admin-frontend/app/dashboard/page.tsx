@@ -10,7 +10,15 @@ import { ArticleTable } from './components/ArticleTable';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { signOut } = useAuth();
+  const { signOut, isAuthenticated, isLoading: authLoading } = useAuth();
+
+  // Protect route: redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      console.log('[Dashboard] Not authenticated, redirecting to login...');
+      router.push('/login');
+    }
+  }, [isAuthenticated, authLoading, router]);
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
