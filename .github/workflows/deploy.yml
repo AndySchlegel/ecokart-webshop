@@ -445,6 +445,7 @@ jobs:
               \"NEXT_PUBLIC_USER_POOL_CLIENT_ID\":\"$CLIENT_ID\",
               \"NEXT_PUBLIC_API_URL\":\"$API_URL\",
               \"NEXT_PUBLIC_AWS_REGION\":\"${{ env.AWS_REGION }}\",
+              \"NEXT_PUBLIC_COOKIE_DOMAIN\":\".amplifyapp.com\",
               \"AMPLIFY_MONOREPO_APP_ROOT\":\"admin-frontend\",
               \"AMPLIFY_DIFF_DEPLOY\":\"false\"
             }" \
@@ -459,6 +460,7 @@ jobs:
               \"NEXT_PUBLIC_USER_POOL_CLIENT_ID\":\"$CLIENT_ID\",
               \"NEXT_PUBLIC_API_URL\":\"$API_URL\",
               \"NEXT_PUBLIC_AWS_REGION\":\"${{ env.AWS_REGION }}\",
+              \"NEXT_PUBLIC_COOKIE_DOMAIN\":\".amplifyapp.com\",
               \"AMPLIFY_MONOREPO_APP_ROOT\":\"frontend\",
               \"AMPLIFY_DIFF_DEPLOY\":\"false\"
             }" \
