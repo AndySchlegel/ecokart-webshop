@@ -14,7 +14,9 @@ export default function LoginPage() {
 
   // Redirect to dashboard if already logged in
   useEffect(() => {
+    console.log('[LoginPage useEffect] authLoading:', authLoading, 'isAuthenticated:', isAuthenticated);
     if (!authLoading && isAuthenticated) {
+      console.log('[LoginPage useEffect] Redirecting to dashboard...');
       router.push('/dashboard');
     }
   }, [isAuthenticated, authLoading, router]);
@@ -24,16 +26,23 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
     try {
+      console.log('[LoginPage] Calling login()...');
       // Login via Cognito mit Admin Group Check
       // (SignOut wird jetzt automatisch im AuthContext aufgerufen - kein Error Handling mehr nötig)
       await login(email, password);
 
+      console.log('[LoginPage] Login successful, isAuthenticated:', isAuthenticated);
+      console.log('[LoginPage] authLoading:', authLoading);
+
       // Success! Reset loading state before redirect
       setIsLoading(false);
 
+      console.log('[LoginPage] About to redirect to /dashboard...');
       // Redirect to dashboard on successful login
       router.push('/dashboard');
+      console.log('[LoginPage] router.push called');
     } catch (err) {
+      console.error('[LoginPage] Login failed:', err);
       setIsLoading(false);
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler beim Login.');
     }
