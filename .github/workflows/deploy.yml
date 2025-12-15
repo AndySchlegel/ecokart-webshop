@@ -440,26 +440,28 @@ jobs:
           echo "🔧 Updating Admin Frontend ENV Vars..."
           aws amplify update-app \
             --app-id "$ADMIN_APP_ID" \
-            --environment-variables \
-              NEXT_PUBLIC_USER_POOL_ID="$USER_POOL_ID" \
-              NEXT_PUBLIC_USER_POOL_CLIENT_ID="$CLIENT_ID" \
-              NEXT_PUBLIC_API_URL="$API_URL" \
-              NEXT_PUBLIC_AWS_REGION="${{ env.AWS_REGION }}" \
-              AMPLIFY_MONOREPO_APP_ROOT="admin-frontend" \
-              AMPLIFY_DIFF_DEPLOY="false" \
+            --environment-variables "{
+              \"NEXT_PUBLIC_USER_POOL_ID\":\"$USER_POOL_ID\",
+              \"NEXT_PUBLIC_USER_POOL_CLIENT_ID\":\"$CLIENT_ID\",
+              \"NEXT_PUBLIC_API_URL\":\"$API_URL\",
+              \"NEXT_PUBLIC_AWS_REGION\":\"${{ env.AWS_REGION }}\",
+              \"AMPLIFY_MONOREPO_APP_ROOT\":\"admin-frontend\",
+              \"AMPLIFY_DIFF_DEPLOY\":\"false\"
+            }" \
             --region ${{ env.AWS_REGION }}
 
           # Update Customer Amplify ENV Vars
           echo "🔧 Updating Customer Frontend ENV Vars..."
           aws amplify update-app \
             --app-id "$CUSTOMER_APP_ID" \
-            --environment-variables \
-              NEXT_PUBLIC_USER_POOL_ID="$USER_POOL_ID" \
-              NEXT_PUBLIC_USER_POOL_CLIENT_ID="$CLIENT_ID" \
-              NEXT_PUBLIC_API_URL="$API_URL" \
-              NEXT_PUBLIC_AWS_REGION="${{ env.AWS_REGION }}" \
-              AMPLIFY_MONOREPO_APP_ROOT="frontend" \
-              AMPLIFY_DIFF_DEPLOY="false" \
+            --environment-variables "{
+              \"NEXT_PUBLIC_USER_POOL_ID\":\"$USER_POOL_ID\",
+              \"NEXT_PUBLIC_USER_POOL_CLIENT_ID\":\"$CLIENT_ID\",
+              \"NEXT_PUBLIC_API_URL\":\"$API_URL\",
+              \"NEXT_PUBLIC_AWS_REGION\":\"${{ env.AWS_REGION }}\",
+              \"AMPLIFY_MONOREPO_APP_ROOT\":\"frontend\",
+              \"AMPLIFY_DIFF_DEPLOY\":\"false\"
+            }" \
             --region ${{ env.AWS_REGION }}
 
           echo "✅ Amplify Environment Variables ensured!"
