@@ -114,32 +114,27 @@ export function configureAmplify() {
   });
 
   // ----------------------------------------------------------------
-  // Cookie Storage Configuration (für Token Persistence)
+  // Token Storage Configuration
   // ----------------------------------------------------------------
-  if (process.env.NODE_ENV === 'production') {
-    const cookieDomain = process.env.NEXT_PUBLIC_COOKIE_DOMAIN;
-
-    if (cookieDomain) {
-      cognitoUserPoolsTokenProvider.setKeyValueStorage(
-        new CookieStorage({
-          domain: cookieDomain,
-          sameSite: 'lax',
-          secure: true,
-        })
-      );
-
-      logger.info('Amplify CookieStorage configured', {
-        cookieDomain,
-        component: 'amplify',
-        frontend: 'admin'
-      });
-    } else {
-      logger.warn('CookieStorage disabled - NEXT_PUBLIC_COOKIE_DOMAIN not set', {
-        component: 'amplify',
-        frontend: 'admin'
-      });
-    }
-  }
+  // LocalStorage ist der Default und funktioniert perfekt für Single-Origin Apps
+  // CookieStorage ist nur nötig für Cross-Domain Cookie Sharing (z.B. Custom Domains)
+  //
+  // Da Admin und Customer auf unterschiedlichen Amplify Subdomains laufen,
+  // ist Cookie Sharing nicht möglich und auch nicht nötig.
+  //
+  // LocalStorage Vorteile:
+  // - Keine ENV Var Dependencies
+  // - Funktioniert out-of-the-box auf Amplify
+  // - Keine Cross-Origin Probleme
+  // - 100% Reproduzierbar
+  //
+  // Optional: CookieStorage kann später für Custom Domains aktiviert werden
+  // wenn Cross-Domain Cookie Sharing benötigt wird
+  logger.info('Using Amplify default storage (LocalStorage) for token persistence', {
+    component: 'amplify',
+    frontend: 'admin',
+    note: 'LocalStorage is secure and works perfectly for Single-Origin Apps'
+  });
 
   logger.info('Amplify Auth configured for Admin Frontend', {
     userPoolId,
