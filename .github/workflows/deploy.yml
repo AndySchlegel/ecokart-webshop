@@ -466,6 +466,54 @@ jobs:
 
           echo "✅ Amplify Environment Variables ensured!"
 
+          # Trigger Amplify Builds (damit neue ENV vars aktiv werden!)
+          echo ""
+          echo "🚀 Triggering Amplify builds to apply new ENV vars..."
+
+          # Determine branch name based on environment
+          case "${{ steps.env.outputs.environment }}" in
+            production)
+              BRANCH_NAME="main"
+              ;;
+            staging)
+              BRANCH_NAME="staging"
+              ;;
+            development)
+              BRANCH_NAME="develop"
+              ;;
+            *)
+              BRANCH_NAME="develop"
+              ;;
+          esac
+
+          echo "📍 Branch: $BRANCH_NAME"
+
+          # Trigger Admin Frontend Build
+          echo "🔨 Triggering Admin Frontend build..."
+          ADMIN_JOB_ID=$(aws amplify start-job \
+            --app-id "$ADMIN_APP_ID" \
+            --branch-name "$BRANCH_NAME" \
+            --job-type RELEASE \
+            --region ${{ env.AWS_REGION }} \
+            --query 'jobSummary.jobId' \
+            --output text)
+          echo "   ✅ Admin build started: Job ID $ADMIN_JOB_ID"
+
+          # Trigger Customer Frontend Build
+          echo "🔨 Triggering Customer Frontend build..."
+          CUSTOMER_JOB_ID=$(aws amplify start-job \
+            --app-id "$CUSTOMER_APP_ID" \
+            --branch-name "$BRANCH_NAME" \
+            --job-type RELEASE \
+            --region ${{ env.AWS_REGION }} \
+            --query 'jobSummary.jobId' \
+            --output text)
+          echo "   ✅ Customer build started: Job ID $CUSTOMER_JOB_ID"
+
+          echo ""
+          echo "✅ Amplify builds triggered successfully!"
+          echo "   Builds will complete in ~2-3 minutes"
+
       # ======================================================================
       # 17. Terraform Destroy (if requested, mit Environment-Config!)
       # ======================================================================
