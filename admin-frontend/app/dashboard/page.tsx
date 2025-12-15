@@ -30,7 +30,7 @@ export default function DashboardPage() {
     try {
       // Remove trailing slash from API URL to avoid double slashes
       const apiUrl = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
-      const response = await fetch(`${apiUrl}/products`, { cache: 'no-store' });
+      const response = await fetch(`${apiUrl}/api/products`, { cache: 'no-store' });
       const payload = await response.json();
       if (!response.ok) {
         throw new Error(payload.message ?? 'Artikel konnten nicht geladen werden.');
@@ -84,12 +84,13 @@ export default function DashboardPage() {
     }
     // Remove trailing slash from API URL to avoid double slashes
     const apiUrl = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
-    const request = await fetch(`${apiUrl}/products`, {
+    const url = articleId ? `${apiUrl}/api/products/${articleId}` : `${apiUrl}/api/products`;
+    const request = await fetch(url, {
       method: articleId ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(articleId ? { ...payload, id: articleId } : payload)
+      body: JSON.stringify(payload)
     });
     const body = await request.json();
     if (!request.ok) {
@@ -104,12 +105,8 @@ export default function DashboardPage() {
   async function handleDeleteArticle(id: string) {
     // Remove trailing slash from API URL to avoid double slashes
     const apiUrl = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
-    const request = await fetch(`${apiUrl}/products`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ id })
+    const request = await fetch(`${apiUrl}/api/products/${id}`, {
+      method: 'DELETE'
     });
     if (!request.ok) {
       const payload = await request.json();
