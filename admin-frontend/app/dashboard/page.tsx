@@ -28,7 +28,8 @@ export default function DashboardPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+      // Remove trailing slash from API URL to avoid double slashes
+      const apiUrl = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
       const response = await fetch(`${apiUrl}/products`, { cache: 'no-store' });
       const payload = await response.json();
       if (!response.ok) {
@@ -81,7 +82,8 @@ export default function DashboardPage() {
     if (Number.isNaN(payload.stock) || payload.stock < 0) {
       throw new Error('Bitte einen gültigen Lagerbestand hinterlegen.');
     }
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+    // Remove trailing slash from API URL to avoid double slashes
+    const apiUrl = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
     const request = await fetch(`${apiUrl}/products`, {
       method: articleId ? 'PUT' : 'POST',
       headers: {
@@ -100,7 +102,8 @@ export default function DashboardPage() {
   }
 
   async function handleDeleteArticle(id: string) {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+    // Remove trailing slash from API URL to avoid double slashes
+    const apiUrl = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
     const request = await fetch(`${apiUrl}/products`, {
       method: 'DELETE',
       headers: {
