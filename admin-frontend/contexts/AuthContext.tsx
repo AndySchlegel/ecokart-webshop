@@ -164,6 +164,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       logger.debug('Admin login attempt', { email, component: 'AdminAuthContext' });
 
+      // ----------------------------------------------------------------
+      // 🔥 FIX: Proaktives SignOut vor Login
+      // ----------------------------------------------------------------
+      // Problem: Customer und Admin Frontend teilen sich die Cognito Session
+      // Wenn User im Customer Frontend eingeloggt ist, schlägt Admin Login fehl
+      // mit "UserAlreadyAuthenticatedException"
+      //
+      // Lösung: IMMER erst signOut aufrufen, dann signIn
+      // Das stellt sicher, dass keine alte Session im Weg ist
+      try {
+        await amplifySignOut();
+        logger.debug('Signed out existing session before login', {
+          email,
+          component: 'AdminAuthContext'
+        });
+      } catch (signOutError) {
+        // Ignorieren - wenn nicht eingeloggt, ist das ok
+        logger.debug('No existing session to sign out (expected)', {
+          email,
+          component: 'AdminAuthContext'
+        });
+      }
+
       // Cognito Sign In
       const { isSignedIn, nextStep } = await signIn({
         username: email, // Bei Cognito ist username = email

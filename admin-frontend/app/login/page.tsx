@@ -25,27 +25,14 @@ export default function LoginPage() {
     setError(null);
     try {
       // Login via Cognito mit Admin Group Check
+      // (SignOut wird jetzt automatisch im AuthContext aufgerufen - kein Error Handling mehr nötig)
       await login(email, password);
 
       // Redirect to dashboard on successful login
       router.push('/dashboard');
     } catch (err) {
-      // If already signed in, sign out and try again
-      if (err instanceof Error && err.message.includes('already a signed in user')) {
-        try {
-          const { signOut: amplifySignOut } = await import('aws-amplify/auth');
-          await amplifySignOut();
-          // Retry login
-          await login(email, password);
-          router.push('/dashboard');
-        } catch (retryErr) {
-          setIsLoading(false);
-          setError(retryErr instanceof Error ? retryErr.message : 'Unbekannter Fehler beim Login.');
-        }
-      } else {
-        setIsLoading(false);
-        setError(err instanceof Error ? err.message : 'Unbekannter Fehler beim Login.');
-      }
+      setIsLoading(false);
+      setError(err instanceof Error ? err.message : 'Unbekannter Fehler beim Login.');
     }
   }
 
