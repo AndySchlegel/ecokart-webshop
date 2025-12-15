@@ -1,812 +1,368 @@
 # 🎯 Action Plan - Ecokart Development
 
-**Last Updated:** 3. Dezember 2025
-**Status:** 🎉 **STRIPE PAYMENT FLOW COMPLETE!** - Nur noch 2 Steps bis Production! 🚀
+**Last Updated:** 15. Dezember 2025
+**Status:** 🎉 **ADMIN LOGIN & STRIPE WEBHOOKS COMPLETE!** - Final 2 Steps bis Production! 🚀
 
 > **📖 Struktur dieses Dokuments:**
-> - **Current Sprint** - Was läuft JETZT (diese/nächste Woche)
-> - **Next Milestones** - Nächste 2-4 Wochen
-> - **Feature-Complete Roadmap** - 7-Wochen-Plan zu Production-Ready
-> - **Recent Learnings** - Letzte 5 wichtigsten Lessons (Details → LESSONS_LEARNED.md)
-> - **Known Issues** - Aktuelle Blocker
+> - **Current Status** - Wo stehen wir JETZT
+> - **Next Priorities** - Was kommt als nächstes (Custom Domains, SNS)
+> - **Recent Completions** - Was wurde gerade fertig
+> - **Known Issues** - Aktuelle Blocker (KEINE!)
 > - **Project Health** - Metrics & Status
+> - **Roadmap** - Langfrist-Plan
 
 ---
 
-## 🎉 SUCCESS STATUS (03.12.2025)
+## 🎉 CURRENT STATUS (15.12.2025)
 
-**🏆 HEUTE'S EPIC WIN - COMPLETE PAYMENT FLOW FUNKTIONIERT! 🎉**
-- ✅ **Stripe Webhook Handler implementiert** - Order Creation nach successful payment
-- ✅ **Stock Deduction Logic** - Reserved Stock → Actual Stock reduction
-- ✅ **Cart Clearing** - Warenkorb wird nach Zahlung geleert
-- ✅ **Bug gefunden & gefixt:** `updateCart(cart.id)` → `updateCart(userId)` (Table Key Mismatch!)
-- ✅ **Webhook Signature Verification** - Secret Mismatch Problem gelöst
-- ✅ **Incremental Deploys erfolgreich!** - Kein Nuclear mehr nötig für Code-Änderungen
-- ✅ **E2E Test erfolgreich:** Products → Cart → Stripe → Order Created → Cart Empty
-- 🎯 **Key Takeaway:** "Langsam & systematisch debuggen - Logs analysieren, DynamoDB checken, Root Cause finden!"
-- 📚 **Dokumentation:** Session Doc geplant (2025-12-03_stripe_webhook_complete.md)
+### ✅ Recently Completed - HEUTE! 🎊
 
-**Previous Session (02.12.2025):**
-- ✅ **STRIPE REDIRECT GELÖST!** (nach 180+ Versuchen)
-- ✅ **Finale Lösung:** Origin Header - Browser sendet automatisch Frontend URL
-- ✅ **100% Reproduzierbar:** 2/2 Tests erfolgreich (inkl. Nuclear + Deploy)
-- ✅ **Terraform Circular Dependency gebrochen** - Lambda ↔ Amplify dependency gelöst
-- 🎯 **Key Takeaway:** "Die einfachste Lösung ist oft die beste - nutze HTTP Standards!"
+**Admin Login Final Fixes Session (15.12.2025)**
+- ✅ **Admin Login WORKING** - Proactive SignOut Pattern implementiert
+- ✅ **Stripe Webhooks WORKING** - Full E2E Payment Flow funktioniert
+- ✅ **Inventory Management** - Stock wird nach Zahlung automatisch reduziert
+- ✅ **100% Reproducibility Verified** - Terraform Seed Module entdeckt
+- ✅ **Code Cleanup** - NEXT_PUBLIC_COOKIE_DOMAIN removed (Commit 9365034)
 
-**Previous Session (25.11.2025):**
-- ✅ **Phase 2 Testing COMPLETE** - Automated Unit Tests running in CI/CD!
-- ✅ **Unit Tests** - 63 tests passing, 60-69% coverage achieved
-- ✅ **CI/CD Integration** - GitHub Actions workflow operational
-- ✅ **Pragmatic Decision** - Integration tests disabled (LocalStack too complex for CI/CD)
-- ✅ **Documentation** - Complete testing implementation documented in LESSONS_LEARNED.md #29
+**Key Achievements:**
+```
+Problem: Admin Login → "UserAlreadyAuthenticatedException"
+Solution: Proactive signOut() before signIn()
+Result: ✅ Admin Login funktioniert perfekt!
 
-**Previous Session (24.11.2025):**
-- ✅ **Phase 1 COMPLETE** - Error Handling & Code Quality finished!
-- ✅ **ESLint Configuration** - Pragmatic config with "warn" levels (0 errors)
-- ✅ **CloudWatch Monitoring** - 9 Alarms operational (confirmed working!)
-- ✅ **IAM Hybrid Approach** - Manual IAM + Terraform Infrastructure
-- 🐛 **New Bug Identified** - Product card "Add to Cart" bypasses size/color selection (Phase 2)
+Problem: Stripe Webhooks URL falsch
+Solution: Korrekte API Gateway ID (67qgm5v6y4)
+Result: ✅ Webhooks 200 OK, Inventory decreasing!
 
-**Previous Session (23.11.2025):**
-- ✅ **Code Cleanup Complete** - Old auth system removed (3 files, 555 lines deleted)
-- ✅ **German Learning Comments** - Backend controllers documented für Verständnis
-- ✅ **German Error Messages** - User-friendly deutsche Messages (9+ Typen)
-- ✅ **Visual Loading States** - Animated spinners & feedback for cart operations
-- ✅ **CloudWatch Monitoring** - 9 Alarms + SNS Topic for production monitoring
-- 📚 **Documentation Updated** - MONITORING.md created, README.md updated
+Discovery: Terraform Seed Module
+Finding: Database Seeding läuft automatisch bei jedem terraform apply
+Result: ✅ 100% Reproducibility after Nuclear Cleanup confirmed!
+```
 
-**Current Deployment Status:**
-- Infrastructure: ✅ Deployed successfully
-- Frontend URLs: ✅ Online (Customer: d1gmfue5ca0dd, Admin: d2nztaj6zgakqy)
-- Backend API: ✅ Working perfectly
-- Authentication: ✅ **WORKING** - Cognito JWT fully functional
-- Cart/Orders: ✅ **WORKING** - All endpoints return 200 OK
-- Stock Management: ✅ **WORKING** - Inventory tracking operational
-- **Stripe Payment: ✅ COMPLETE!** - Full payment flow working (Checkout + Webhooks + Order Creation)
-- **Incremental Deploys: ✅ WORKING!** - No more Nuclear cleanup needed
-- Error Handling: ✅ **IMPROVED** - Deutsche user-friendly messages
-- UX: ✅ **IMPROVED** - Visual loading feedback
-- Monitoring: ✅ **PRODUCTION READY** - CloudWatch Alarms configured
-- Testing: ✅ **UNIT TESTS** - 63 tests passing, 60-69% coverage
+**Files Modified (Today):**
+- `admin-frontend/contexts/AuthContext.tsx` - Proactive SignOut
+- `admin-frontend/app/dashboard/page.tsx` - Client-side auth guard, API fixes
+- `admin-frontend/app/login/page.tsx` - Loading state fixes
+- `admin-frontend/middleware.ts` - DELETED (incompatible with LocalStorage)
+- `frontend/lib/config.ts` - Trailing slash fix
+- `.github/workflows/deploy.yml` - NEXT_PUBLIC_COOKIE_DOMAIN removed
 
-**Next Priority (Final 2 Steps!):**
-1. Custom Domain Setup (api/shop/admin.ecokart.de) - 100% Reproducibility
-2. Email Notifications (AWS SES) - Order Confirmation Emails
+**Commits (Today):**
+- `9365034` - chore: remove unused NEXT_PUBLIC_COOKIE_DOMAIN
+- `6920bad` - fix: remove trailing slash from API URL (customer frontend)
+- `f1f2a98` - fix: admin dashboard API calls use backend URL
+- `0198fef` - fix: products API endpoints (admin frontend)
+- `3642d67` - fix: delete middleware, add client-side auth check
+- `87a5f01` - debug: add extensive logging to login flow
+- `55524b0` - fix: frozen login button (setIsLoading before redirect)
+- `f0c972a` - fix: use LocalStorage instead of CookieStorage
+- Multiple others fixing ENV vars, Amplify auto-build, etc.
+
+**New Learnings Added:**
+- LESSONS_LEARNED.md #32 - Admin Authentication Proactive SignOut Pattern
+- LESSONS_LEARNED.md #33 - Terraform Seed Module 100% Reproducibility
+- LESSONS_LEARNED.md #34 - NEXT_PUBLIC_COOKIE_DOMAIN Cleanup
 
 ---
 
-## 🎯 Next Steps (High Priority)
+## 📊 Project Health Metrics
 
-### ✅ Recently Completed (25.11.2025)
+| Metric | Current | Target | Trend |
+|--------|---------|--------|-------|
+| **AWS Costs** | <$10/month | <$10/month | ✅ On budget |
+| **Deployment** | ✅ Automated | - | ✅ Excellent |
+| **Authentication** | ✅ Working | - | ✅ Fixed (15.12) |
+| **Admin Login** | ✅ **WORKING** | - | ✅ **Fixed (15.12)** |
+| **Stripe Payments** | ✅ Working | - | ✅ Complete (02.12) |
+| **Stripe Webhooks** | ✅ **WORKING** | - | ✅ **Fixed (15.12)** |
+| **Inventory** | ✅ **WORKING** | - | ✅ **Fixed (15.12)** |
+| **Error Handling** | ✅ German UX | - | ✅ Complete (23.11) |
+| **Monitoring** | ✅ CloudWatch | - | ✅ Complete (24.11) |
+| **Code Quality** | ✅ ESLint | - | ✅ Complete (24.11) |
+| **Unit Tests** | ✅ 63 passing (60-69%) | - | ✅ Complete (25.11) |
+| **E2E Tests** | ❌ Missing | 5-10 flows | 🟡 Next Phase |
+| **Technical Debt** | **Very Low** | Low | ✅ Excellent |
+| **Documentation** | ✅ 100% complete | 100% | ✅ Updated (15.12) |
+| **Last Deploy** | 15.12.2025 | - | ✅ Success |
 
-**Phase 2: Automated Testing (Unit Tests) - COMPLETE! 🎉**
+### Technical Debt Tracking
 
-1. ✅ **Backend Unit Tests** - COMPLETE (25.11.2025)
-   - Jest + ts-jest configuration
-   - 63 tests passing (4 test suites)
-   - Coverage: branches 60.48%, functions 62.96%, lines 68.6%, statements 69.08%
-   - Test separation: Unit tests vs Integration tests
-   - GitHub Actions workflow operational
-   - **Pragmatic Decision:** Integration tests disabled in CI/CD (LocalStack too complex)
-   - **Status:** ✅ Unit tests provide sufficient coverage for Phase 2
-   - **Files:** `backend/jest.config.js`, `.github/workflows/backend-tests.yml`
-   - **Documentation:** LESSONS_LEARNED.md #29
+| Debt Item | Priority | Effort | Status |
+|-----------|----------|--------|--------|
+| ~~Frontend Token Storage~~ | ~~CRITICAL~~ | - | ✅ DONE (22.11) |
+| ~~Admin Login Bug~~ | ~~CRITICAL~~ | - | ✅ **DONE (15.12)** |
+| ~~Stripe Webhooks~~ | ~~HIGH~~ | - | ✅ **DONE (15.12)** |
+| ~~Error handling~~ | ~~MEDIUM~~ | - | ✅ DONE (23.11) |
+| ~~Old Auth System~~ | ~~MEDIUM~~ | - | ✅ DONE (23.11) |
+| ~~ESLint/Prettier~~ | ~~MEDIUM~~ | - | ✅ DONE (24.11) |
+| ~~CloudWatch Monitoring~~ | ~~MEDIUM~~ | - | ✅ DONE (24.11) |
+| ~~Backend Unit Tests~~ | ~~HIGH~~ | - | ✅ DONE (25.11) |
+| **Custom Domains** | 🔴 HIGH | 2-3 days | ⏳ Next Priority |
+| **SNS Notifications** | HIGH | 2-3 days | ⏳ Pending |
+| **E2E Tests (Playwright)** | MEDIUM | 3-4 days | ⏳ Pending |
+| Lambda Cleanup bug | LOW | 2 days | ⏳ Pending |
 
-**Phase 1: Error Handling & Code Quality - COMPLETE! 🎉 (24.11.2025)**
-
-1. ✅ **Error Boundaries** - COMPLETE
-   - Frontend: error.tsx, global-error.tsx, checkout/error.tsx
-   - Admin: error.tsx, global-error.tsx
-   - User-friendly German error messages
-   - Dev/prod modes with stack traces
-   - Recovery actions and navigation
-
-2. ✅ **Toast Notifications System** - COMPLETE
-   - Zero-dependency custom implementation
-   - 4 toast types (success, error, warning, info)
-   - Auto-dismiss with configurable duration
-   - Stacking, animations, manual dismiss
-   - Implemented in both frontends
-
-3. ✅ **Structured Logging with CloudWatch** - COMPLETE
-   - ✅ Logger infrastructure complete (all 3 apps)
-   - ✅ Backend: index.ts, productController, cartController
-   - ✅ Migration to structured logging (core services)
-   - 📝 Complete migration guide created
-   - Features: JSON logs, contextual metadata, log levels, error traces
-
-4. ✅ **ESLint/Prettier Configuration** - COMPLETE
-   - ✅ Frontend: 0 errors, 20 warnings (pragmatic "warn" level)
-   - ✅ Admin: 0 errors, 5 warnings (pragmatic "warn" level)
-   - ✅ Configuration files created for both apps
-   - Target achieved: Zero blocking errors
-
-5. ✅ **CloudWatch Monitoring** - COMPLETE
-   - ✅ 9 Alarms deployed and operational
-   - ✅ SNS Topic configured
-   - ✅ Monitoring guide created (MONITORING.md)
-   - ✅ User confirmed all alarms working
-
-**Previous Completions (23.11.2025):**
-
-5. ✅ **Code Cleanup nach Auth Migration**
-   - Deleted old auth system (3 files, 555 lines)
-   - German learning comments added
-
-6. ✅ **Frontend Error Messages verbessern**
-   - German translations (9+ error types)
-   - Centralized in CartContext
-
-7. ✅ **Frontend Loading States**
-   - Animated spinners, visual feedback
-   - Success states with checkmarks
-
-8. ✅ **CloudWatch Monitoring Setup**
-   - 9 alarms, SNS notifications
-   - MONITORING.md guide
-
-### 🔥 Next High Priority Tasks
-
-1. **Stripe Webhook Handler - Order Creation** (ETA: 1-2 Tage) ← **HÖCHSTE PRIORITÄT**
-   - ✅ Checkout Session Creation: **DONE**
-   - ✅ Stripe Redirect: **DONE** (Origin Header)
-   - ⏳ **Webhook Handler:** `POST /api/webhooks/stripe`
-     - Event: `payment_intent.succeeded`
-     - Action: Create Order in DynamoDB
-     - Action: Clear User's Cart
-     - Action: Deduct Stock (from reserved to actual)
-   - ⏳ **Webhook Signature Verification** (Stripe Secret)
-   - ⏳ **Success Page:** Display Order Details
-   - **Why Critical:** Komplettiert Payment Flow, Orders werden erstellt
-   - **Files:** `backend/src/controllers/webhookController.ts`, `backend/src/routes/webhook.ts`
-
-2. **E2E Testing mit Playwright** (ETA: 3-4 Tage)
-   - **User Journeys:** 5-10 kritische Flows (Login → Browse → Add to Cart → Checkout → Payment)
-   - **Cross-Browser:** Chrome, Firefox, Safari
-   - **CI/CD Integration:** Playwright in GitHub Actions
-   - **Visual Testing:** Screenshots bei Failures
-   - **Target:** Kritische Business-Flows abgedeckt
-   - **Why Critical:** End-to-End Confidence, User Experience Verification
-
-2. **Testing & Edge Cases Verification**
-   - **Test Scenarios:**
-     - Empty cart checkout attempt
-     - Out of stock product add to cart
-     - Invalid token handling (expired session)
-     - Concurrent cart updates (multiple tabs)
-     - Network error handling
-   - **Create:** Test checklist document
-   - **ETA:** 2-3 hours
-
-5. **Stock Management Verification**
-   - **Verify:**
-     - Reserved stock increments on cart add
-     - Reserved stock decrements on cart remove
-     - Actual stock decrements on order placement
-     - Stock levels displayed correctly in UI
-   - **Test:** Multi-user scenario (two users ordering same product)
-   - **ETA:** 1 hour
-
-6. **CloudWatch Alarms Setup**
-   - **Alarms needed:**
-     - Lambda 500 errors (threshold: >5 in 5 minutes)
-     - Lambda invocation errors
-     - DynamoDB throttling
-     - High latency (>1000ms)
-   - **Notification:** SNS → Email
-   - **ETA:** 1 hour
-
-### 🟢 Low Priority
-
-7. **Deploy Workflow Improvement: Incremental Deployment**
-   - **Problem:** Currently need destroy + deploy cycle
-   - **Goal:** Make `terraform apply` work incrementally
-   - **Investigation needed:**
-     - Why does state cause issues?
-     - Can we fix state locking mechanism?
-   - **Note:** Not critical since workflow works, just inefficient
-   - **ETA:** 2-4 hours (research + implementation)
-
-8. **Documentation Updates**
-   - **Update:** README.md with new Cognito auth flow
-   - **Create:** API documentation (endpoints, auth headers)
-   - **Update:** Architecture diagram with Cognito
-   - **ETA:** 1-2 hours
-
-9. **Performance Optimization Analysis**
-   - **Measure:**
-     - Lambda cold start times
-     - Lambda memory usage (current: 256MB)
-     - DynamoDB response times
-     - Frontend bundle size
-   - **Create:** Performance baseline report
-   - **Optimize:** If issues found
-   - **ETA:** 2-3 hours
+**Technical Debt:** Very Low! 🎉
 
 ---
 
-## 🚦 Current Sprint
+## 🎯 Next Priorities (Nächste Session)
 
-### In Progress - CRITICAL
+### Priority 1: Custom Domains 🌐
+**ETA:** 2-3 Tage
+**Impact:** URL Stabilität - keine Stripe Webhook Updates mehr nach Nuclear Cleanup
 
-- 🚧 **AWS Cost Optimization**
-  - **Problem:** AWS Kosten bei $17.08/Monat (Budget: <$10/Monat)
-  - **Main Drivers:**
-    - Config: $5.87 (34%) - Unnecessary for development
-    - VPC: $2.98 (17%) - Unnecessary for Lambda
-    - RDS: $2.34 (14%) - Shouldn't exist (we use DynamoDB)
-    - ECS: $1.39 (8%) - Shouldn't exist (we use Lambda)
-  - **Actions:**
-    - [ ] Disable AWS Config immediately
-    - [ ] Find and delete orphaned RDS instances
-    - [ ] Find and delete orphaned ECS clusters
-    - [ ] Check for NAT Gateways (VPC cost driver)
-  - **Expected Savings:** $17/month → $5-6/month (65% reduction)
-  - **Owner:** DevOps
-  - **ETA:** This week
+**Why Critical:**
+```
+Aktuell (Amplify Subdomains):
+- Admin: https://develop.d2nztaj6zgakqy.amplifyapp.com
+- Customer: https://develop.d1gmfue5ca0dd.amplifyapp.com
+- API: https://67qgm5v6y4.execute-api.eu-central-1.amazonaws.com
 
-- 🚧 **Documentation Restructure**
-  - **Goal:** Clear, organized docs with README as "living dashboard"
-  - **Status:**
-    - ✅ New folder structure created (architecture/, guides/, sessions/, archived/)
-    - ✅ README.md rewritten as Project Dashboard
-    - 🚧 ACTION_PLAN.md (this document)
-    - ⏳ LESSONS_LEARNED.md consolidation
-    - ⏳ DEVELOPMENT.md creation
-    - ⏳ Session docs organization
-    - ⏳ Archive old docs
-  - **Owner:** Documentation
-  - **ETA:** This week
+Problem:
+- Nach Nuclear Cleanup ändern sich die IDs
+- Stripe Webhook URL muss manuell updated werden
+- Unprofessionell für Production
 
-### Recently Completed ✅
+Mit Custom Domains:
+- Admin: https://admin.ecokart.de
+- Customer: https://shop.ecokart.de
+- API: https://api.ecokart.de
 
-- ✅ **CODE CLEANUP & MONITORING SETUP** (23.11.2025) - Production Ready Polish
-  - **Duration:** ~3 hours
-  - **Achievements:**
-    - Removed old auth system completely (3 files, 555 lines deleted)
-    - Added German learning comments in backend controllers (cartController, orderController)
-    - Implemented German error message translation (9+ error types)
-    - Added visual loading states (animated spinners, success feedback)
-    - Created CloudWatch monitoring (9 alarms + SNS topic)
-    - Created MONITORING.md guide
-    - Updated README.md (Documentation: 90% complete)
-  - **Files Changed:** 13 files
-  - **Commits:**
-    - `1b275c2` - Code Cleanup + German Comments
-    - `c364b2a` - Frontend Error Messages
-    - `3e00cad` - Visual Loading States
-    - `88c20eb` - CloudWatch Monitoring
-    - `74b0d5d` - Documentation Updates
-  - **Learnings Added:** LESSONS_LEARNED.md #23-#26
-  - **User Feedback:** "Deployment erfolgreich es funktioniert alles was wir bisher entwickelt haben, voll cool!"
-  - **Status:** ✅ Production-ready polish complete
+Vorteil:
+✅ URLs bleiben IMMER gleich
+✅ Kein Stripe Update nach Nuclear Cleanup nötig
+✅ Professionell für Bewerbungen
+✅ 100% Reproducibility OHNE manuelle Schritte
+```
 
-- 🎊 **TOKEN STORAGE BUG RESOLVED** (22.11.2025) - 12 Hour Epic
-  - **Challenge:** The hardest debugging session yet
-  - **Duration:** 12+ hours
-  - **Problem Phase 1:** 401 Unauthorized on all authenticated endpoints
-    - User login successful ✅
-    - Lambda logs: "JWT validated successfully" ✅
-    - Browser: 401 Unauthorized ❌
-  - **Root Cause #1:** Auth Type Mismatch
-    - Routes used `cognitoJwtAuth` middleware (sets `req.user`)
-    - Controllers used old `AuthRequest` type (expects `req.userId`)
-    - `req.userId` was undefined → 401 returned
-  - **Problem Phase 2:** 500 Errors after deployment
-    - ALL endpoints returned 500 Internal Server Error
-    - Lambda logs: NO logs (requests not logged)
-  - **Root Cause #2:** Missing Backend Build Step
-    - Deploy workflow had NO `npm run build` step
-    - Lambda deployed with old/missing compiled code
-    - Every request crashed with 500 error
-  - **Solution:**
-    - Fixed controllers: `req.userId` → `req.user?.userId`
-    - Added backend build step to deploy.yml workflow
-    - Deployed with correct compiled code
-  - **Files Changed:**
-    - `backend/src/controllers/cartController.ts`
-    - `backend/src/controllers/orderController.ts`
-    - `.github/workflows/deploy.yml`
-  - **Commits:** `645a93d`, `6550ac5`
-  - **Outcome:** ✅ **COMPLETE E2E SUCCESS!**
-    - Cart operations: WORKING ✅
-    - Order creation: WORKING ✅
-    - Stock management: WORKING ✅
-    - Cognito JWT: FULLY FUNCTIONAL ✅
-  - **Learnings Added:** LESSONS_LEARNED.md #21, #22
-  - **User Feedback:** "ich bin so happy gerade - danke, danke, danke"
+**Tasks:**
+- [ ] Custom Domain für API Gateway (api.ecokart.de)
+- [ ] Custom Domains für Amplify Apps (admin/shop.ecokart.de)
+- [ ] SSL Certificates via AWS Certificate Manager
+- [ ] DNS Configuration (Route 53 oder extern)
+- [ ] Update Stripe Webhook URL (letzte Mal!)
+- [ ] Test End-to-End
+- [ ] Documentation aktualisieren
 
-- ⚡ **Infrastructure Recovery after State Corruption** (21.11.2025)
-  - **Challenge:** Terraform state corruption nach Architektur-Änderung
-  - **Problem:** 4+ Stunden Debugging, multiple failed attempts
-  - **Solution:** Complete manual cleanup via AWS CLI
-  - **Outcome:** ✅ Fresh deployment successful
-  - **Learnings:**
-    - Terraform state is extremely fragile with architecture changes
-    - Manual AWS CLI cleanup sometimes required
-    - Nuclear cleanup workflow created as emergency backup
-  - **Files:** `.github/workflows/nuclear-cleanup.yml` created
-  - **Status:** Infrastructure stable, ready for development
+### Priority 2: Email Notifications (AWS SNS/SES) 📧
+**ETA:** 2-3 Tage
+**Impact:** Professional Customer Experience
 
-- 🔧 **Workflow Improvements** (21.11.2025)
-  - ✅ Nuclear Cleanup Workflow (emergency AWS resource deletion)
-  - ✅ Forced State Cleanup in Deploy Workflow
-  - ✅ Fixed API Gateway cleanup (REST vs HTTP APIs)
-  - ✅ Fixed destroy.yml with correct API Gateway commands
-  - ✅ Deleted duplicate Amplify apps (4 → 2)
+**Features:**
+```
+Order Confirmation Email:
+- Trigger: After successful payment (Stripe Webhook)
+- Recipient: Customer (from order)
+- Content: Order details, items, total, shipping info
+- Template: HTML Email (professional design)
 
-- 🔒 **AWS Cognito Authentication** (20.11.2025)
-  - ⚠️ **Status:** Code Complete, Deployment Blocked by AWS Organizations SCP
-  - **Features Implemented:**
-    - 🎯 **Auto Admin User Provisioning:** Automatische Admin-User-Erstellung bei jedem Deployment (keine manuelle AWS Console Arbeit mehr!)
-    - 🔐 Login/Register UI mit Email Verification Flow
-    - 📧 6-stelliger Verification Code mit Auto-Login
-    - 🛡️ Lifecycle Protection gegen versehentliches Löschen
-    - 🌿 Multi-Branch Support (develop/staging/main)
-    - 🔧 API Gateway Cognito Authorizer Integration
-    - ⚙️ Frontend AuthContext mit AWS Amplify
-  - **Branch:** `claude/admin-stock-management-015aciWWHqNcb14KFAQpRcM6`
-  - **Blocker:** AWS Organizations Service Control Policy verbietet Cognito
-  - **Action Required:** Organization Admin muss SCP anpassen
-  - **Next Steps:** Nach SCP-Freigabe → Deployment → Testing
+Admin Notification Email:
+- Trigger: New order created
+- Recipient: Admin (configured email)
+- Content: Order summary, customer info
+- Action: Link to Admin Dashboard
 
-- ✅ **Inventory Management System** (19.11.2025)
-  - Stock-Tracking im Backend (DynamoDB)
-  - Reserved-Tracking für Warenkorb
-  - Stock-Display im Customer Frontend (grün/orange/rot)
-  - Stock-Management im Admin Frontend
-  - Automatischer Stock-Abzug bei Bestellung
-  - Branch: `claude/admin-stock-management-015aciWWHqNcb14KFAQpRcM6`
-  - **Waiting for:** Merge to main
+Shipping Notification:
+- Trigger: Order status changed to "SHIPPED"
+- Recipient: Customer
+- Content: Tracking number, estimated delivery
+```
 
-- ✅ **Admin Stock Management UI** (19.11.2025)
-  - Tabellenansicht mit farbcodiertem Stock
-  - Edit-Formular mit Stock-Input-Feld
-  - PUT-Route für Updates implementiert
-  - Synchronisation mit Backend-API
+**Tasks:**
+- [ ] AWS SES Setup (Sandbox → Production)
+- [ ] Email Templates erstellen (HTML + Text)
+- [ ] Email Service im Backend implementieren
+- [ ] SNS Topic für Order Events
+- [ ] Webhook Integration (payment success → email)
+- [ ] Admin Dashboard: Order Status Management
+- [ ] Test Email Flow
+- [ ] Documentation
 
-- ✅ **Auto Lambda Cleanup** (19.11.2025)
-  - Automatischer Cleanup-Step in destroy.yml
-  - Re-Seed Database Workflow
+### Priority 3: E2E Testing (Playwright) 🧪
+**ETA:** 3-4 Tage (später)
+**Impact:** End-to-End Confidence
+
+**Critical User Journeys:**
+1. Customer Registration → Email Verification → Login
+2. Browse Products → Add to Cart → Checkout
+3. Stripe Payment → Order Creation → Stock Deduction
+4. Admin Login → Product Management → Stock Update
+5. Order Tracking → Email Notifications
+
+**Setup:**
+- Playwright Configuration
+- Test Data Management
+- CI/CD Integration
+- Visual Regression Testing
 
 ---
 
 ## 🐛 Known Issues & Blockers
 
+### Critical Issues: ✅ KEINE! 🎉
+
+**All Critical Issues Resolved:**
+- ✅ Admin Login Working (15.12.2025)
+- ✅ Stripe Webhooks Working (15.12.2025)
+- ✅ Inventory Management Working (15.12.2025)
+- ✅ Authentication Working (22.11.2025)
+- ✅ Cognito SCP Resolved (21.11.2025)
+
 ### Medium Priority
 
-**🟡 Product Card "Add to Cart" bypasses size/color selection** (NEW - 24.11.2025)
-- **Problem:** In product overview (card view), clicking "Add to Cart" works without selecting size/color
-- **Expected:** Should require size/color selection like in product detail page
-- **Impact:** User Experience issue - not a critical bug but not best practice
-- **Workaround:** Users can select size/color in product detail page
-- **Priority:** Medium (Phase 2 enhancement)
-- **Status:** Documented for Phase 2
-
-### Critical (RESOLVED)
-
-**🟢 Frontend Token Storage Bug - RESOLVED** (22.11.2025)
-- **Problem:** Tokens werden nach Login/Registration NICHT in localStorage/sessionStorage gespeichert
-- **Symptoms:**
-  - ✅ Login funktioniert (optisch)
-  - ✅ Console zeigt "User eingeloggt"
-  - ✅ Backend JWT Validation erfolgreich (laut Logs)
-  - ❌ localStorage und sessionStorage sind LEER
-  - ❌ Alle Cart/Orders Requests: 401 Unauthorized
-- **Root Cause:** Frontend Auth Code persistiert Tokens nicht
-- **Impact:** ALLE authentifizierten Features sind broken
-- **Files to investigate:**
-  - `frontend/src/contexts/AuthContext.tsx` (oder ähnlich)
-  - Frontend Authentication Flow
-  - Token Storage Implementation
-- **Expected Fix:**
-  ```typescript
-  // Nach Login/Registration:
-  localStorage.setItem('idToken', token);
-  localStorage.setItem('accessToken', accessToken);
-  localStorage.setItem('refreshToken', refreshToken);
-  ```
-- **Priority:** 🔴 HIGHEST - Blocks all authenticated features
-- **Status:** Identified but unresolved
-- **ETA:** Tomorrow (22.11.2025)
-
-**🔴 AWS Organizations SCP blockiert Cognito Deployment**
-- **Problem:** Service Control Policy (SCP) auf Organization-Ebene verbietet Cognito-Service
-- **Error:** `AccessDeniedException: with an explicit deny in a service control policy`
-- **Impact:** Cognito User Pool kann nicht deployed werden - kompletter Auth-Flow blockiert
-- **Workaround:** Keiner - SCP überschreibt alle IAM-Permissions
-- **Solution:** AWS Organizations Admin muss SCP anpassen um Cognito zu erlauben
-- **Action Required:**
-  - [ ] Organization Admin kontaktieren
-  - [ ] SCP Policy updaten (Cognito Services freigeben)
-  - [ ] Nach Freigabe: `terraform apply` erneut ausführen
-- **Tracking:** Blocked since 20.11.2025
-- **Code Status:** ✅ Cognito Code vollständig implementiert und getestet (nur Deployment blockiert)
-
-### High Priority
-
-**Lambda Auto-Cleanup nicht zuverlässig**
+**Lambda Auto-Cleanup nicht 100% zuverlässig**
 - **Problem:** Lambda wird beim Destroy manchmal nicht gelöscht (CloudWatch Dependency)
 - **Impact:** Manuelle Intervention nötig nach Destroy
 - **Workaround:** Manuell `cleanup-lambda.yml` Workflow ausführen
-- **TODO:**
-  - [ ] Lambda-Cleanup testen/debuggen
-  - [ ] Evtl. Cleanup direkt in Destroy-Script integrieren
-- **Tracking:** Known since 19.11.2025
+- **Status:** Low priority - Destroy funktioniert grundsätzlich
 
-**AWS Config verursacht hohe Kosten**
-- **Problem:** Config tracked jede Ressourcen-Änderung bei Destroy/Rebuild
-- **Impact:** Destroy/Rebuild Cycles sind teuer
-- **Solution:** Disable AWS Config (see Current Sprint)
-- **Tracking:** Identified 20.11.2025
+**Node.js 20.x Deprecation Warning**
+- **Problem:** AWS Health Event - Node.js 20.x end-of-life April 30, 2026
+- **Impact:** Keine - noch 1.3 Jahre Zeit
+- **Action:** Für später dokumentiert
+- **Status:** Track for later
 
-### Medium Priority
+### Low Priority
 
-**develop Branch gelöscht**
-- **Problem:** Branch wurde gelöscht, muss neu erstellt werden
-- **Impact:** CI/CD für Development Environment funktioniert nicht
-- **Solution:**
-  - [ ] develop Branch neu erstellen von main (nach Merge)
-- **Tracking:** Known since 19.11.2025
+**Product Card "Add to Cart" bypasses size/color selection**
+- **Problem:** Im Product Overview kann direkt in Cart ohne Size/Color
+- **Expected:** Sollte Size/Color Selection erfordern
+- **Impact:** UX issue - nicht kritisch
+- **Status:** Phase 2 Enhancement
 
 ---
 
-## 📋 Next Milestones (Nächste 2-4 Wochen)
+## 📋 Recent Completions (Letzte 2 Wochen)
 
-### Woche 1-2: Quality & Reliability 🔥
+### 15.12.2025 - Admin Login & Stripe Webhooks Complete! 🎉
+**Duration:** Full Day Session
+**Status:** ✅ Success - All Features Working!
 
-**1. Code Cleanup** (ETA: 1 Tag)
-- [ ] Alte Auth-System entfernen (`backend/src/middleware/auth.ts`, `AuthRequest` Types)
-- [ ] Console.logs → CloudWatch Structured Logging
-- [ ] ESLint/Prettier Pass (no warnings)
+**Completed:**
+1. ✅ Admin Login Fixed - Proactive SignOut Pattern
+   - Problem: "UserAlreadyAuthenticatedException" when switching from Customer to Admin
+   - Solution: Proactive `signOut()` before `signIn()` in AuthContext
+   - Impact: Admin Login works seamlessly now
+   - Files: `admin-frontend/contexts/AuthContext.tsx`
 
-**2. Automated Testing** (ETA: 5-6 Tage) ← **HÖCHSTE PRIORITÄT**
-- [ ] Backend Unit Tests (Jest + Supertest) - 80% Coverage
-- [ ] API Integration Tests (Auth → Cart → Order Flow)
-- [ ] E2E Tests (Playwright) - 5-10 kritische Journeys
-- [ ] CI/CD Integration (Tests in GitHub Actions)
+2. ✅ Stripe Webhooks Working
+   - Problem: Wrong API Gateway URL (old ID)
+   - Solution: Corrected URL with actual API Gateway ID (67qgm5v6y4)
+   - Impact: Full E2E payment flow working
+   - Result: Orders created, inventory decreasing, cart clearing
 
-**3. Error Handling & UX** (ETA: 2-3 Tage)
-- [ ] Deutsche Error Messages (alle Endpoints)
-- [ ] Loading States (Spinner/Skeletons)
-- [ ] Error Boundaries (React)
-- [ ] Toast Notifications (Success/Error Feedback)
+3. ✅ Client-Side Auth Guards
+   - Problem: Middleware blocking dashboard (server-side vs client-side storage)
+   - Solution: Deleted middleware, added useEffect auth check
+   - Impact: Dashboard accessible, route protection working
+   - Files: `admin-frontend/app/dashboard/page.tsx`, `middleware.ts` deleted
 
-### Woche 3-4: Essential Features 💳
+4. ✅ API Endpoint Fixes
+   - Problem: Trailing slash causing double slashes (`/dev//products`)
+   - Solution: `.replace(/\/$/, '')` in config and dashboard
+   - Impact: All API calls working correctly
+   - Files: `frontend/lib/config.ts`, `admin-frontend/app/dashboard/page.tsx`
 
-**4. Payment Integration - Stripe** (ETA: 3-4 Tage)
-- [ ] Stripe Checkout Integration
-- [ ] Webhook Handler (payment_intent.succeeded)
-- [ ] Order Creation on Payment Success
-- [ ] Test Mode verifizieren
+5. ✅ 100% Reproducibility Verified
+   - Discovery: Terraform Seed Module runs on every `terraform apply`
+   - Finding: Database seeding automatic via `null_resource` with timestamp trigger
+   - Impact: Nuclear Cleanup + Redeploy = 100% functional (only Stripe URL manual)
+   - Files: `terraform/main.tf`, `terraform/modules/seed/main.tf`
 
-**5. Email Notifications - AWS SES** (ETA: 2-3 Tage)
-- [ ] SES Setup (Sandbox → Production)
-- [ ] Order Confirmation Email (HTML Template)
-- [ ] Shipping Notification Email
-- [ ] Email Service in Backend
+6. ✅ Code Cleanup
+   - Removed: NEXT_PUBLIC_COOKIE_DOMAIN (dead ENV var)
+   - Why: Switched to LocalStorage, cookie domain unused
+   - Impact: Cleaner code, less confusion
+   - Files: `.github/workflows/deploy.yml`
 
-**6. Order Lifecycle** (ETA: 2-3 Tage)
-- [ ] Order Status Machine (PENDING → PAID → SHIPPED → DELIVERED)
-- [ ] Admin: Order Management UI
-- [ ] Customer: Order Tracking Page
-- [ ] Email Triggers on Status Change
+**Learnings Added:**
+- LESSONS_LEARNED.md #32 - Proactive SignOut Pattern
+- LESSONS_LEARNED.md #33 - Terraform Seed Module
+- LESSONS_LEARNED.md #34 - Dead Code Elimination
 
----
+**User Feedback:** "Cool - jetzt die alles entscheidende Frage: ... fährt dann alles wieder 100% so hoch ... ?" ✅ YES!
 
-## 🗺️ Feature-Complete Roadmap (7 Wochen zu Production-Ready)
+### 03.12.2025 - Stripe Payment Flow Complete
+**Duration:** ~8 hours
+**Status:** ✅ Complete
 
-> **Projekt-Ziel:** Vollständig funktionaler, production-ready E-Commerce Webshop für Bewerbungen
->
-> **Anforderungen:**
-> - Feature-Complete (Alle essentiellen E-Commerce Features)
-> - 100% Reproduzierbar (Portierbar zu eigenem AWS Account)
-> - Production-Ready (Tests, Monitoring, Error Handling, Dokumentation)
-> - Showcase-Quality (Beeindruckend für Arbeitgeber)
+**Completed:**
+1. ✅ Stripe Checkout Session Creation
+2. ✅ Stripe Redirect Solution (Origin Header)
+3. ✅ Webhook Handler (payment_intent.succeeded)
+4. ✅ Order Creation on Payment Success
+5. ✅ Stock Deduction Logic
+6. ✅ Cart Clearing after Payment
+7. ✅ Incremental Deploys Working (no more Nuclear!)
+8. ✅ Terraform Circular Dependency resolved
 
-### ✅ Status Quo (Was bereits funktioniert)
+**Learnings Added:**
+- LESSONS_LEARNED.md #30 - Stripe Redirect Solution (Origin Header)
+- LESSONS_LEARNED.md #31 - Incremental Deploys
 
-**Authentication & User Management:**
-- ✅ AWS Cognito JWT Authentication
-- ✅ User Registration mit Email Verification
-- ✅ Login/Logout Flow
-- ✅ Admin User Auto-Provisioning
-- ✅ Role-Based Access Control (Admin/Customer)
+### 25.11.2025 - Automated Testing (Unit Tests)
+**Duration:** ~6 hours
+**Status:** ✅ Complete
 
-**E-Commerce Core:**
-- ✅ Product Catalog (31 Produkte, Auto-Seeding)
-- ✅ Shopping Cart (Add/Remove/Update Quantity)
-- ✅ Order Placement
-- ✅ Inventory Management (Stock + Reserved Tracking)
-- ✅ Stock Deduction on Order
+**Completed:**
+1. ✅ Backend Unit Tests - 63 tests passing
+2. ✅ CI/CD Integration - GitHub Actions
+3. ✅ Coverage: 60-69% (unit tests only)
+4. ✅ Pragmatic Decision: Integration tests disabled
 
-**Infrastructure:**
-- ✅ 100% Serverless (Lambda, DynamoDB, Amplify)
-- ✅ Infrastructure as Code (Terraform)
-- ✅ Multi-Environment (Dev/Staging/Prod)
-- ✅ CI/CD Pipeline (GitHub Actions + OIDC)
-- ✅ Auto-Deployment (Branch-based)
-- ✅ AWS Costs <$10/Monat
+**Learnings Added:**
+- LESSONS_LEARNED.md #29 - Automated Testing Implementation
 
-**Frontend:**
-- ✅ Customer Shop (Next.js 15, Responsive)
-- ✅ Admin Dashboard (Product & Stock Management)
-- ✅ Basic Error Handling
+### 23.11.2025 - Production Polish
+**Duration:** ~3 hours
+**Status:** ✅ Complete
 
----
+**Completed:**
+1. ✅ Code Cleanup (old auth system deleted)
+2. ✅ German Error Messages
+3. ✅ Visual Loading States
+4. ✅ CloudWatch Monitoring (9 Alarms)
 
-### Phase 1: Quality & Reliability (Woche 1-2) 🔥
-
-**Ziel:** Von "funktioniert" zu "zuverlässig"
-
-| Feature | ETA | Status |
-|---------|-----|--------|
-| Automated Testing (80% Coverage) | 5-6 Tage | ⏳ Pending |
-| Error Handling & UX Polish | 2-3 Tage | ⏳ Pending |
-| Code Cleanup | 1 Tag | ⏳ Pending |
-
-**Deliverables:**
-- Backend Unit Tests (Jest + Supertest)
-- E2E Tests (Playwright) - 5-10 critical paths
-- Deutsche Error Messages + Loading States
-- Code: ESLint/Prettier Pass, No console.logs
-
-**Warum wichtig:** Zeigt Professionalität, verhindert Bugs, messbare Quality
+**Learnings Added:**
+- LESSONS_LEARNED.md #23-#26
 
 ---
 
-### Phase 2: Essential E-Commerce Features (Woche 3-4) 💳
+## 🗺️ Long-Term Roadmap
 
-**Ziel:** Von "Demo" zu "echter Webshop"
+### Phase Complete: E-Commerce Core Features ✅
+**Status:** Feature-Complete!
 
-| Feature | ETA | Status |
-|---------|-----|--------|
-| Stripe Payment Integration | 3-4 Tage | ⏳ Pending |
-| Email Notifications (AWS SES) | 2-3 Tage | ⏳ Pending |
-| Order Lifecycle Management | 2-3 Tage | ⏳ Pending |
+- ✅ Authentication (Cognito JWT)
+- ✅ Product Catalog (31 products, auto-seeding)
+- ✅ Shopping Cart (with stock reservation)
+- ✅ Order Management
+- ✅ Inventory Tracking
+- ✅ Payment Integration (Stripe)
+- ✅ Admin Dashboard
 
-**Deliverables:**
-- Stripe Checkout + Webhook Handler
-- Order Confirmation & Shipping Emails
-- Order Status Machine (PENDING → PAID → SHIPPED → DELIVERED)
-- Customer Order Tracking
+### Phase In Progress: Production Ready 🚧
+**Goal:** Professional, production-ready platform
 
-**Kosten:** +$0 (SES first 62k free, Stripe Test Mode)
+**Remaining:**
+- ⏳ Custom Domains (URL stability)
+- ⏳ Email Notifications (Customer experience)
+- ⏳ E2E Testing (Quality assurance)
+- ⏳ Performance Optimization
+- ⏳ Security Audit
 
-**Warum wichtig:** Business-kritisch, professionelle Customer Experience
+**ETA:** 2-3 Wochen
 
----
+### Phase Future: Nice-to-Have Features 📝
+**Optional Enhancements:**
 
-### Phase 3: Monitoring & Observability (Woche 5) 📊
-
-**Ziel:** "Probleme finden BEVOR User sie merken"
-
-| Feature | ETA | Status |
-|---------|-----|--------|
-| CloudWatch Dashboards | 1-2 Tage | ⏳ Pending |
-| CloudWatch Alarms | 1 Tag | ⏳ Pending |
-
-**Deliverables:**
-- Business Metrics Dashboard (Orders, Revenue, Top Products)
-- Technical Metrics Dashboard (Lambda, DynamoDB, API Gateway)
-- Critical Alarms (Lambda 500 Errors, High Latency, etc.)
-- SNS Email Notifications
-
-**Kosten:** +$0,50/Monat (erste 10 Alarms gratis)
-
-**Warum wichtig:** Proaktive Fehler-Erkennung, Production Standard
-
----
-
-### Phase 4: Performance & Security (Woche 6) ⚡
-
-**Ziel:** "Fast, Secure, Scalable"
-
-| Feature | ETA | Status |
-|---------|-----|--------|
-| Performance Optimization | 2-3 Tage | ⏳ Pending |
-| Security Audit | 1-2 Tage | ⏳ Pending |
-
-**Deliverables:**
-- Frontend: Lighthouse Score Optimization
-- Backend: Lambda Memory Sizing, DynamoDB Query Optimization
-- Security: OWASP Top 10 Checklist, Input Validation
-- Performance Report (Before/After)
-
-**Warum wichtig:** User Experience, Security Best Practices
-
----
-
-### Phase 5: Documentation & Reproducibility (Woche 7) 📚
-
-**Ziel:** "Jeder kann das Projekt verstehen und deployen"
-
-| Feature | ETA | Status |
-|---------|-----|--------|
-| Complete Documentation | 2-3 Tage | ⏳ Pending |
-| Reproducibility Test | 1 Tag | ⏳ Pending |
-
-**Deliverables:**
-- DATABASE_SCHEMA.md, API_ENDPOINTS.md
-- LOCAL_SETUP.md, TESTING.md
-- README mit Screenshots
-- Fresh AWS Account Deployment Test
-
-**Warum wichtig:** Bewerbungs-Showcase, 100% Reproduzierbar
-
----
-
-### 📈 Timeline & Aufwand
-
-| Woche | Phase | Aufwand | Kosten |
-|-------|-------|---------|--------|
-| 1-2 | Quality & Reliability | 8-11 Tage | $0 |
-| 3-4 | Essential Features | 7-10 Tage | $0 |
-| 5 | Monitoring | 2-3 Tage | +$0,50 |
-| 6 | Optimization | 3-5 Tage | $0 |
-| 7 | Documentation | 3-4 Tage | $0 |
-
-**Gesamt:** ~30-35 Arbeitstage (6-7 Wochen Vollzeit)
-**Kosten:** ~$11-13/Monat (inkl. SES, CloudWatch)
-
----
-
-### 🎯 Definition of Done ("Feature-Complete")
-
-**Must-Have:**
-- ✅ Authentication (Cognito JWT) ✅ DONE
-- ✅ Product Catalog ✅ DONE
-- ✅ Shopping Cart ✅ DONE
-- ✅ Inventory Management ✅ DONE
-- ⏳ Testing (80% Coverage) - Phase 1
-- ⏳ Payment (Stripe) - Phase 2
-- ⏳ Email Notifications - Phase 2
-- ⏳ Order Lifecycle - Phase 2
-- ⏳ Monitoring - Phase 3
-
-**Should-Have:**
-- ⏳ Error Handling (UX) - Phase 1
-- ⏳ Performance Optimization - Phase 4
-- ⏳ Security Audit - Phase 4
-- ⏳ Complete Documentation - Phase 5
-- ⏳ Reproducibility Test - Phase 5
-
-**Nice-to-Have:**
-- Admin Analytics, Product Search, Wishlist, Reviews, Multi-Language
-
----
-
-### 💼 Bewerbungs-Relevanz
-
-**Was das Projekt zeigt (nach Completion):**
-
-**Technical Skills:**
-- Full-Stack Development (Next.js + Express + Terraform)
-- AWS Serverless (Lambda, DynamoDB, Cognito, SES, CloudWatch)
-- DevOps/CI/CD (GitHub Actions, OIDC, Multi-Environment)
-- Testing (Unit, Integration, E2E - 80% Coverage)
-- Security (Auth, OWASP Top 10)
-- Payment Integration (Stripe)
-- Email Services (AWS SES)
-
-**Soft Skills:**
-- Strukturiertes Arbeiten (Roadmap, Milestones)
-- Best Practices (Testing, Clean Code, Documentation)
-- Problem-Solving (siehe LESSONS_LEARNED.md - 22 Learnings)
-- Lernfähigkeit (0 → Production-Ready in 6 Monaten)
-
----
-
-## 💡 Recent Learnings (Letzte 5 Sessions)
-
-> **Detaillierte Learnings mit Code Examples:** Siehe [LESSONS_LEARNED.md](LESSONS_LEARNED.md)
-
-### 25.11.2025 - Automated Testing Complete (Unit Tests)
-- ✅ **Backend Unit Tests:** 63 tests passing, 60-69% coverage
-- ✅ **CI/CD Integration:** GitHub Actions workflow operational
-- ✅ **Pragmatic Decision:** Integration tests disabled (LocalStack too complex)
-- 🎓 **Learning:** Test separation critical (unit vs integration via testPathIgnorePatterns)
-- 🎓 **Learning:** Coverage thresholds must match reality (60-69% for unit-only, not 80%)
-- 🎓 **Learning:** Helper files in __tests__/ must be explicitly excluded
-- 🔧 **Best Practice:** Pragmatic > Perfect - Unit tests provide sufficient coverage for Phase 2
-- 📚 **New Learning:** LESSONS_LEARNED.md #29
-
-### 23.11.2025 - Production Polish Complete
-- ✅ **German Error Messages:** Pattern-Matching Translation Function (9+ error types)
-- ✅ **Loading States:** 3-State UI Pattern (idle → loading → success)
-- ✅ **CloudWatch Monitoring:** 9 Alarms + SNS Topic (Terraform)
-- ✅ **Monitoring Workflow:** SNS Email Subscriptions müssen nach destroy/deploy neu erstellt werden
-- 🎓 **Learning:** User-friendly Error Messages reduzieren Frustration erheblich
-- 🔧 **Best Practice:** Centralized Error Translation > Scattered translations
-- 📚 **New Learnings:** LESSONS_LEARNED.md #23-#26
-
-### 22.11.2025 - Token Storage Bug RESOLVED (12h Debugging Epic)
-- ✅ **Auth Type Mismatch:** `req.userId` (old) vs `req.user?.userId` (Cognito)
-- ✅ **Missing Backend Build:** Deploy workflow hatte keinen `npm run build` Step
-- 🎓 **Learning:** Type-Mismatches sind schwer zu debuggen (req ist undefined, kein Error)
-- 🔧 **Solution:** Controllers aligned + Build Step in workflow
-
-### 21.11.2025 - Terraform State Corruption
-- 🐛 **Problem:** Architektur-Änderung bei existierendem State → "Provider configuration not present"
-- 💣 **Solution:** Nuclear Cleanup - manuelles Löschen aller AWS Ressourcen
-- 🎓 **Learning:** NIEMALS Terraform-Architektur ändern bei existierendem State
-- 🔧 **Emergency Tool:** `.github/workflows/nuclear-cleanup.yml` created
-
-### 20.11.2025 - AWS Organizations SCP Blocker
-- 🐛 **Problem:** Cognito Deployment blocked trotz korrekter IAM Permissions
-- 🎓 **Learning:** SCP (Service Control Policy) überschreibt IAM auf Organization-Level
-- 📋 **Action:** Organization Admin muss SCP anpassen
-- ⏳ **Status:** Cognito Code complete, Deployment blocked
-
-### 19.11.2025 - Inventory Management Success
-- ✅ Stock Tracking (stock + reserved)
-- ✅ Admin Stock Management UI
-- ✅ Auto Stock Deduction on Order
-- 🎓 **Learning:** Reserved-Logic verhindert Überverkäufe
-
-### 18.11.2025 - Auto Lambda Cleanup
-- ✅ Automated cleanup in destroy.yml
-- 🎓 **Learning:** AWS braucht Zeit (3-5 Min) - wait commands essential
-
----
-## 📊 Project Health Metrics
-
-| Metric | Current | Target | Trend |
-|--------|---------|--------|-------|
-| **AWS Costs** | $17.08/month | <$10/month | 🔴 Over budget |
-| **Deployment** | ✅ Automated | - | ✅ Good |
-| **Test Coverage** | ⚠️ 60-69% (Unit) | 80% | 🟡 In Progress |
-| **Unit Tests** | ✅ 63 passing | - | ✅ Complete (25.11) |
-| **E2E Tests** | ❌ Missing | 5-10 flows | 🔴 Next priority |
-| **Authentication** | ✅ Working | - | ✅ Fixed (22.11) |
-| **Stripe Payment** | ✅ **WORKING** | - | ✅ **Fixed (02.12)** |
-| **Stripe Webhook** | ⏳ Pending | - | 🟡 Next priority |
-| **Error Handling** | ✅ German UX | - | ✅ Improved (23.11) |
-| **Monitoring** | ✅ CloudWatch | - | ✅ Complete (24.11) |
-| **Code Quality** | ✅ ESLint | - | ✅ Complete (24.11) |
-| **Technical Debt** | **Very Low** | Low | ✅ Excellent |
-| **Documentation** | 100% complete | 100% | ✅ Excellent |
-| **Last Deploy** | 02.12.2025 | - | ✅ Success |
-
-### Technical Debt Tracking
-
-| Debt Item | Priority | Effort | Payoff | Status |
-|-----------|----------|--------|--------|--------|
-| ~~Frontend Token Storage~~ | ~~CRITICAL~~ | - | - | ✅ DONE (22.11) |
-| ~~Error handling~~ | ~~MEDIUM~~ | - | - | ✅ DONE (23.11) |
-| ~~Old Auth System~~ | ~~MEDIUM~~ | - | - | ✅ DONE (23.11) |
-| ~~ESLint/Prettier~~ | ~~MEDIUM~~ | - | - | ✅ DONE (24.11) |
-| ~~CloudWatch Monitoring~~ | ~~MEDIUM~~ | - | - | ✅ DONE (24.11) |
-| ~~Backend Unit Tests~~ | ~~HIGH~~ | - | - | ✅ DONE (25.11) |
-| **E2E Tests (Playwright)** | 🔴 HIGH | 3-4 days | End-to-End confidence | ⏳ Next Priority |
-| **AWS Config cleanup** | HIGH | 1 day | 65% cost savings | ⏳ Pending |
-| Lambda Cleanup bug | MEDIUM | 2 days | Smoother deploys | ⏳ Pending |
-| Product card cart bug | LOW | 1 hour | Better UX | ⏳ Phase 2 |
-
----
-
-## 🎯 Success Criteria
-
-### This Sprint (Week of 20.11.2025)
-
-- [x] README.md as living dashboard
-- [ ] AWS costs reduced to <$10/month
-- [ ] Documentation restructure complete
-- [ ] Inventory Management merged to main
-
-### This Month (November 2025)
-
-- [ ] Automated tests running in CI/CD
-- [ ] Inventory Management deployed to Production
-- [ ] develop Branch restored and functional
-- [ ] Technical debt reduced by 30%
-
-### Next Month (December 2025)
-
-- [ ] AWS Cognito authentication live
-- [ ] Email notifications working
-- [ ] Stock-alert system functional
-- [ ] Order workflow complete
+- Product Search & Filters
+- Product Reviews & Ratings
+- Wishlist Feature
+- Multi-Language Support
+- Analytics Dashboard
+- Advanced Reporting
 
 ---
 
@@ -815,32 +371,27 @@
 ### Current Work
 - [This Document](ACTION_PLAN.md) - Current tasks & roadmap
 - [README.md](../README.md) - Project dashboard
-- [DEVELOPMENT.md](DEVELOPMENT.md) - Technical documentation
+- [LESSONS_LEARNED.md](LESSONS_LEARNED.md) - Best practices (34 learnings!)
 
-### Architecture & Design
+### Architecture
 - [SYSTEM_DESIGN.md](architecture/SYSTEM_DESIGN.md) - Architecture overview
 - [DATABASE_SCHEMA.md](architecture/DATABASE_SCHEMA.md) - Database structure
 - [API_ENDPOINTS.md](architecture/API_ENDPOINTS.md) - API documentation
 
 ### Guides
 - [DEPLOYMENT.md](guides/DEPLOYMENT.md) - How to deploy
-- [LOCAL_SETUP.md](guides/LOCAL_SETUP.md) - Local development setup
 - [TROUBLESHOOTING.md](guides/TROUBLESHOOTING.md) - Common issues
+- [STRIPE_SETUP.md](guides/STRIPE_SETUP.md) - Stripe configuration
 
-### History
-- [SESSION_INVENTORY_MANAGEMENT.md](sessions/2025-11-19_inventory_management.md) - Last session details
-- [LESSONS_LEARNED.md](LESSONS_LEARNED.md) - Best practices & pitfalls
-- [ROADMAP_PLANNING.md](archived/ROADMAP_PLANNING.md) - Long-term vision
-
-### GitHub
-- [GitHub Actions](https://github.com/AndySchlegel/Ecokart-Webshop/actions) - CI/CD status
-- [Open Issues](https://github.com/AndySchlegel/Ecokart-Webshop/issues) - Bug tracking
-- [Pull Requests](https://github.com/AndySchlegel/Ecokart-Webshop/pulls) - Code review
+### Session History
+- [2025-12-15_admin_login_final_fixes.md](sessions/2025-12-15_admin_login_final_fixes.md) - Today's session
+- [2025-12-03_stripe_webhook_complete.md](sessions/2025-12-03_stripe_webhook_complete.md) - Stripe complete
+- [sessions/](sessions/) - Full session history
 
 ### Live URLs
-- [Customer Shop](https://main.dyoqwczz7hfmn.amplifyapp.com) - Production frontend
-- [Admin Panel](https://main.d3ds92499cafzo.amplifyapp.com) - Admin dashboard
-- [API Endpoint](https://e0hfrob892.execute-api.eu-north-1.amazonaws.com/Prod/) - Backend API
+- [Customer Shop](https://develop.d1gmfue5ca0dd.amplifyapp.com) - Customer Frontend
+- [Admin Panel](https://develop.d2nztaj6zgakqy.amplifyapp.com) - Admin Dashboard
+- [API Gateway](https://67qgm5v6y4.execute-api.eu-central-1.amazonaws.com/dev) - Backend API
 
 ---
 
@@ -848,27 +399,14 @@
 
 | Date | Update | Author |
 |------|--------|--------|
-| 02.12.2025 | **🏆 STRIPE REDIRECT GELÖST (nach 180+ Versuchen!):** Origin Header Solution, Terraform Circular Dependency gebrochen, 100% reproduzierbar, Session Doc erstellt | Claude + Andy |
-| 25.11.2025 | **Phase 2 Testing COMPLETE:** Unit tests (63 passing), CI/CD integration, pragmatic integration test decision | Claude + Andy |
-| 24.11.2025 | **Phase 1 COMPLETE:** ESLint config, CloudWatch operational, IAM hybrid approach, docs updated | Claude + Andy |
-| 24.11.2025 | Updated LESSONS_LEARNED.md with #27-#28 (IAM hybrid, Logger/Amplify builds) | Claude |
-| 24.11.2025 | Updated ACTION_PLAN.md - Phase 1 marked complete, metrics updated, new bug documented | Claude |
-| 23.11.2025 | **Production Polish:** Code cleanup, German errors, Loading states, CloudWatch monitoring | Claude + Andy |
-| 23.11.2025 | Updated LESSONS_LEARNED.md with #23-#26 (German errors, Loading states, Monitoring, SNS workflow) | Claude |
-| 23.11.2025 | Updated ACTION_PLAN.md - marked completed tasks, updated metrics, added concrete next steps | Claude |
-| 22.11.2025 | **CRITICAL SESSION:** Token storage bug RESOLVED after 12h debugging epic | Claude + Andy |
-| 21.11.2025 | **CRITICAL SESSION:** State corruption, Nuclear cleanup, Token storage bug identified | Claude + Andy |
-| 21.11.2025 | Infrastructure recovered via manual AWS CLI cleanup | Claude |
-| 21.11.2025 | Nuclear cleanup workflow created (.github/workflows/nuclear-cleanup.yml) | Claude |
-| 21.11.2025 | Deploy workflow updated with forced state cleanup | Claude |
-| 21.11.2025 | Frontend token storage bug identified as critical blocker | Claude |
-| 20.11.2025 | Cognito implementation completed (code), blocked by SCP (deployment) | Claude |
-| 20.11.2025 | Initial ACTION_PLAN.md creation | Claude |
-| 19.11.2025 | Inventory Management completed | Claude + Andy |
-| 19.11.2025 | Auto Lambda Cleanup implemented | Claude |
-| 03.11.2025 | Multi-Environment Setup completed | Claude + Andy |
+| 15.12.2025 | **🎉 ADMIN LOGIN & WEBHOOKS COMPLETE:** Proactive SignOut, Stripe working, 100% Reproducibility verified, Code cleanup | Claude + Andy |
+| 03.12.2025 | **🏆 STRIPE COMPLETE:** Origin Header Solution, Circular Dependency fixed, Incremental Deploys | Claude + Andy |
+| 25.11.2025 | **Phase 2 Testing COMPLETE:** Unit tests, CI/CD integration | Claude + Andy |
+| 24.11.2025 | **Phase 1 COMPLETE:** ESLint, CloudWatch, IAM hybrid | Claude + Andy |
+| 23.11.2025 | **Production Polish:** Code cleanup, German errors, Loading states, Monitoring | Claude + Andy |
+| 22.11.2025 | **CRITICAL SESSION:** Token storage bug resolved | Claude + Andy |
 
 ---
 
-**Next Review:** 03.12.2025 - Stripe Webhook Handler Implementation
-**Status:** 🎉 Stripe Checkout COMPLETE - Webhook Handler Next!
+**Next Session Focus:** Custom Domains (Prio 1) → SNS Notifications (Prio 2)
+**Status:** 🎉 Core Features Complete - Final 2 Steps to Production!

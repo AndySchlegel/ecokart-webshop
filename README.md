@@ -23,16 +23,17 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 - ✅ **Infrastructure as Code** - Komplette Infrastruktur in Terraform definiert
 - ✅ **Best Practices** - CI/CD, Security, Cost Optimization, Clean Code
 
-**Status:** Aktuell funktionsfähig (Auth → Cart → Orders → Stock Management) - in aktiver Entwicklung zu Feature-Completeness
+**Status:** Aktuell funktionsfähig (Auth → Cart → Orders → Payments → Stock Management) - nur noch 2 Features bis Production Launch!
 
 ---
 
 ## 🚦 Current Status
 
-**Last Updated:** 3. Dezember 2025
+**Last Updated:** 15. Dezember 2025
 
 ### ✅ Implemented Features
 - ✅ **Authentication** - AWS Cognito JWT (User Registration, Login, Email Verification)
+- ✅ **Admin Authentication** - Proactive SignOut, LocalStorage, Client-Side Auth Guards
 - ✅ **Customer Shop** - Next.js 15 Frontend auf AWS Amplify
 - ✅ **Admin Panel** - Product & Inventory Management Dashboard
 - ✅ **Inventory System** - Stock tracking mit reserved logic (Overselling Prevention)
@@ -44,17 +45,15 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 - ✅ **E2E Workflow** - Complete Payment Flow: Products → Cart → Stripe Checkout → Order Creation
 - ✅ **Error Handling** - User-friendly deutsche Error Messages
 - ✅ **Loading States** - Visual feedback für Cart Operations
-- ✅ **CloudWatch Monitoring** - 9 Alarms für Lambda, DynamoDB, API Gateway (See [docs/guides/MONITORING.md](docs/guides/MONITORING.md))
+- ✅ **CloudWatch Monitoring** - 9 Alarms für Lambda, DynamoDB, API Gateway
 - ✅ **Code Quality** - ESLint/Prettier configured (0 errors, warnings only)
-- ✅ **Unit Tests** - Jest + ts-jest, 63 tests passing, 60-69% coverage (See [backend/jest.config.js](backend/jest.config.js))
+- ✅ **Unit Tests** - Jest + ts-jest, 63 tests passing, 60-69% coverage
 - ✅ **Incremental Deploys** - No more Nuclear cleanup needed for code changes!
-
-### 🚧 In Progress
-- 🚧 **E2E Testing** - Playwright für kritische User Journeys (Next Priority)
+- ✅ **100% Reproducibility** - Terraform Seed Module macht automatic database seeding
 
 ### 📋 Next Milestones (Final 2 Steps to Production!)
-1. **Custom Domain Setup** - api.ecokart.de, shop.ecokart.de, admin.ecokart.de (100% Reproducibility)
-2. **Email Notifications** - Order Confirmation, Shipping Updates (AWS SES)
+1. **Custom Domain Setup** - api.ecokart.de, shop.ecokart.de, admin.ecokart.de (Eliminiert manuelle URL-Updates)
+2. **Email Notifications** - Order Confirmation via AWS SNS/SES
 3. **Production Launch** - Security Audit, Performance Optimization
 
 **Detailed Roadmap:** [docs/ACTION_PLAN.md](docs/ACTION_PLAN.md)
@@ -67,13 +66,16 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 |--------|--------|--------|
 | **Deployment** | ✅ Automated | - |
 | **Authentication** | ✅ Cognito JWT | - |
+| **Admin Login** | ✅ Working | - |
+| **Stripe Payments** | ✅ Complete | - |
+| **Inventory** | ✅ Working | - |
 | **Monitoring** | ✅ CloudWatch Alarms | - |
 | **Code Quality** | ✅ ESLint configured | - |
 | **Unit Tests** | ✅ 63 passing (60-69%) | - |
 | **E2E Tests** | ❌ Missing | 5-10 flows |
 | **AWS Costs** | ✅ <$10/month | <$10/month |
 | **Documentation** | ✅ 100% complete | 100% |
-| **Last Deploy** | 25.11.2025 | - |
+| **Last Deploy** | 15.12.2025 | - |
 
 ---
 
@@ -96,9 +98,9 @@ git push origin develop  # Auto-deploys to development
 ### For Users
 
 **Live URLs** (after deployment):
-- 🛍️ **Customer Shop:** https://main.dyoqwczz7hfmn.amplifyapp.com
-- 👨‍💼 **Admin Panel:** https://main.d3ds92499cafzo.amplifyapp.com
-- 🔌 **API:** https://e0hfrob892.execute-api.eu-north-1.amazonaws.com/Prod/
+- 🛍️ **Customer Shop:** https://develop.d1gmfue5ca0dd.amplifyapp.com
+- 👨‍💼 **Admin Panel:** https://develop.d2nztaj6zgakqy.amplifyapp.com
+- 🔌 **API:** https://67qgm5v6y4.execute-api.eu-central-1.amazonaws.com/dev
 
 **Access:** Contact repository owner for test credentials
 
@@ -131,9 +133,9 @@ git push origin develop  # Auto-deploys to development
 ### 📖 Quick Links
 | Document | Purpose | Last Updated |
 |----------|---------|--------------|
-| [ACTION_PLAN.md](docs/ACTION_PLAN.md) | Current tasks & roadmap | 24.11.2025 |
+| [ACTION_PLAN.md](docs/ACTION_PLAN.md) | Current tasks & roadmap | 15.12.2025 |
 | [DEVELOPMENT.md](docs/DEVELOPMENT.md) | Technical documentation | 20.11.2025 |
-| [LESSONS_LEARNED.md](docs/LESSONS_LEARNED.md) | Best practices & pitfalls | 24.11.2025 |
+| [LESSONS_LEARNED.md](docs/LESSONS_LEARNED.md) | Best practices & pitfalls | 15.12.2025 |
 | [STRIPE_SETUP.md](docs/guides/STRIPE_SETUP.md) | Stripe Keys & Deployment Secrets | 25.11.2025 |
 
 ### 📂 Documentation Structure
@@ -155,7 +157,7 @@ docs/
 │   └── TROUBLESHOOTING.md
 │
 └── sessions/                   # Development history
-    ├── 2025-11-19_inventory_management.md
+    ├── 2025-12-15_admin_login_final_fixes.md
     └── README.md
 ```
 
@@ -199,6 +201,7 @@ Ecokart-Webshop/
 - 📦 Order management
 - 📊 **Inventory tracking** (stock + reserved)
 - 👨‍💼 Admin dashboard for product management
+- 💳 **Stripe Payment Integration** (Checkout + Webhooks)
 
 ### Technical Features
 - ⚡ **100% Serverless** - No servers to manage
@@ -207,6 +210,7 @@ Ecokart-Webshop/
 - 🔒 **Secure** - JWT auth + OIDC for CI/CD
 - 📦 **IaC** - Everything in Terraform
 - 🔄 **CI/CD** - Automated deployments via GitHub Actions
+- ✅ **100% Reproducible** - Automatic database seeding via Terraform
 
 ---
 
@@ -222,11 +226,11 @@ Ecokart-Webshop/
 # View logs
 aws logs tail /aws/lambda/ecokart-development-api --follow
 
-# Re-seed database
-# GitHub Actions → Run "Re-Seed Database" workflow
+# Re-seed database (automatic via Terraform!)
+terraform apply  # Seed module runs automatically
 
 # View Terraform outputs
-cd terraform/examples/basic && terraform output
+cd terraform && terraform output
 ```
 
 ---
@@ -235,17 +239,19 @@ cd terraform/examples/basic && terraform output
 
 See [docs/ACTION_PLAN.md#known-issues](docs/ACTION_PLAN.md#known-issues) for current blockers.
 
-**Quick Fixes:**
-- Lambda sometimes requires manual cleanup after destroy
-  → Use `.github/workflows/cleanup-lambda.yml`
-- AWS Config causing high costs
-  → See cost optimization guide in ACTION_PLAN.md
+**All Critical Issues:** Resolved! ✅
 
 ---
 
 ## 📈 Roadmap
 
-### Recently Completed (Nov-Dec 2025)
+### Recently Completed (Dec 2025)
+- ✅ **Admin Login Complete** - Proactive SignOut, LocalStorage, Client-Side Guards (15.12.2025)
+- ✅ **Stripe Webhooks Working** - Full payment flow functional (15.12.2025)
+- ✅ **100% Reproducibility Verified** - Terraform Seed Module discovered (15.12.2025)
+- ✅ **NEXT_PUBLIC_COOKIE_DOMAIN Cleanup** - Dead code removed (15.12.2025)
+
+### Previously Completed (Nov 2025)
 - ✅ **Payment Integration** - Stripe Checkout & Webhooks (03.12.2025)
 - ✅ **Incremental Deploys** - No more Nuclear cleanup for code changes (03.12.2025)
 - ✅ **Unit Tests** - 63 tests passing, CI/CD integration (25.11.2025)
@@ -253,9 +259,9 @@ See [docs/ACTION_PLAN.md#known-issues](docs/ACTION_PLAN.md#known-issues) for cur
 - ✅ **Inventory Management System** - Stock tracking, Admin UI (19.11.2025)
 - ✅ **AWS Cognito Authentication** - JWT, Email Verification (20.11.2025)
 
-### Current Sprint (Final Steps to Production!)
+### Current Sprint (Final Steps!)
 - 🚧 Custom Domain Setup (api/shop/admin.ecokart.de)
-- 🚧 Email Notifications (AWS SES)
+- 🚧 Email Notifications (AWS SNS/SES)
 
 ### Next Up
 - [ ] E2E Testing (Playwright)
@@ -275,6 +281,8 @@ This project demonstrates:
 - Monorepo with multiple Next.js apps
 - TypeScript full-stack development
 - Cost optimization strategies
+- Payment Integration (Stripe)
+- 100% Reproducible Infrastructure
 
 **Lessons Learned:** [docs/LESSONS_LEARNED.md](docs/LESSONS_LEARNED.md)
 
