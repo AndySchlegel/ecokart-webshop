@@ -382,7 +382,11 @@ jobs:
           echo "📋 Planning deployment for: ${{ steps.env.outputs.environment }}"
           echo "📁 Using config: environments/${{ steps.env.outputs.environment }}.tfvars"
 
+          # Plan mit -refresh=true um sicherzustellen, dass Terraform den aktuellen State
+          # mit der Konfiguration vergleicht und Amplify ENV Vars bei JEDEM Deploy setzt
+          # WICHTIG: Ohne refresh würde Terraform bei Frontend-only Changes keine Amplify Updates erkennen
           terraform plan \
+            -refresh=true \
             -var-file="environments/${{ steps.env.outputs.environment }}.tfvars" \
             -var="github_access_token=${{ steps.github-token.outputs.token }}" \
             -var="jwt_secret=${{ steps.jwt-secret.outputs.secret }}" \
@@ -400,11 +404,68 @@ jobs:
         working-directory: terraform
         run: |
           echo "🚀 Applying infrastructure for: ${{ steps.env.outputs.environment }}"
+
+          # Apply the plan (refresh wurde bereits bei terraform plan durchgeführt)
           terraform apply -auto-approve tfplan
+
           echo "✅ Infrastructure deployed successfully to ${{ steps.env.outputs.environment }}!"
 
       # ======================================================================
-      # 16. Terraform Destroy (if requested, mit Environment-Config!)
+      # 16.5. Force Amplify ENV Vars Update (für 100% Reproduzierbarkeit)
+      # ======================================================================
+      # WICHTIG: Dieser Step stellt sicher, dass Amplify ENV Vars IMMER gesetzt sind,
+      # auch wenn Terraform keine Infrastructure-Changes erkannt hat.
+      # Das ist kritisch für destroy + redeploy Szenarien!
+      - name: 🔄 Ensure Amplify Environment Variables
+        if: github.event.inputs.destroy != 'true'
+        working-directory: terraform
+        run: |
+          echo "🔄 Ensuring Amplify Environment Variables are set..."
+
+          # Get values from Terraform outputs
+          USER_POOL_ID=$(terraform output -raw cognito_user_pool_id)
+          CLIENT_ID=$(terraform output -raw cognito_user_pool_client_id)
+          API_URL=$(terraform output -raw api_gateway_url)
+          ADMIN_APP_ID=$(terraform output -raw admin_amplify_app_id)
+          CUSTOMER_APP_ID=$(terraform output -raw amplify_app_id)
+
+          echo "📊 Values from Terraform:"
+          echo "  - User Pool ID: $USER_POOL_ID"
+          echo "  - Client ID: ${CLIENT_ID:0:10}..."
+          echo "  - API URL: $API_URL"
+          echo "  - Admin App ID: $ADMIN_APP_ID"
+          echo "  - Customer App ID: $CUSTOMER_APP_ID"
+
+          # Update Admin Amplify ENV Vars
+          echo "🔧 Updating Admin Frontend ENV Vars..."
+          aws amplify update-app \
+            --app-id "$ADMIN_APP_ID" \
+            --environment-variables \
+              NEXT_PUBLIC_USER_POOL_ID="$USER_POOL_ID" \
+              NEXT_PUBLIC_USER_POOL_CLIENT_ID="$CLIENT_ID" \
+              NEXT_PUBLIC_API_URL="$API_URL" \
+              NEXT_PUBLIC_AWS_REGION="${{ env.AWS_REGION }}" \
+              AMPLIFY_MONOREPO_APP_ROOT="admin-frontend" \
+              AMPLIFY_DIFF_DEPLOY="false" \
+            --region ${{ env.AWS_REGION }}
+
+          # Update Customer Amplify ENV Vars
+          echo "🔧 Updating Customer Frontend ENV Vars..."
+          aws amplify update-app \
+            --app-id "$CUSTOMER_APP_ID" \
+            --environment-variables \
+              NEXT_PUBLIC_USER_POOL_ID="$USER_POOL_ID" \
+              NEXT_PUBLIC_USER_POOL_CLIENT_ID="$CLIENT_ID" \
+              NEXT_PUBLIC_API_URL="$API_URL" \
+              NEXT_PUBLIC_AWS_REGION="${{ env.AWS_REGION }}" \
+              AMPLIFY_MONOREPO_APP_ROOT="frontend" \
+              AMPLIFY_DIFF_DEPLOY="false" \
+            --region ${{ env.AWS_REGION }}
+
+          echo "✅ Amplify Environment Variables ensured!"
+
+      # ======================================================================
+      # 17. Terraform Destroy (if requested, mit Environment-Config!)
       # ======================================================================
       - name: 💥 Terraform Destroy
         if: github.event.inputs.destroy == 'true'
@@ -425,7 +486,7 @@ jobs:
           echo "✅ Infrastructure destroyed for ${{ steps.env.outputs.environment }}"
 
       # ======================================================================
-      # 17. Get Outputs and Create Summary
+      # 18. Get Outputs and Create Summary
       # ======================================================================
       - name: 📊 Deployment Summary
         if: github.event.inputs.destroy != 'true'
@@ -462,7 +523,7 @@ jobs:
           echo "✅ **All systems operational!**" >> $GITHUB_STEP_SUMMARY
 
       # ======================================================================
-      # 18. Notify on Failure
+      # 19. Notify on Failure
       # ======================================================================
       - name: ❌ Deployment Failed
         if: failure()
