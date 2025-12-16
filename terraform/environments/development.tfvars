@@ -87,38 +87,43 @@ enable_cognito_auth = true
 enable_auto_seed = true
 
 # ----------------------------------------------------------------------------
-# Custom Domain Konfiguration
+# Custom Domain Konfiguration - SUBDOMAIN DELEGATION
 # ----------------------------------------------------------------------------
 
 # Custom Domain aktivieren (für 100% reproduzierbare URLs)
-# ITERATION 1: Disabled - nutzen Random Amplify URLs zum Testen
-enable_custom_domain = false
+# WICHTIG: Wir nutzen SUBDOMAIN DELEGATION (aws.his4irness23.de)
+# Die Hauptdomain his4irness23.de bleibt bei Infomaniak (schützt VPN + Webseite)
+enable_custom_domain = true
 
-# Basis-Domain (bei Infomaniak registriert)
-domain_name = "his4irness23.de"
+# Basis-Domain: Die SUBDOMAIN die zu Route 53 delegiert wird
+# NICHT die Hauptdomain! Subdomain Delegation schützt bestehende Services!
+domain_name = "aws.his4irness23.de"
 
-# Subdomains (optional - defaults sind bereits gesetzt)
-api_subdomain   = "api"    # → api.his4irness23.de
-shop_subdomain  = "shop"   # → shop.his4irness23.de
-admin_subdomain = "admin"  # → admin.his4irness23.de
+# Subdomains unter aws.his4irness23.de
+api_subdomain   = "api"    # → api.aws.his4irness23.de
+shop_subdomain  = "shop"   # → shop.aws.his4irness23.de
+admin_subdomain = "admin"  # → admin.aws.his4irness23.de
 
-# WICHTIG: Nach Deploy DNS CNAME Records in Infomaniak erstellen!
-# Verwende: terraform output dns_records_for_infomaniak
+# DNS wird AUTOMATISCH von Amplify + Route 53 verwaltet
+# KEINE manuellen CNAME Records in Infomaniak nötig!
 
 # ----------------------------------------------------------------------------
-# Route53 DNS Management
+# Route53 DNS Management - SUBDOMAIN DELEGATION
 # ----------------------------------------------------------------------------
 
 # Route53 aktivieren für 100% automatische DNS-Verwaltung
-# Eliminiert manuelle DNS-Schritte in Infomaniak
-# ITERATION 1: Disabled - erst nach Basic Stack Test aktivieren
-enable_route53 = false
+# Mit Subdomain Delegation: NUR aws.his4irness23.de wird zu Route 53 delegiert
+# Hauptdomain his4irness23.de bleibt bei Infomaniak (VPN + Webseite geschützt!)
+enable_route53 = true
 
-# WICHTIG: Nach erstem Deploy mit enable_route53=true:
-# 1. Terraform zeigt Name Server in Outputs
-# 2. Diese Name Server bei Infomaniak eintragen (einmalig!)
+# Nach Deploy Schritte:
+# 1. Terraform zeigt Route 53 Name Server in Outputs: terraform output route53_nameservers
+# 2. NS Record in Infomaniak DNS Zone erstellen (EINMALIG):
+#    Name:  aws
+#    Type:  NS
+#    Value: [Die 4 Nameservers von Terraform Output]
 # 3. DNS Propagation abwarten (5-60 Minuten)
-# 4. Danach sind ALLE DNS-Changes automatisch via Terraform
+# 4. Danach: 100% Reproduzierbarkeit - URLs ändern sich NIE mehr!
 
 # ----------------------------------------------------------------------------
 # Zusätzliche Tags
