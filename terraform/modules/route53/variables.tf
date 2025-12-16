@@ -8,12 +8,14 @@
 # ----------------------------------------------------------------------------
 
 variable "domain_name" {
-  description = "Root domain name (e.g., his4irness23.de)"
+  description = "Domain name - can be root domain (e.g., his4irness23.de) OR subdomain (e.g., aws.his4irness23.de)"
   type        = string
 
   validation {
-    condition     = can(regex("^[a-z0-9][a-z0-9-]*\\.[a-z]{2,}$", var.domain_name))
-    error_message = "domain_name must be a valid domain (e.g., example.com)"
+    # Allows both root domains (example.com) and subdomains (subdomain.example.com)
+    # Pattern: one or more labels (alphanumeric + hyphens) separated by dots, ending with 2+ letter TLD
+    condition     = can(regex("^([a-z0-9][a-z0-9-]*\\.)+[a-z]{2,}$", var.domain_name))
+    error_message = "domain_name must be a valid domain or subdomain (e.g., example.com or aws.example.com)"
   }
 }
 
