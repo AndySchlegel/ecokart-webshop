@@ -63,5 +63,41 @@ resource "aws_iam_role_policy" "amplify_ssm_write" {
   })
 }
 
+# ----------------------------------------------------------------------------
+# Route53 + ACM Access (für Custom Domain Validation)
+# ----------------------------------------------------------------------------
+# Amplify benötigt Route53 + ACM Permissions für automatische Custom Domain Setup
+
+resource "aws_iam_role_policy" "amplify_route53_acm" {
+  name = "${var.app_name}-route53-acm-policy"
+  role = aws_iam_role.amplify_service_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "route53:ListHostedZones",
+          "route53:ListResourceRecordSets",
+          "route53:ChangeResourceRecordSets",
+          "route53:GetChange"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "acm:RequestCertificate",
+          "acm:DescribeCertificate",
+          "acm:ListCertificates",
+          "acm:AddTagsToCertificate"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Data Source für Account ID
 data "aws_caller_identity" "current" {}

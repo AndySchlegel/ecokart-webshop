@@ -249,7 +249,8 @@ jobs:
                 "iam:DetachRolePolicy", "iam:ListAttachedRolePolicies", "iam:ListRolePolicies",
                 "iam:PassRole", "iam:TagRole", "iam:UntagRole",
                 "iam:CreatePolicy", "iam:DeletePolicy", "iam:GetPolicy",
-                "iam:GetPolicyVersion", "iam:ListPolicyVersions"
+                "iam:GetPolicyVersion", "iam:ListPolicyVersions",
+                "iam:CreateServiceLinkedRole", "iam:DeleteServiceLinkedRole", "iam:GetServiceLinkedRoleDeletionStatus"
               ],
               "Resource": "*"
             }]
@@ -345,6 +346,37 @@ jobs:
           EOF
           create_policy "${ROLE_NAME}-cognito" /tmp/cognito-policy.json
 
+          # 11. Route53 Policy (for Custom Domain DNS management)
+          cat > /tmp/route53-policy.json <<'EOF'
+          {
+            "Version": "2012-10-17",
+            "Statement": [{
+              "Effect": "Allow",
+              "Action": [
+                "route53:*",
+                "route53domains:*"
+              ],
+              "Resource": "*"
+            }]
+          }
+          EOF
+          create_policy "${ROLE_NAME}-route53" /tmp/route53-policy.json
+
+          # 12. ACM Policy (for SSL Certificate management)
+          cat > /tmp/acm-policy.json <<'EOF'
+          {
+            "Version": "2012-10-17",
+            "Statement": [{
+              "Effect": "Allow",
+              "Action": [
+                "acm:*"
+              ],
+              "Resource": "*"
+            }]
+          }
+          EOF
+          create_policy "${ROLE_NAME}-acm" /tmp/acm-policy.json
+
           echo "✅ All policies created and attached!"
 
       # ======================================================================
@@ -361,7 +393,7 @@ jobs:
           echo "- ✅ **GitHub OIDC Provider:** token.actions.githubusercontent.com" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ **IAM Role:** $ROLE_NAME" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ **Role ARN:** \`$ROLE_ARN\`" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ **10 Policies Attached**" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ **12 Policies Attached**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Next Steps" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
