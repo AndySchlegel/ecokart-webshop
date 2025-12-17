@@ -59,7 +59,8 @@ app.use(cors({
     'http://localhost:3000',      // Customer Frontend (lokal)
     'http://localhost:3001',      // Admin Frontend (lokal)
     'http://localhost:3002',      // Alternatives Frontend (lokal)
-    /https:\/\/.*\.amplifyapp\.com$/  // Alle Amplify URLs (z.B. develop.d123.amplifyapp.com)
+    /https:\/\/.*\.amplifyapp\.com$/,  // Alle Amplify URLs (z.B. develop.d123.amplifyapp.com)
+    /https:\/\/(shop|admin)\.aws\.his4irness23\.de$/  // Custom Domains (shop.aws.his4irness23.de, admin.aws.his4irness23.de)
   ],
   credentials: true               // Erlaube Cookies/Authorization Headers
 }));
