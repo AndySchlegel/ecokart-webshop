@@ -265,7 +265,7 @@ module "amplify" {
   # Frontend can determine its own URL at runtime using window.location.origin
   environment_variables = {
     AMPLIFY_MONOREPO_APP_ROOT      = var.amplify_monorepo_app_root
-    NEXT_PUBLIC_API_URL            = var.enable_custom_domains ? "https://${module.custom_domain[0].api_domain_name}/${var.api_gateway_stage_name}" : module.lambda.api_gateway_url
+    NEXT_PUBLIC_API_URL            = var.enable_custom_domain ? "https://${module.custom_domain[0].api_domain_name}/${var.api_gateway_stage_name}" : module.lambda.api_gateway_url
     AMPLIFY_DIFF_DEPLOY            = "false"
     # Cognito Configuration
     NEXT_PUBLIC_USER_POOL_ID       = module.cognito.user_pool_id
@@ -330,7 +330,7 @@ module "amplify_admin" {
   # Cognito Credentials für Amplify Auth
   environment_variables = {
     AMPLIFY_MONOREPO_APP_ROOT      = var.admin_amplify_monorepo_app_root
-    NEXT_PUBLIC_API_URL            = var.enable_custom_domains ? "https://${module.custom_domain[0].api_domain_name}/${var.api_gateway_stage_name}" : module.lambda.api_gateway_url
+    NEXT_PUBLIC_API_URL            = var.enable_custom_domain ? "https://${module.custom_domain[0].api_domain_name}/${var.api_gateway_stage_name}" : module.lambda.api_gateway_url
     AMPLIFY_DIFF_DEPLOY            = "false"
     # Cognito Configuration (gleicher User Pool wie Customer Frontend)
     NEXT_PUBLIC_USER_POOL_ID       = module.cognito.user_pool_id
