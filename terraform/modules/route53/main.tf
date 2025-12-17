@@ -21,6 +21,10 @@ resource "aws_route53_zone" "main" {
       Name = var.domain_name
     }
   )
+
+  lifecycle {
+    prevent_destroy = true  # ⚠️ CRITICAL: Verhindert versehentliches Löschen der DNS Zone!
+  }
 }
 
 # Data Source für existierende Hosted Zone (falls create_hosted_zone=false)

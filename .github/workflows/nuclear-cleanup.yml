@@ -1,10 +1,37 @@
-name: Nuclear Cleanup - Delete Everything
+name: Nuclear Cleanup - Infrastructure Only
+
+# ============================================================================
+# ⚠️ CRITICAL: This workflow ONLY deletes INFRASTRUCTURE!
+# ============================================================================
+#
+# ✅ DELETED (100% Reproduzierbar):
+#    - Amplify Apps (Shop & Admin Frontends)
+#    - Lambda Functions
+#    - API Gateway REST APIs & Custom Domain Mappings
+#    - Cognito User Pools
+#    - DynamoDB Tables
+#    - IAM Roles (Infrastructure)
+#    - CloudWatch Logs & Alarms
+#    - Terraform State Files & Locks
+#    - SSM Parameters
+#
+# 🔒 PRESERVED (Permanent Custom Domains):
+#    - Route53 Hosted Zones
+#    - ACM SSL Certificates
+#    - Route53 DNS Records
+#    - Custom Domain URLs bleiben stabil!
+#
+# Nach Nuclear Cleanup + Deploy:
+#    → Infrastructure neu erstellt ✅
+#    → Custom Domains funktionieren sofort ✅
+#    → URLs sind identisch! ✅
+# ============================================================================
 
 on:
   workflow_dispatch:
     inputs:
       confirm_nuclear:
-        description: 'Type "NUCLEAR" to confirm complete deletion'
+        description: 'Type "NUCLEAR" to confirm infrastructure deletion (Custom Domains bleiben!)'
         required: true
         type: string
       environment:
@@ -52,6 +79,34 @@ jobs:
           echo "🔍 Verifying AWS credentials..."
           aws sts get-caller-identity
           echo "✅ AWS authentication successful"
+
+      - name: 🔒 Verify Custom Domain Protection
+        run: |
+          echo "🔍 Checking Custom Domain resources (should exist and remain)..."
+          echo ""
+
+          # Check Route53 Hosted Zone
+          echo "1️⃣ Route53 Hosted Zone:"
+          if aws route53 list-hosted-zones | grep -q "aws.his4irness23.de"; then
+            echo "   ✅ Route53 Zone exists (will be PRESERVED)"
+          else
+            echo "   ⚠️  Route53 Zone not found (OK if not created yet)"
+          fi
+
+          # Check ACM Certificates
+          echo ""
+          echo "2️⃣ ACM Certificates:"
+          CERT_COUNT=$(aws acm list-certificates --region ${{ env.AWS_REGION }} | grep -c "his4irness23.de" || echo "0")
+          if [ "$CERT_COUNT" -gt 0 ]; then
+            echo "   ✅ Found $CERT_COUNT ACM Certificate(s) (will be PRESERVED)"
+          else
+            echo "   ⚠️  No ACM Certificates found (OK if not created yet)"
+          fi
+
+          echo ""
+          echo "🔒 Custom Domain Protection: Active"
+          echo "   → This workflow will NOT delete Route53 or ACM resources"
+          echo "   → Custom Domain URLs will remain stable after cleanup"
 
       - name: 🗑️ Delete Amplify Apps
         run: |
@@ -379,32 +434,33 @@ jobs:
           fi
         continue-on-error: true
 
-      - name: 🗑️ Delete Terraform State from S3
+      - name: ⚠️ Terraform State Management (MANUAL)
         run: |
-          echo "🗑️ Deleting Terraform state files..."
-
-          BUCKET_NAME="ecokart-terraform-state-805160323349"
-          STATE_KEYS=(
-            "development/terraform.tfstate"
-            "development-v2/terraform.tfstate"
-            "personal-development/terraform.tfstate"
-          )
-
-          for STATE_KEY in "${STATE_KEYS[@]}"; do
-            if aws s3api head-object \
-              --bucket "$BUCKET_NAME" \
-              --key "$STATE_KEY" \
-              --region ${{ env.AWS_REGION }} &>/dev/null; then
-
-              echo "   - Deleting state file: s3://$BUCKET_NAME/$STATE_KEY"
-              aws s3 rm "s3://$BUCKET_NAME/$STATE_KEY" --region ${{ env.AWS_REGION }}
-
-              echo "   ✅ State file deleted: $STATE_KEY"
-            else
-              echo "   ℹ️  State file already deleted or doesn't exist: $STATE_KEY"
-            fi
-          done
+          echo "⚠️  Terraform State wird NICHT automatisch gelöscht!"
+          echo ""
+          echo "🔒 GRUND: Custom Domain Ressourcen müssen im State bleiben"
+          echo ""
+          echo "📋 Nach diesem Nuclear Cleanup hast du 2 Optionen:"
+          echo ""
+          echo "Option A: State behalten (EMPFOHLEN)"
+          echo "   → Terraform erkennt Custom Domains automatisch"
+          echo "   → Nächstes Deploy funktioniert out-of-the-box"
+          echo "   → URLs bleiben stabil"
+          echo ""
+          echo "Option B: State manuell löschen (NUR wenn nötig)"
+          echo "   → Nur wenn State corrupted ist"
+          echo "   → Nach Deploy: Terraform Import für Custom Domains nötig"
+          echo "   → Anleitung in docs/LESSONS_LEARNED.md"
+          echo ""
+          echo "✅ Terraform State bleibt unverändert (Custom Domains geschützt)"
         continue-on-error: true
+
+      # DEAKTIVIERT: Automatisches State Delete
+      # Grund: Custom Domain Ressourcen müssen im State bleiben!
+      # Falls State manuell gelöscht werden muss:
+      #   1. Backup erstellen: aws s3 cp s3://ecokart-terraform-state-805160323349/development/terraform.tfstate ./backup.tfstate
+      #   2. State löschen: aws s3 rm s3://ecokart-terraform-state-805160323349/development/terraform.tfstate
+      #   3. Nach Deploy: Terraform Import durchführen (siehe docs/LESSONS_LEARNED.md)
 
       - name: 🗑️ Delete DynamoDB State Lock Entries
         run: |

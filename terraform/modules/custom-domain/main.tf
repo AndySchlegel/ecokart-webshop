@@ -33,6 +33,7 @@ resource "aws_acm_certificate" "api" {
 
   lifecycle {
     create_before_destroy = true
+    prevent_destroy       = true  # ⚠️ CRITICAL: Verhindert versehentliches Löschen! ACM Validation dauert 15-30 Min!
   }
 }
 
