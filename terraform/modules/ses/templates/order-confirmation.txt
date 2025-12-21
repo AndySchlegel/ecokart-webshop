@@ -3,6 +3,8 @@ AIR LEGACY
 BESTELLBESTÄTIGUNG
 ========================================
 
+BESTELLUNG ERFOLGREICH!
+
 Hallo {{customerName}},
 
 Deine Bestellung ist bei uns eingegangen.
@@ -17,13 +19,13 @@ BESTELLNUMMER
 #{{orderId}}
 
 ----------------------------------------
-BESTELLÜBERSICHT
+DEINE PRODUKTE
 ----------------------------------------
 
 {{#each items}}
 {{this.name}}
-Menge: {{this.quantity}} × {{this.unitPrice}} €
-Summe: {{this.price}} €
+Menge: {{this.quantity}}
+Preis: {{this.price}} €
 
 {{/each}}
 ----------------------------------------
