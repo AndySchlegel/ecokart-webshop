@@ -104,6 +104,32 @@ module "cognito" {
 }
 
 # ----------------------------------------------------------------------------
+# SES Module - E-Mail Versand (Order Confirmations)
+# ----------------------------------------------------------------------------
+# Erstellt:
+# - SES E-Mail Identity (Sender Verification)
+# - E-Mail Templates (Order Confirmation, Welcome)
+# - Configuration Set (für Tracking)
+#
+# Note: Startet im SES Sandbox Mode
+# - Kann nur an verifizierte E-Mails senden
+# - Max 200 E-Mails/Tag
+# - Für Production: Domain Verification + AWS Support Ticket nötig
+
+module "ses" {
+  source = "./modules/ses"
+
+  project_name = var.project_name
+  environment  = var.environment
+  sender_email = var.ses_sender_email
+  brand_name   = "Ecokart"
+
+  enable_welcome_email = false  # Später aktivieren wenn gewünscht
+
+  tags = local.common_tags
+}
+
+# ----------------------------------------------------------------------------
 # Lambda Module - Backend API + API Gateway
 # ----------------------------------------------------------------------------
 # Erstellt:
@@ -138,6 +164,8 @@ module "lambda" {
     # Stripe Payment Integration
     STRIPE_SECRET_KEY       = var.stripe_secret_key
     STRIPE_WEBHOOK_SECRET   = var.stripe_webhook_secret
+    # SES E-Mail Configuration
+    SES_SENDER_EMAIL        = var.ses_sender_email
     # FRONTEND_URL: Use provided URL or fallback to localhost
     # NOTE: Backend will auto-detect the actual frontend URL from request headers (origin, x-frontend-url)
     # This is just a fallback for local development

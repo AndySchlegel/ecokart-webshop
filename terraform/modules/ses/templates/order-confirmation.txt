@@ -1,0 +1,43 @@
+========================================
+🌿 ${brand_name} - Bestellbestätigung
+========================================
+
+Hallo {{customerName}},
+
+vielen Dank für deine Bestellung! Wir haben sie erhalten und werden sie schnellstmöglich bearbeiten.
+
+📦 BESTELLNUMMER: #{{orderId}}
+
+----------------------------------------
+BESTELLDETAILS
+----------------------------------------
+
+{{#each items}}
+{{this.name}}
+Menge: {{this.quantity}} x {{this.unitPrice}} €
+Gesamt: {{this.price}} €
+
+{{/each}}
+----------------------------------------
+GESAMTSUMME: {{totalAmount}} €
+----------------------------------------
+
+📍 LIEFERADRESSE
+{{shippingAddress.name}}
+{{shippingAddress.street}}
+{{shippingAddress.postalCode}} {{shippingAddress.city}}
+{{shippingAddress.country}}
+
+🔗 Bestellung verfolgen:
+{{orderTrackingUrl}}
+
+========================================
+
+Bei Fragen zu deiner Bestellung kannst du uns jederzeit kontaktieren.
+
+${brand_name} - Nachhaltigkeit trifft Online-Shopping 🌱
+
+Diese E-Mail wurde automatisch generiert.
+Bitte antworte nicht auf diese E-Mail.
+
+========================================

@@ -98,6 +98,36 @@ resource "aws_iam_role_policy" "ssm_access" {
   })
 }
 
+# ----------------------------------------------------------------------------
+# SES (E-Mail Versand) Access
+# ----------------------------------------------------------------------------
+# Erlaubt Lambda das Versenden von E-Mails via SES
+# Benötigt für:
+# - Order Confirmation E-Mails
+# - Transaktionale E-Mails
+
+resource "aws_iam_role_policy" "ses_access" {
+  name = "${var.function_name}-ses-policy"
+  role = aws_iam_role.lambda_exec.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ses:SendEmail",
+          "ses:SendRawEmail",
+          "ses:SendTemplatedEmail"
+        ]
+        Resource = "*"
+        # Note: SES Permissions können nicht auf spezifische E-Mail Adressen
+        # eingeschränkt werden. Resource = "*" ist AWS Best Practice für SES.
+      }
+    ]
+  })
+}
+
 # Data Sources für dynamische ARN-Erstellung
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}

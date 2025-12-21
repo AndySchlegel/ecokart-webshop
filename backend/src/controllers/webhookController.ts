@@ -27,6 +27,7 @@ import Stripe from 'stripe';
 import { stripe } from '../config/stripe';
 import database from '../config/database-adapter';
 import { logger } from '../utils/logger';
+import { emailService } from '../services/email.service';
 
 // Webhook Secret (aus Stripe CLI oder Dashboard)
 // Für lokales Development: Set via Environment Variable
@@ -277,12 +278,23 @@ async function handleCheckoutSessionCompleted(
   logger.info('Cart cleared after order creation', { userId, orderId: order.id });
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // SCHRITT 6: Weitere Aktionen (Optional - für später)
+  // SCHRITT 6: Order Confirmation E-Mail senden
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // TODO für Phase 3:
-  // - Bestätigungs-Email senden (AWS SES)
-  // - Notification an Admin
+
+  // E-Mail an Customer senden (non-blocking - Fehler stoppen Order Creation nicht!)
+  await emailService.sendOrderConfirmationEmail({
+    order,
+    customerEmail: shippingAddress.email || session.customer_email || '',
+    customerName: shippingAddress.name,
+  });
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // SCHRITT 7: Weitere Aktionen (Optional - für später)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // TODO für später:
+  // - Admin Notification (SNS oder Dashboard Badge)
   // - Analytics Event tracken
+  // - Inventory Management Update
   // etc.
 }
 

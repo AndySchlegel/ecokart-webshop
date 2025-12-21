@@ -81,6 +81,14 @@ admin_basic_auth_password = "admin1234"
 enable_cognito_auth = true
 
 # ----------------------------------------------------------------------------
+# SES E-Mail Versand Konfiguration
+# ----------------------------------------------------------------------------
+
+# E-Mail Adresse für Order Confirmation E-Mails
+# AWS sendet Verification E-Mail an diese Adresse → Link klicken!
+ses_sender_email = "andy.schlegel@chakademie.org"
+
+# ----------------------------------------------------------------------------
 # Database Seeding
 # ----------------------------------------------------------------------------
 

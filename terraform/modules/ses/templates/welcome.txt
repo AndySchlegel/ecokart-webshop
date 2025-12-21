@@ -1,0 +1,21 @@
+========================================
+🌿 Willkommen bei ${brand_name}!
+========================================
+
+Hallo {{userName}},
+
+schön, dass du dich für ${brand_name} entschieden hast! Wir freuen uns, dich in unserer Community begrüßen zu dürfen.
+
+WAS DICH ERWARTET:
+- 🌱 Nachhaltige Produkte aus verantwortungsvoller Produktion
+- 📦 Schneller und umweltfreundlicher Versand
+- 💚 Ein Beitrag zu einer besseren Zukunft mit jedem Einkauf
+
+🔗 Jetzt einkaufen:
+{{shopUrl}}
+
+========================================
+
+${brand_name} - Nachhaltigkeit trifft Online-Shopping 🌱
+
+========================================

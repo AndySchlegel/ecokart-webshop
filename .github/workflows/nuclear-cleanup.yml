@@ -488,6 +488,55 @@ jobs:
           fi
         continue-on-error: true
 
+      - name: 🗑️ Delete SES Configuration Sets & Templates
+        run: |
+          echo "🗑️ Deleting SES Configuration Sets & Templates for ${{ inputs.environment }}..."
+
+          CONFIG_SET_NAME="ecokart-${{ inputs.environment }}"
+
+          # Delete Configuration Set
+          if aws ses describe-configuration-set \
+            --configuration-set-name "$CONFIG_SET_NAME" \
+            --region ${{ env.AWS_REGION }} &>/dev/null; then
+
+            echo "   - Deleting Configuration Set: $CONFIG_SET_NAME"
+            aws ses delete-configuration-set \
+              --configuration-set-name "$CONFIG_SET_NAME" \
+              --region ${{ env.AWS_REGION }}
+
+            echo "   ✅ Configuration Set deleted: $CONFIG_SET_NAME"
+          else
+            echo "   ℹ️  Configuration Set already deleted: $CONFIG_SET_NAME"
+          fi
+
+          # Delete SES Templates
+          TEMPLATES=(
+            "ecokart-order-confirmation"
+            "ecokart-welcome"
+          )
+
+          for TEMPLATE_NAME in "${TEMPLATES[@]}"; do
+            if aws ses get-template \
+              --template-name "$TEMPLATE_NAME" \
+              --region ${{ env.AWS_REGION }} &>/dev/null; then
+
+              echo "   - Deleting SES Template: $TEMPLATE_NAME"
+              aws ses delete-template \
+                --template-name "$TEMPLATE_NAME" \
+                --region ${{ env.AWS_REGION }}
+
+              echo "   ✅ SES Template deleted: $TEMPLATE_NAME"
+            else
+              echo "   ℹ️  SES Template already deleted: $TEMPLATE_NAME"
+            fi
+          done
+
+          echo ""
+          echo "   ℹ️  NOTE: SES Email Identity (sender address) is NOT deleted"
+          echo "   → Email verification persists across cleanups"
+          echo "   → No need to re-verify email after cleanup"
+        continue-on-error: true
+
       - name: 🗑️ Delete SSM Parameters
         run: |
           echo "🗑️ Deleting SSM Parameters for ${{ inputs.environment }}..."
@@ -539,7 +588,11 @@ jobs:
           echo "   - ✅ CloudWatch Metric Alarms"
           echo "   - ✅ DynamoDB State Lock Entries"
           echo "   - ✅ SSM Parameters"
+          echo "   - ✅ SES Configuration Sets & Templates"
           echo "   - ✅ Terraform State Files"
+          echo ""
+          echo "🔒 Preserved Resources (account-level):"
+          echo "   - ✅ SES Email Identity (no re-verification needed)"
           echo ""
           echo "✅ Environment is now completely clean!"
           echo ""

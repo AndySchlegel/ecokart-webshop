@@ -120,6 +120,30 @@ output "cognito_user_pool_endpoint" {
 }
 
 # ----------------------------------------------------------------------------
+# SES (E-Mail Service) Outputs
+# ----------------------------------------------------------------------------
+
+output "ses_sender_email" {
+  description = "SES Sender E-Mail Adresse (muss verifiziert werden!)"
+  value       = module.ses.sender_email
+}
+
+output "ses_configuration_set_name" {
+  description = "SES Configuration Set Name (für Tracking)"
+  value       = module.ses.configuration_set_name
+}
+
+output "ses_order_confirmation_template" {
+  description = "SES Template Name für Order Confirmation E-Mails"
+  value       = module.ses.order_confirmation_template_name
+}
+
+output "ses_email_identity_arn" {
+  description = "SES E-Mail Identity ARN"
+  value       = module.ses.email_identity_arn
+}
+
+# ----------------------------------------------------------------------------
 # Amplify Outputs (conditional)
 # ----------------------------------------------------------------------------
 
@@ -243,25 +267,35 @@ output "setup_complete" {
 
     ${var.enable_admin_amplify ? "Admin Frontend:\n      • App URL: ${module.amplify_admin[0].default_domain}\n      • Branch: ${var.github_branch}" : ""}
 
+    SES (E-Mail Service):
+      • Sender: ${module.ses.sender_email}
+      • Templates: Order Confirmation, Welcome
+      • Status: ⚠️  E-Mail Verifizierung erforderlich!
+
     🚀 Nächste Schritte:
     ────────────────────────────────────────────────────────────────────
 
-    1. DynamoDB mit Daten füllen:
+    1. SES E-Mail verifizieren (WICHTIG!):
+       → AWS sendet E-Mail an: ${module.ses.sender_email}
+       → Öffne E-Mail und klicke Verification-Link
+       → Ohne Verifizierung können KEINE E-Mails gesendet werden!
+
+    2. DynamoDB mit Daten füllen:
        cd ../../../backend
        npm run dynamodb:migrate:single -- --region ${var.aws_region}
 
-    2. Testuser erstellen (optional):
+    3. Testuser erstellen (optional):
        cd ../../../backend
        node scripts/create-test-user.js
        → Login: demo@ecokart.com / Demo1234!
 
-    3. API testen:
+    4. API testen:
        curl ${module.lambda.api_gateway_url}api/products
 
-    4. Frontend Environment Variable setzen:
+    5. Frontend Environment Variable setzen:
        NEXT_PUBLIC_API_URL=${module.lambda.api_gateway_url}
 
-    ${var.enable_amplify || var.enable_admin_amplify ? "5. GitHub-Verbindung herstellen (EINMALIG!):\n       ../../scripts/connect-github.sh\n       → Öffnet automatisch die AWS Console URLs\n       → Klicke \"Reconnect repository\" für jede App\n       → Nach Verbindung starten Builds automatisch\n" : ""}
+    ${var.enable_amplify || var.enable_admin_amplify ? "6. GitHub-Verbindung herstellen (EINMALIG!):\n       ../../scripts/connect-github.sh\n       → Öffnet automatisch die AWS Console URLs\n       → Klicke \"Reconnect repository\" für jede App\n       → Nach Verbindung starten Builds automatisch\n" : ""}
     📚 Dokumentation:
     ────────────────────────────────────────────────────────────────────
     Siehe terraform/README.md für Details

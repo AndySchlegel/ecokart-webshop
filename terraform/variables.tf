@@ -395,6 +395,36 @@ variable "enable_route53" {
 }
 
 # ----------------------------------------------------------------------------
+# SES (E-Mail Versand) Konfiguration
+# ----------------------------------------------------------------------------
+
+variable "ses_sender_email" {
+  description = <<EOT
+    E-Mail Adresse für SES Sender Identity
+
+    Diese E-Mail wird als Absender für:
+    - Order Confirmation E-Mails
+    - Transaktionale E-Mails
+
+    Wichtig:
+    - Muss in SES verifiziert werden (Verification E-Mail wird gesendet!)
+    - Für Development: Persönliche E-Mail OK
+    - Für Production: noreply@domain.com empfohlen
+
+    SES Sandbox Mode (Default):
+    - Kann nur an verifizierte E-Mails senden
+    - Max 200 E-Mails/Tag
+    - Für Production: AWS Support Ticket zum Verlassen des Sandbox Mode
+  EOT
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", var.ses_sender_email))
+    error_message = "Muss eine gültige E-Mail Adresse sein."
+  }
+}
+
+# ----------------------------------------------------------------------------
 # Tagging
 # ----------------------------------------------------------------------------
 
