@@ -64,3 +64,6 @@ backend/*.zip
 # Terraform Plans
 terraform/tfplan*
 terraform/**/*.tfplan
+
+# Terraform State Backups (created by backup-before-nuclear.sh)
+terraform-state-backup-*/
