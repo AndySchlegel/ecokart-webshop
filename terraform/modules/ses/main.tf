@@ -65,7 +65,7 @@ resource "aws_ses_configuration_set" "main" {
 resource "aws_ses_template" "order_confirmation" {
   name = "${var.project_name}-order-confirmation"
 
-  subject = "🎉 Deine Ecokart Bestellung ist bestätigt!"
+  subject = "Deine AIR LEGACY Bestellung ist bestätigt"
 
   # HTML Version (schön formatiert)
   html = templatefile("${path.module}/templates/order-confirmation.html", {
