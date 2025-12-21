@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deine ${brand_name} Bestellung ist unterwegs 🌿</title>
+    <title>Bestellbestätigung - AIR LEGACY</title>
     <style>
         * {
             margin: 0;
@@ -13,9 +13,9 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: #1f2937;
-            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-            padding: 40px 20px;
+            color: #1a1a1a;
+            background-color: #f5f5f5;
+            padding: 20px;
         }
         .email-wrapper {
             max-width: 600px;
@@ -23,67 +23,88 @@
         }
         .container {
             background-color: #ffffff;
-            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.1);
         }
+
+        /* Header - Dark like shop */
         .header {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            text-align: center;
-            padding: 40px 30px;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 30px;
+            text-align: left;
         }
         .logo {
-            font-size: 42px;
-            margin-bottom: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: #ffffff;
         }
         .header h1 {
-            font-size: 28px;
-            font-weight: 600;
+            font-size: 32px;
+            font-weight: 700;
             margin: 0;
             line-height: 1.2;
+            color: #ffffff;
         }
+
+        /* Orange accent bar - like shop CTA */
+        .accent-bar {
+            height: 4px;
+            background-color: #FF6B35;
+        }
+
+        /* Content */
         .content {
             padding: 40px 30px;
         }
         .greeting {
             font-size: 18px;
-            color: #1f2937;
+            color: #1a1a1a;
             margin-bottom: 20px;
+            font-weight: 600;
         }
         .message {
-            color: #4b5563;
+            color: #4a4a4a;
             margin-bottom: 30px;
             line-height: 1.8;
         }
-        .highlight-box {
-            background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
-            border-left: 4px solid #10b981;
+
+        /* Order Number Box */
+        .order-box {
+            background-color: #f8f8f8;
+            border-left: 4px solid #FF6B35;
             padding: 20px;
-            border-radius: 8px;
             margin: 30px 0;
         }
-        .order-number {
-            font-size: 14px;
-            color: #6b7280;
+        .order-label {
+            font-size: 12px;
+            color: #666;
             margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
         .order-id {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
-            color: #10b981;
+            color: #1a1a1a;
             font-family: 'Courier New', monospace;
         }
+
+        /* Section Title */
         .section-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1f2937;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
             margin: 30px 0 20px 0;
             padding-bottom: 10px;
-            border-bottom: 2px solid #e5e7eb;
+            border-bottom: 2px solid #FF6B35;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
+        /* Product List */
         .product-list {
             margin: 20px 0;
         }
@@ -92,7 +113,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            border-bottom: 1px solid #f3f4f6;
+            border-bottom: 1px solid #e0e0e0;
         }
         .product-item:last-child {
             border-bottom: none;
@@ -103,23 +124,25 @@
         .product-name {
             font-size: 16px;
             font-weight: 600;
-            color: #1f2937;
+            color: #1a1a1a;
             margin-bottom: 5px;
         }
         .product-quantity {
             font-size: 14px;
-            color: #6b7280;
+            color: #666;
         }
         .product-price {
             font-size: 18px;
             font-weight: 700;
-            color: #1f2937;
+            color: #1a1a1a;
             text-align: right;
         }
+
+        /* Total */
         .total-section {
-            background-color: #f9fafb;
+            background-color: #1a1a1a;
+            color: #ffffff;
             padding: 20px;
-            border-radius: 8px;
             margin-top: 20px;
         }
         .total-row {
@@ -128,79 +151,96 @@
             align-items: center;
         }
         .total-label {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
-            color: #1f2937;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .total-amount {
             font-size: 28px;
             font-weight: 700;
-            color: #10b981;
+            color: #FF6B35;
         }
+
+        /* Address */
         .address-card {
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            background-color: #f8f8f8;
             padding: 20px;
             margin: 20px 0;
         }
         .address-card strong {
             display: block;
             font-size: 16px;
-            color: #1f2937;
+            color: #1a1a1a;
             margin-bottom: 8px;
+            font-weight: 600;
         }
         .address-card div {
-            color: #6b7280;
+            color: #4a4a4a;
             line-height: 1.8;
         }
+
+        /* CTA Button - Orange like shop */
         .cta-section {
             text-align: center;
             margin: 40px 0;
         }
         .button {
             display: inline-block;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 16px 32px;
+            background-color: #FF6B35;
+            color: #ffffff;
+            padding: 16px 40px;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 16px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-            transition: all 0.3s ease;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease;
         }
+        .button:hover {
+            background-color: #e55a2b;
+        }
+
+        /* Info Box */
         .info-box {
-            background-color: #eff6ff;
-            border-left: 4px solid #3b82f6;
-            padding: 15px 20px;
-            border-radius: 8px;
+            background-color: #f8f8f8;
+            padding: 20px;
             margin: 30px 0;
+            border-left: 4px solid #1a1a1a;
+        }
+        .info-box strong {
+            display: block;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+            font-weight: 600;
         }
         .info-box p {
-            color: #1e40af;
+            color: #4a4a4a;
             margin: 0;
-            font-size: 14px;
+            line-height: 1.8;
         }
+
+        /* Footer */
         .footer {
-            background-color: #f9fafb;
+            background-color: #1a1a1a;
+            color: #ffffff;
             text-align: center;
             padding: 30px;
-            color: #6b7280;
         }
         .footer-brand {
-            font-size: 18px;
-            font-weight: 600;
-            color: #10b981;
-            margin-bottom: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
         }
         .footer-tagline {
             font-size: 14px;
+            color: #999;
             margin-bottom: 20px;
         }
         .footer-legal {
             font-size: 12px;
-            color: #9ca3af;
+            color: #666;
             margin-top: 20px;
             line-height: 1.6;
         }
@@ -209,11 +249,14 @@
 <body>
     <div class="email-wrapper">
         <div class="container">
-            <!-- Header -->
+            <!-- Header - Dark like shop -->
             <div class="header">
-                <div class="logo">🌿</div>
-                <h1>Vielen Dank für deine Bestellung!</h1>
+                <div class="logo">AIR LEGACY</div>
+                <h1>BESTELLBESTÄTIGUNG</h1>
             </div>
+
+            <!-- Orange accent bar -->
+            <div class="accent-bar"></div>
 
             <!-- Content -->
             <div class="content">
@@ -223,27 +266,27 @@
 
                 <div class="message">
                     <p style="margin-bottom: 15px;">
-                        <strong>Großartig! Deine Bestellung ist bei uns eingegangen.</strong> 🎉
+                        <strong>Deine Bestellung ist bei uns eingegangen.</strong>
                     </p>
                     <p>
-                        Vielen Dank, dass du dich für ${brand_name} entschieden hast! Wir freuen uns, dass du nachhaltige Produkte wählst und damit aktiv zum Umweltschutz beiträgst. Deine Bestellung wird jetzt liebevoll für dich vorbereitet.
+                        Vielen Dank für dein Vertrauen in AIR LEGACY. Deine Bestellung wird jetzt für dich vorbereitet und innerhalb von 2-3 Werktagen versendet.
                     </p>
                 </div>
 
                 <!-- Order Number -->
-                <div class="highlight-box">
-                    <div class="order-number">Deine Bestellnummer</div>
+                <div class="order-box">
+                    <div class="order-label">Bestellnummer</div>
                     <div class="order-id">#{{orderId}}</div>
                 </div>
 
                 <!-- Order Details -->
-                <div class="section-title">📦 Bestellübersicht</div>
+                <div class="section-title">Bestellübersicht</div>
                 <div class="product-list">
                     {{#each items}}
                     <div class="product-item">
                         <div class="product-info">
                             <div class="product-name">{{this.name}}</div>
-                            <div class="product-quantity">Menge: {{this.quantity}} Stück</div>
+                            <div class="product-quantity">Menge: {{this.quantity}}</div>
                         </div>
                         <div class="product-price">{{this.price}} €</div>
                     </div>
@@ -259,7 +302,7 @@
                 </div>
 
                 <!-- Shipping Address -->
-                <div class="section-title">📍 Lieferadresse</div>
+                <div class="section-title">Lieferadresse</div>
                 <div class="address-card">
                     <strong>{{shippingAddress.name}}</strong>
                     <div>
@@ -271,30 +314,30 @@
 
                 <!-- Info Box -->
                 <div class="info-box">
+                    <strong>Versandinformationen</strong>
                     <p>
-                        <strong>Was passiert als Nächstes?</strong><br>
-                        Wir bereiten deine Bestellung vor und senden sie innerhalb von 2-3 Werktagen an dich. Du erhältst eine weitere E-Mail mit den Versandinformationen, sobald dein Paket unterwegs ist.
+                        Deine Bestellung wird innerhalb von 2-3 Werktagen bearbeitet und versendet. Du erhältst eine weitere E-Mail mit den Tracking-Informationen, sobald dein Paket unterwegs ist.
                     </p>
                 </div>
 
                 <!-- CTA Button -->
                 <div class="cta-section">
                     <a href="{{orderTrackingUrl}}" class="button">
-                        Bestellung verfolgen →
+                        BESTELLUNG VERFOLGEN
                     </a>
                 </div>
 
                 <div class="message" style="margin-top: 40px;">
-                    <p style="color: #6b7280; font-size: 14px;">
-                        Bei Fragen oder Anliegen zu deiner Bestellung sind wir jederzeit für dich da. Vielen Dank für dein Vertrauen! 💚
+                    <p style="color: #666; font-size: 14px;">
+                        Bei Fragen zu deiner Bestellung kannst du uns jederzeit kontaktieren.
                     </p>
                 </div>
             </div>
 
-            <!-- Footer -->
+            <!-- Footer - Dark like shop -->
             <div class="footer">
-                <div class="footer-brand">${brand_name}</div>
-                <div class="footer-tagline">Nachhaltigkeit trifft Online-Shopping 🌱</div>
+                <div class="footer-brand">AIR LEGACY</div>
+                <div class="footer-tagline">Performance Meets Style</div>
                 <div class="footer-legal">
                     Diese E-Mail wurde automatisch generiert.<br>
                     Bitte antworte nicht direkt auf diese E-Mail.

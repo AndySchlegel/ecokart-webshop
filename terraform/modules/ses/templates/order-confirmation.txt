@@ -1,29 +1,28 @@
 ========================================
-🌿 ${brand_name}
+AIR LEGACY
 BESTELLBESTÄTIGUNG
 ========================================
 
 Hallo {{customerName}},
 
-Großartig! Deine Bestellung ist bei uns eingegangen. 🎉
+Deine Bestellung ist bei uns eingegangen.
 
-Vielen Dank, dass du dich für ${brand_name} entschieden hast!
-Wir freuen uns, dass du nachhaltige Produkte wählst und damit
-aktiv zum Umweltschutz beiträgst. Deine Bestellung wird jetzt
-liebevoll für dich vorbereitet.
+Vielen Dank für dein Vertrauen in AIR LEGACY. Deine
+Bestellung wird jetzt für dich vorbereitet und innerhalb
+von 2-3 Werktagen versendet.
 
 ----------------------------------------
-📦 DEINE BESTELLNUMMER
+BESTELLNUMMER
 ----------------------------------------
 #{{orderId}}
 
 ----------------------------------------
-📦 BESTELLÜBERSICHT
+BESTELLÜBERSICHT
 ----------------------------------------
 
 {{#each items}}
 {{this.name}}
-Menge: {{this.quantity}} Stück × {{this.unitPrice}} €
+Menge: {{this.quantity}} × {{this.unitPrice}} €
 Summe: {{this.price}} €
 
 {{/each}}
@@ -31,7 +30,7 @@ Summe: {{this.price}} €
 GESAMTSUMME: {{totalAmount}} €
 ----------------------------------------
 
-📍 LIEFERADRESSE
+LIEFERADRESSE
 ----------------------------------------
 {{shippingAddress.name}}
 {{shippingAddress.street}}
@@ -39,21 +38,22 @@ GESAMTSUMME: {{totalAmount}} €
 {{shippingAddress.country}}
 
 ----------------------------------------
-ℹ️  WAS PASSIERT ALS NÄCHSTES?
+VERSANDINFORMATIONEN
 ----------------------------------------
-Wir bereiten deine Bestellung vor und senden sie innerhalb
-von 2-3 Werktagen an dich. Du erhältst eine weitere E-Mail
-mit den Versandinformationen, sobald dein Paket unterwegs ist.
+Deine Bestellung wird innerhalb von 2-3 Werktagen
+bearbeitet und versendet. Du erhältst eine weitere
+E-Mail mit den Tracking-Informationen, sobald dein
+Paket unterwegs ist.
 
-🔗 Bestellung verfolgen:
+Bestellung verfolgen:
 {{orderTrackingUrl}}
 
 ========================================
 
-Bei Fragen oder Anliegen zu deiner Bestellung sind wir
-jederzeit für dich da. Vielen Dank für dein Vertrauen! 💚
+Bei Fragen zu deiner Bestellung kannst du uns
+jederzeit kontaktieren.
 
-${brand_name} - Nachhaltigkeit trifft Online-Shopping 🌱
+AIR LEGACY - Performance Meets Style
 
 Diese E-Mail wurde automatisch generiert.
 Bitte antworte nicht auf diese E-Mail.
