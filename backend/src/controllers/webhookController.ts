@@ -190,19 +190,22 @@ async function handleCheckoutSessionCompleted(
   const orderId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   const now = new Date().toISOString();
 
+  // Shipping Address normalisieren (Metadata hat oft fehlende/falsche Felder)
+  const normalizedShippingAddress = {
+    name: shippingAddress?.name || session.customer_details?.name || '',
+    street: shippingAddress?.street || '',
+    city: shippingAddress?.city || '',
+    postalCode: shippingAddress?.zipCode || shippingAddress?.postalCode || '',
+    country: shippingAddress?.country || '',
+  };
+
   const order = await database.createOrder({
     id: orderId,
     userId,
     items: cart.items,
     total: (session.amount_total || 0) / 100, // Cents → Euros
     status: 'pending',
-    shippingAddress: shippingAddress || {
-      name: '',
-      street: '',
-      city: '',
-      postalCode: '',
-      country: '',
-    },
+    shippingAddress: normalizedShippingAddress,
     createdAt: now,
     updatedAt: now,
   });
@@ -282,10 +285,11 @@ async function handleCheckoutSessionCompleted(
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   // E-Mail an Customer senden (non-blocking - Fehler stoppen Order Creation nicht!)
+  // WICHTIG: Shipping Address aus Metadata fehlen oft Felder, daher Fallbacks nutzen
   await emailService.sendOrderConfirmationEmail({
     order,
-    customerEmail: shippingAddress.email || session.customer_email || '',
-    customerName: shippingAddress.name,
+    customerEmail: shippingAddress?.email || session.customer_email || '',
+    customerName: normalizedShippingAddress.name || 'Kunde',
   });
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
