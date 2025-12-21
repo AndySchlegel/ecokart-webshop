@@ -1,21 +1,30 @@
 ========================================
-🌿 ${brand_name} - Bestellbestätigung
+🌿 ${brand_name}
+BESTELLBESTÄTIGUNG
 ========================================
 
 Hallo {{customerName}},
 
-vielen Dank für deine Bestellung! Wir haben sie erhalten und werden sie schnellstmöglich bearbeiten.
+Großartig! Deine Bestellung ist bei uns eingegangen. 🎉
 
-📦 BESTELLNUMMER: #{{orderId}}
+Vielen Dank, dass du dich für ${brand_name} entschieden hast!
+Wir freuen uns, dass du nachhaltige Produkte wählst und damit
+aktiv zum Umweltschutz beiträgst. Deine Bestellung wird jetzt
+liebevoll für dich vorbereitet.
 
 ----------------------------------------
-BESTELLDETAILS
+📦 DEINE BESTELLNUMMER
+----------------------------------------
+#{{orderId}}
+
+----------------------------------------
+📦 BESTELLÜBERSICHT
 ----------------------------------------
 
 {{#each items}}
 {{this.name}}
-Menge: {{this.quantity}} x {{this.unitPrice}} €
-Gesamt: {{this.price}} €
+Menge: {{this.quantity}} Stück × {{this.unitPrice}} €
+Summe: {{this.price}} €
 
 {{/each}}
 ----------------------------------------
@@ -23,17 +32,26 @@ GESAMTSUMME: {{totalAmount}} €
 ----------------------------------------
 
 📍 LIEFERADRESSE
+----------------------------------------
 {{shippingAddress.name}}
 {{shippingAddress.street}}
 {{shippingAddress.postalCode}} {{shippingAddress.city}}
 {{shippingAddress.country}}
+
+----------------------------------------
+ℹ️  WAS PASSIERT ALS NÄCHSTES?
+----------------------------------------
+Wir bereiten deine Bestellung vor und senden sie innerhalb
+von 2-3 Werktagen an dich. Du erhältst eine weitere E-Mail
+mit den Versandinformationen, sobald dein Paket unterwegs ist.
 
 🔗 Bestellung verfolgen:
 {{orderTrackingUrl}}
 
 ========================================
 
-Bei Fragen zu deiner Bestellung kannst du uns jederzeit kontaktieren.
+Bei Fragen oder Anliegen zu deiner Bestellung sind wir
+jederzeit für dich da. Vielen Dank für dein Vertrauen! 💚
 
 ${brand_name} - Nachhaltigkeit trifft Online-Shopping 🌱
 

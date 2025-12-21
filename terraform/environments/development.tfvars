@@ -86,7 +86,7 @@ enable_cognito_auth = true
 
 # E-Mail Adresse für Order Confirmation E-Mails
 # AWS sendet Verification E-Mail an diese Adresse → Link klicken!
-ses_sender_email = "andy.schlegel23@googlemail.com"
+ses_sender_email = "andy.schlegel@chakademie.org"
 
 # ----------------------------------------------------------------------------
 # Database Seeding
