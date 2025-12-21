@@ -411,108 +411,11 @@ jobs:
           echo "✅ Infrastructure deployed successfully to ${{ steps.env.outputs.environment }}!"
 
       # ======================================================================
-      # 16.5. Force Amplify ENV Vars Update (für 100% Reproduzierbarkeit)
+      # 16.5. Amplify Builds (Automatic via Terraform)
       # ======================================================================
-      # WICHTIG: Dieser Step stellt sicher, dass Amplify ENV Vars IMMER gesetzt sind,
-      # auch wenn Terraform keine Infrastructure-Changes erkannt hat.
-      # Das ist kritisch für destroy + redeploy Szenarien!
-      - name: 🔄 Ensure Amplify Environment Variables
-        if: github.event.inputs.destroy != 'true'
-        working-directory: terraform
-        run: |
-          echo "🔄 Ensuring Amplify Environment Variables are set..."
-
-          # Get values from Terraform outputs
-          USER_POOL_ID=$(terraform output -raw cognito_user_pool_id)
-          CLIENT_ID=$(terraform output -raw cognito_user_pool_client_id)
-          API_URL=$(terraform output -raw api_gateway_url)
-          ADMIN_APP_ID=$(terraform output -raw admin_amplify_app_id)
-          CUSTOMER_APP_ID=$(terraform output -raw amplify_app_id)
-
-          echo "📊 Values from Terraform:"
-          echo "  - User Pool ID: $USER_POOL_ID"
-          echo "  - Client ID: ${CLIENT_ID:0:10}..."
-          echo "  - API URL: $API_URL"
-          echo "  - Admin App ID: $ADMIN_APP_ID"
-          echo "  - Customer App ID: $CUSTOMER_APP_ID"
-
-          # Update Admin Amplify ENV Vars
-          echo "🔧 Updating Admin Frontend ENV Vars..."
-          aws amplify update-app \
-            --app-id "$ADMIN_APP_ID" \
-            --environment-variables "{
-              \"NEXT_PUBLIC_USER_POOL_ID\":\"$USER_POOL_ID\",
-              \"NEXT_PUBLIC_USER_POOL_CLIENT_ID\":\"$CLIENT_ID\",
-              \"NEXT_PUBLIC_API_URL\":\"$API_URL\",
-              \"NEXT_PUBLIC_AWS_REGION\":\"${{ env.AWS_REGION }}\",
-              \"AMPLIFY_MONOREPO_APP_ROOT\":\"admin-frontend\",
-              \"AMPLIFY_DIFF_DEPLOY\":\"false\"
-            }" \
-            --region ${{ env.AWS_REGION }}
-
-          # Update Customer Amplify ENV Vars
-          echo "🔧 Updating Customer Frontend ENV Vars..."
-          aws amplify update-app \
-            --app-id "$CUSTOMER_APP_ID" \
-            --environment-variables "{
-              \"NEXT_PUBLIC_USER_POOL_ID\":\"$USER_POOL_ID\",
-              \"NEXT_PUBLIC_USER_POOL_CLIENT_ID\":\"$CLIENT_ID\",
-              \"NEXT_PUBLIC_API_URL\":\"$API_URL\",
-              \"NEXT_PUBLIC_AWS_REGION\":\"${{ env.AWS_REGION }}\",
-              \"AMPLIFY_MONOREPO_APP_ROOT\":\"frontend\",
-              \"AMPLIFY_DIFF_DEPLOY\":\"false\"
-            }" \
-            --region ${{ env.AWS_REGION }}
-
-          echo "✅ Amplify Environment Variables ensured!"
-
-          # Trigger Amplify Builds (damit neue ENV vars aktiv werden!)
-          echo ""
-          echo "🚀 Triggering Amplify builds to apply new ENV vars..."
-
-          # Determine branch name based on environment
-          case "${{ steps.env.outputs.environment }}" in
-            production)
-              BRANCH_NAME="main"
-              ;;
-            staging)
-              BRANCH_NAME="staging"
-              ;;
-            development)
-              BRANCH_NAME="develop"
-              ;;
-            *)
-              BRANCH_NAME="develop"
-              ;;
-          esac
-
-          echo "📍 Branch: $BRANCH_NAME"
-
-          # Trigger Admin Frontend Build
-          echo "🔨 Triggering Admin Frontend build..."
-          ADMIN_JOB_ID=$(aws amplify start-job \
-            --app-id "$ADMIN_APP_ID" \
-            --branch-name "$BRANCH_NAME" \
-            --job-type RELEASE \
-            --region ${{ env.AWS_REGION }} \
-            --query 'jobSummary.jobId' \
-            --output text)
-          echo "   ✅ Admin build started: Job ID $ADMIN_JOB_ID"
-
-          # Trigger Customer Frontend Build
-          echo "🔨 Triggering Customer Frontend build..."
-          CUSTOMER_JOB_ID=$(aws amplify start-job \
-            --app-id "$CUSTOMER_APP_ID" \
-            --branch-name "$BRANCH_NAME" \
-            --job-type RELEASE \
-            --region ${{ env.AWS_REGION }} \
-            --query 'jobSummary.jobId' \
-            --output text)
-          echo "   ✅ Customer build started: Job ID $CUSTOMER_JOB_ID"
-
-          echo ""
-          echo "✅ Amplify builds triggered successfully!"
-          echo "   Builds will complete in ~2-3 minutes"
+      # NOTE: Amplify builds are triggered automatically when Terraform creates
+      # or updates the Amplify apps. ENV vars are set via Terraform module.
+      # No manual build trigger needed here!
 
       # ======================================================================
       # 17. Terraform Destroy (if requested, mit Environment-Config!)
