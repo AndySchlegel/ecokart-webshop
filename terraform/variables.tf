@@ -425,6 +425,31 @@ variable "ses_sender_email" {
 }
 
 # ----------------------------------------------------------------------------
+# Assets (S3 + CloudFront)
+# ----------------------------------------------------------------------------
+
+variable "cloudfront_price_class" {
+  description = <<EOT
+    CloudFront Price Class für Assets CDN
+
+    Optionen:
+    - PriceClass_All:     Alle Edge Locations weltweit (teuerster)
+    - PriceClass_200:     US, Europe, Asia, Middle East, Africa
+    - PriceClass_100:     US, Canada, Europe (günstigster)
+
+    Für Development/Staging: PriceClass_100 ist ausreichend
+    Für Production mit globalem Traffic: PriceClass_200 empfohlen
+  EOT
+  type        = string
+  default     = "PriceClass_100"
+
+  validation {
+    condition     = contains(["PriceClass_All", "PriceClass_200", "PriceClass_100"], var.cloudfront_price_class)
+    error_message = "Muss eine der folgenden sein: PriceClass_All, PriceClass_200, PriceClass_100"
+  }
+}
+
+# ----------------------------------------------------------------------------
 # Tagging
 # ----------------------------------------------------------------------------
 

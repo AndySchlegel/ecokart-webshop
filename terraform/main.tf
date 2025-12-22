@@ -130,6 +130,35 @@ module "ses" {
 }
 
 # ----------------------------------------------------------------------------
+# Assets Module - S3 + CloudFront für Produktbilder
+# ----------------------------------------------------------------------------
+# Erstellt:
+# - S3 Bucket (private, nur CloudFront-Zugriff)
+# - CloudFront CDN (schnelle Auslieferung weltweit)
+# - 100% reproduzierbar via Terraform
+#
+# Produktbilder werden via Terraform uploaded und sind verfügbar unter:
+# https://{cloudfront-domain}/images/product-name.jpg
+#
+# Funktioniert ÜBERALL:
+# - Frontend (Next.js)
+# - Emails (SES)
+# - Mobile Apps (zukünftig)
+# - Externe Integrationen
+
+module "assets" {
+  source = "./modules/assets"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  # CloudFront Price Class (PriceClass_100 = US, Canada, Europe)
+  cloudfront_price_class = var.cloudfront_price_class
+
+  tags = local.common_tags
+}
+
+# ----------------------------------------------------------------------------
 # Lambda Module - Backend API + API Gateway
 # ----------------------------------------------------------------------------
 # Erstellt:

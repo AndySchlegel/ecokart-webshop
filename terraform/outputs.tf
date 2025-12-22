@@ -182,6 +182,30 @@ output "admin_amplify_branch_url" {
 }
 
 # ----------------------------------------------------------------------------
+# Assets (S3 + CloudFront) Outputs
+# ----------------------------------------------------------------------------
+
+output "assets_bucket_name" {
+  description = "S3 Bucket Name für Assets"
+  value       = module.assets.bucket_name
+}
+
+output "assets_cloudfront_domain" {
+  description = "CloudFront Domain für Assets (für product imageUrl)"
+  value       = module.assets.cloudfront_domain_name
+}
+
+output "assets_base_url" {
+  description = "Base URL für Assets (https://cloudfront-domain)"
+  value       = module.assets.assets_base_url
+}
+
+output "assets_cloudfront_distribution_id" {
+  description = "CloudFront Distribution ID (für Cache Invalidation)"
+  value       = module.assets.cloudfront_distribution_id
+}
+
+# ----------------------------------------------------------------------------
 # Custom Domain Outputs (conditional)
 # ----------------------------------------------------------------------------
 
