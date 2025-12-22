@@ -134,6 +134,14 @@ enable_route53 = true
 # 4. Danach: 100% Reproduzierbarkeit - URLs ändern sich NIE mehr!
 
 # ----------------------------------------------------------------------------
+# Frontend URL (für E-Mail Links)
+# ----------------------------------------------------------------------------
+
+# Frontend URL für Order Tracking Links in E-Mails
+# Verwendet Custom Domain Shop URL
+frontend_url = "https://shop.aws.his4irness23.de"
+
+# ----------------------------------------------------------------------------
 # Zusätzliche Tags
 # ----------------------------------------------------------------------------
 
