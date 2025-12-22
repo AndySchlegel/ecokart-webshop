@@ -70,19 +70,29 @@ export async function sendOrderConfirmationEmail(
     }
 
     // Template Daten vorbereiten
+    const frontendUrl = process.env.FRONTEND_URL || 'https://shop.aws.his4irness23.de';
+
     const templateData = {
       customerName,
       orderId: order.id,
-      items: order.items.map(item => ({
-        name: item.name,
-        quantity: item.quantity,
-        unitPrice: item.price.toFixed(2),
-        price: (item.price * item.quantity).toFixed(2),
-        imageUrl: item.imageUrl, // Product image for email
-      })),
+      items: order.items.map(item => {
+        // Convert relative image paths to absolute URLs for email
+        let imageUrl = item.imageUrl;
+        if (imageUrl && imageUrl.startsWith('/')) {
+          imageUrl = `${frontendUrl}${imageUrl}`;
+        }
+
+        return {
+          name: item.name,
+          quantity: item.quantity,
+          unitPrice: item.price.toFixed(2),
+          price: (item.price * item.quantity).toFixed(2),
+          imageUrl, // Product image for email (absolute URL)
+        };
+      }),
       totalAmount: order.total.toFixed(2),
       shippingAddress: order.shippingAddress,
-      orderTrackingUrl: `${process.env.FRONTEND_URL || 'https://shop.aws.his4irness23.de'}/orders/${order.id}`,
+      orderTrackingUrl: `${frontendUrl}/orders/${order.id}`,
     };
 
     // DEBUG: Log template data to see if imageUrl is present
