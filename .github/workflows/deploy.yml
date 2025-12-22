@@ -411,11 +411,66 @@ jobs:
           echo "✅ Infrastructure deployed successfully to ${{ steps.env.outputs.environment }}!"
 
       # ======================================================================
-      # 16.5. Amplify Builds (Automatic via Terraform)
+      # 16.5. Trigger Amplify Builds (EXPLICIT für 100% Reproduzierbarkeit)
       # ======================================================================
-      # NOTE: Amplify builds are triggered automatically when Terraform creates
-      # or updates the Amplify apps. ENV vars are set via Terraform module.
-      # No manual build trigger needed here!
+      # CRITICAL: Amplify Auto-Build ist nicht zuverlässig in Monorepo-Setups
+      # Deshalb triggern wir explizit einen Build für JEDES Deploy
+      # Das garantiert, dass Frontend-Änderungen IMMER deployed werden
+      - name: 🚀 Trigger Amplify Frontend Build
+        if: github.event.inputs.destroy != 'true'
+        run: |
+          echo "🎨 Triggering Amplify build for Customer Frontend..."
+
+          # Get Amplify App ID from Terraform output
+          cd terraform
+          AMPLIFY_APP_ID=$(terraform output -raw amplify_app_id 2>/dev/null || echo "")
+
+          if [ -z "$AMPLIFY_APP_ID" ]; then
+            echo "⚠️  Warning: Amplify App ID not found in outputs. Skipping build trigger."
+            exit 0
+          fi
+
+          echo "📱 App ID: $AMPLIFY_APP_ID"
+          echo "🌿 Branch: ${{ steps.env.outputs.environment == 'production' && 'main' || 'develop' }}"
+
+          # Trigger build via AWS CLI
+          aws amplify start-job \
+            --app-id "$AMPLIFY_APP_ID" \
+            --branch-name "${{ steps.env.outputs.environment == 'production' && 'main' || 'develop' }}" \
+            --job-type RELEASE \
+            --region ${{ env.AWS_REGION }} \
+            --query 'jobSummary.[jobId,status]' \
+            --output text
+
+          echo "✅ Amplify build triggered successfully!"
+          echo "⏱️  Build will complete in ~2-3 minutes"
+
+      - name: 🚀 Trigger Amplify Admin Frontend Build
+        if: github.event.inputs.destroy != 'true'
+        run: |
+          echo "🎨 Triggering Amplify build for Admin Frontend..."
+
+          # Get Amplify Admin App ID from Terraform output
+          cd terraform
+          ADMIN_APP_ID=$(terraform output -raw admin_amplify_app_id 2>/dev/null || echo "")
+
+          if [ -z "$ADMIN_APP_ID" ]; then
+            echo "⚠️  Warning: Admin Amplify App ID not found. Skipping build trigger."
+            exit 0
+          fi
+
+          echo "📱 Admin App ID: $ADMIN_APP_ID"
+
+          # Trigger build via AWS CLI
+          aws amplify start-job \
+            --app-id "$ADMIN_APP_ID" \
+            --branch-name "${{ steps.env.outputs.environment == 'production' && 'main' || 'develop' }}" \
+            --job-type RELEASE \
+            --region ${{ env.AWS_REGION }} \
+            --query 'jobSummary.[jobId,status]' \
+            --output text
+
+          echo "✅ Admin Amplify build triggered successfully!"
 
       # ======================================================================
       # 17. Terraform Destroy (if requested, mit Environment-Config!)
