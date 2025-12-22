@@ -407,6 +407,36 @@ jobs:
           EOF
           create_policy "${ROLE_NAME}-ses" /tmp/ses-policy.json
 
+          # 14. CloudFront Policy (for CDN and asset distribution)
+          cat > /tmp/cloudfront-policy.json <<'EOF'
+          {
+            "Version": "2012-10-17",
+            "Statement": [{
+              "Effect": "Allow",
+              "Action": [
+                "cloudfront:CreateDistribution",
+                "cloudfront:GetDistribution",
+                "cloudfront:GetDistributionConfig",
+                "cloudfront:UpdateDistribution",
+                "cloudfront:DeleteDistribution",
+                "cloudfront:ListDistributions",
+                "cloudfront:TagResource",
+                "cloudfront:UntagResource",
+                "cloudfront:CreateCloudFrontOriginAccessIdentity",
+                "cloudfront:GetCloudFrontOriginAccessIdentity",
+                "cloudfront:DeleteCloudFrontOriginAccessIdentity",
+                "cloudfront:ListCloudFrontOriginAccessIdentities",
+                "cloudfront:UpdateCloudFrontOriginAccessIdentity",
+                "cloudfront:CreateInvalidation",
+                "cloudfront:GetInvalidation",
+                "cloudfront:ListInvalidations"
+              ],
+              "Resource": "*"
+            }]
+          }
+          EOF
+          create_policy "${ROLE_NAME}-cloudfront" /tmp/cloudfront-policy.json
+
           echo "✅ All policies created and attached!"
 
       # ======================================================================
@@ -423,7 +453,7 @@ jobs:
           echo "- ✅ **GitHub OIDC Provider:** token.actions.githubusercontent.com" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ **IAM Role:** $ROLE_NAME" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ **Role ARN:** \`$ROLE_ARN\`" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ **13 Policies Attached**" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ **14 Policies Attached**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Next Steps" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

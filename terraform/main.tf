@@ -199,6 +199,10 @@ module "lambda" {
     # NOTE: Backend will auto-detect the actual frontend URL from request headers (origin, x-frontend-url)
     # This is just a fallback for local development
     FRONTEND_URL            = var.frontend_url != "" ? var.frontend_url : "http://localhost:3000"
+    # Assets CDN URL (CloudFront)
+    # Used for product images in emails and frontend
+    # Converts relative image paths (/images/product.jpg) to absolute CloudFront URLs
+    ASSETS_BASE_URL         = module.assets.assets_base_url
   }
 
   # DynamoDB Table Names für IAM Permissions

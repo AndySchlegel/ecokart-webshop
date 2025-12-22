@@ -71,6 +71,7 @@ export async function sendOrderConfirmationEmail(
 
     // Template Daten vorbereiten
     const frontendUrl = process.env.FRONTEND_URL || 'https://shop.aws.his4irness23.de';
+    const assetsBaseUrl = process.env.ASSETS_BASE_URL || frontendUrl;
 
     const templateData = {
       customerName,
@@ -78,9 +79,13 @@ export async function sendOrderConfirmationEmail(
       items: order.items.map(item => {
         // Convert relative image paths to absolute URLs for email
         let imageUrl = item.imageUrl;
+
         if (imageUrl && imageUrl.startsWith('/')) {
-          imageUrl = `${frontendUrl}${imageUrl}`;
+          // Relative path → use ASSETS_BASE_URL (CloudFront)
+          // e.g. /images/product.jpg → https://cloudfront-domain/images/product.jpg
+          imageUrl = `${assetsBaseUrl}${imageUrl}`;
         }
+        // External URLs (Unsplash, etc.) stay as-is
 
         return {
           name: item.name,

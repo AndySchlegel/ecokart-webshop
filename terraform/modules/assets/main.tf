@@ -18,6 +18,11 @@
 resource "aws_s3_bucket" "assets" {
   bucket = "${var.project_name}-${var.environment}-assets"
 
+  # CRITICAL: Enable force_destroy for Nuclear Cleanup
+  # Allows terraform destroy to delete bucket even if it contains objects
+  # Required for 100% reproducible infrastructure
+  force_destroy = true
+
   tags = merge(
     var.tags,
     {
@@ -177,3 +182,42 @@ resource "aws_cloudfront_distribution" "assets" {
 
   tags = var.tags
 }
+
+# ----------------------------------------------------------------------------
+# Automatic Image Upload to S3 (100% Reproducible)
+# ----------------------------------------------------------------------------
+# Uploads all product images from ./images/ to S3 bucket
+# Runs automatically on terraform apply
+# Re-runs when images change (based on directory hash)
+
+resource "null_resource" "upload_images" {
+  # Trigger re-upload when images directory changes
+  triggers = {
+    # This will re-run if any file in images/ changes
+    images_dir = md5(join("", [for f in fileset("${path.module}/images", "*") : filemd5("${path.module}/images/${f}")]))
+    bucket_id  = aws_s3_bucket.assets.id
+  }
+
+  # Upload all images to S3
+  provisioner "local-exec" {
+    command = <<-EOT
+      echo "📸 Uploading product images to S3..."
+      aws s3 sync ${path.module}/images s3://${aws_s3_bucket.assets.id}/images/ \
+        --region ${data.aws_region.current.name} \
+        --delete \
+        --exclude ".*" \
+        --exclude "*.md"
+      echo "✅ Images uploaded successfully!"
+    EOT
+  }
+
+  depends_on = [
+    aws_s3_bucket.assets,
+    aws_s3_bucket_public_access_block.assets,
+    aws_s3_bucket_policy.assets
+  ]
+}
+
+# Get current AWS region
+data "aws_region" "current" {}
+
