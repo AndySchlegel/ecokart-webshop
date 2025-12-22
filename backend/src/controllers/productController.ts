@@ -4,10 +4,34 @@ import database from '../config/database-adapter';
 import { Product, ProductCreateInput, ProductUpdateInput } from '../models/Product';
 import { logger } from '../utils/logger';
 
+/**
+ * Converts relative image URLs to absolute CloudFront URLs
+ * Leaves external URLs (Unsplash, etc.) unchanged
+ */
+function convertImageUrl(imageUrl: string): string {
+  const assetsBaseUrl = process.env.ASSETS_BASE_URL || '';
+
+  if (imageUrl && imageUrl.startsWith('/')) {
+    // Relative path → convert to absolute CloudFront URL
+    // e.g. /images/product.jpg → https://cloudfront-domain/images/product.jpg
+    return `${assetsBaseUrl}${imageUrl}`;
+  }
+
+  // External URL (Unsplash, etc.) → return as-is
+  return imageUrl;
+}
+
 export const getAllProducts = async (req: Request, res: Response): Promise<void> => {
   try {
     const products = await database.getAllProducts();
-    res.json({ items: products, count: products.length });
+
+    // Convert relative imageUrls to absolute CloudFront URLs for frontend
+    const productsWithAbsoluteUrls = products.map(product => ({
+      ...product,
+      imageUrl: convertImageUrl(product.imageUrl)
+    }));
+
+    res.json({ items: productsWithAbsoluteUrls, count: productsWithAbsoluteUrls.length });
   } catch (error) {
     logger.error('Failed to fetch products', { action: 'getAllProducts' }, error as Error);
     res.status(500).json({ error: 'Failed to fetch products' });
@@ -24,7 +48,13 @@ export const getProductById = async (req: Request, res: Response): Promise<void>
       return;
     }
 
-    res.json(product);
+    // Convert relative imageUrl to absolute CloudFront URL for frontend
+    const productWithAbsoluteUrl = {
+      ...product,
+      imageUrl: convertImageUrl(product.imageUrl)
+    };
+
+    res.json(productWithAbsoluteUrl);
   } catch (error) {
     logger.error('Failed to fetch product', { action: 'getProductById', productId: req.params.id }, error as Error);
     res.status(500).json({ error: 'Failed to fetch product' });
