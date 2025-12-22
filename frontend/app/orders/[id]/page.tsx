@@ -244,8 +244,8 @@ export default function OrderTrackingPage() {
 
         .back-to-shop-button {
           background: none;
-          border: 2px solid var(--accent-orange);
-          color: var(--accent-orange);
+          border: 2px solid #ff6b00;
+          color: #ff6b00;
           padding: 0.75rem 1.5rem;
           font-weight: 700;
           cursor: pointer;
@@ -256,7 +256,7 @@ export default function OrderTrackingPage() {
         }
 
         .back-to-shop-button:hover {
-          background: var(--accent-orange);
+          background: #ff6b00;
           color: #000;
           transform: translateX(-5px);
         }

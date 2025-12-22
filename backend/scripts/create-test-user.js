@@ -37,13 +37,7 @@ async function createTestUser() {
     Item: user
   }));
 
-  console.log('✅ Testuser erfolgreich erstellt!\n');
-  console.log('╔═══════════════════════════════════════╗');
-  console.log('║        LOGIN TESTDATEN                ║');
-  console.log('╠═══════════════════════════════════════╣');
-  console.log('║ Email:    demo@ecokart.com            ║');
-  console.log('║ Passwort: Demo1234!                   ║');
-  console.log('╚═══════════════════════════════════════╝\n');
+  console.log('✅ Testuser erfolgreich erstellt!');
 }
 
 createTestUser().catch(err => {
