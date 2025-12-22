@@ -90,9 +90,9 @@ resource "aws_amplify_app" "frontend" {
   enable_auto_branch_creation = false
 
   # Branch Protection für Main
-  # DISABLED: Auto-Build würde SOFORT triggern BEVOR BuildSpec propagiert ist!
-  # null_resource.trigger_initial_build handled den ersten Build mit Delay
-  enable_branch_auto_build = false
+  # ENABLED: Initial Deploy ist fertig, jetzt Auto-Build bei Git Push aktivieren
+  # Frontend wird automatisch neu gebaut bei jedem Push
+  enable_branch_auto_build = true
 
   tags = var.tags
 }
@@ -111,9 +111,9 @@ resource "aws_amplify_branch" "main" {
   stage = var.environment == "production" ? "PRODUCTION" : "DEVELOPMENT"
 
   # Enable Auto-Build (bei Git Push)
-  # DISABLED für Initial Deploy: null_resource handled ersten Build mit Delay
-  # Nach Initial Deploy kann wieder auf true gesetzt werden für Git Push Builds
-  enable_auto_build = false
+  # ENABLED: Initial Deploy ist fertig, automatisches Build aktiviert
+  # Frontend wird bei jedem Git Push automatisch neu gebaut
+  enable_auto_build = true
 
   # Performance Mode (für bessere Response Times)
   enable_performance_mode = var.environment == "production" ? true : false
