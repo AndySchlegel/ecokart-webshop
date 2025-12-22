@@ -29,7 +29,7 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 
 ## 🚦 Current Status
 
-**Last Updated:** 15. Dezember 2025
+**Last Updated:** 22. Dezember 2025
 
 ### ✅ Implemented Features
 - ✅ **Authentication** - AWS Cognito JWT (User Registration, Login, Email Verification)
@@ -50,10 +50,13 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 - ✅ **Unit Tests** - Jest + ts-jest, 63 tests passing, 60-69% coverage
 - ✅ **Incremental Deploys** - No more Nuclear cleanup needed for code changes!
 - ✅ **100% Reproducibility** - Terraform Seed Module macht automatic database seeding
+- ✅ **Email Notifications** - AWS SES Order Confirmations mit Product Images (CloudFront CDN)
+- ✅ **Assets Infrastructure** - S3 + CloudFront für 100% reproduzierbare Produktbilder
+- ✅ **Automatic Image Upload** - Terraform null_resource synct Bilder bei jedem Deploy
 
-### 📋 Next Milestones (Final 2 Steps to Production!)
+### 📋 Next Milestones (Final Steps to Production!)
 1. **Custom Domain Setup** - api.ecokart.de, shop.ecokart.de, admin.ecokart.de (Eliminiert manuelle URL-Updates)
-2. **Email Notifications** - Order Confirmation via AWS SNS/SES
+2. **E2E Testing** - Playwright für kritische User Flows
 3. **Production Launch** - Security Audit, Performance Optimization
 
 **Detailed Roadmap:** [docs/ACTION_PLAN.md](docs/ACTION_PLAN.md)
@@ -246,6 +249,10 @@ See [docs/ACTION_PLAN.md#known-issues](docs/ACTION_PLAN.md#known-issues) for cur
 ## 📈 Roadmap
 
 ### Recently Completed (Dec 2025)
+- ✅ **CloudFront Assets Infrastructure** - S3 + CloudFront für 100% reproduzierbare Produktbilder (22.12.2025)
+- ✅ **Email Order Confirmations** - AWS SES mit Product Images via CloudFront (22.12.2025)
+- ✅ **Automatic Image Upload** - Terraform null_resource synct Bilder automatisch (22.12.2025)
+- ✅ **API Image URL Conversion** - Backend konvertiert relative → absolute CloudFront URLs (22.12.2025)
 - ✅ **Admin Login Complete** - Proactive SignOut, LocalStorage, Client-Side Guards (15.12.2025)
 - ✅ **Stripe Webhooks Working** - Full payment flow functional (15.12.2025)
 - ✅ **100% Reproducibility Verified** - Terraform Seed Module discovered (15.12.2025)
@@ -261,7 +268,7 @@ See [docs/ACTION_PLAN.md#known-issues](docs/ACTION_PLAN.md#known-issues) for cur
 
 ### Current Sprint (Final Steps!)
 - 🚧 Custom Domain Setup (api/shop/admin.ecokart.de)
-- 🚧 Email Notifications (AWS SNS/SES)
+- 🚧 E2E Testing (Playwright)
 
 ### Next Up
 - [ ] E2E Testing (Playwright)
