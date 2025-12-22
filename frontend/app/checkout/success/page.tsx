@@ -94,8 +94,8 @@ function SuccessContent() {
           <div className="error-box">
             <h1>FEHLER</h1>
             <p>{error || 'Keine gültige Session gefunden'}</p>
-            <Link href="/" className="btn-primary">
-              Zurück zur Startseite
+            <Link href="/" className="back-to-shop-button">
+              ← Zurück zum Shop
             </Link>
           </div>
         </div>
@@ -437,8 +437,7 @@ function SuccessContent() {
             flex-direction: column;
           }
 
-          .btn-primary,
-          .btn-secondary {
+          .back-to-shop-button {
             width: 100%;
           }
         }
