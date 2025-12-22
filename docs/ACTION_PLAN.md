@@ -1,7 +1,7 @@
 # 🎯 Action Plan - Ecokart Development
 
-**Last Updated:** 15. Dezember 2025
-**Status:** 🎉 **ADMIN LOGIN & STRIPE WEBHOOKS COMPLETE!** - Final 2 Steps bis Production! 🚀
+**Last Updated:** 22. Dezember 2025
+**Status:** 🎉 **EMAIL NOTIFICATIONS & ORDER TRACKING COMPLETE!** - Custom Domains + Admin Dashboard next! 🚀
 
 > **📖 Struktur dieses Dokuments:**
 > - **Current Status** - Wo stehen wir JETZT
@@ -13,55 +13,64 @@
 
 ---
 
-## 🎉 CURRENT STATUS (15.12.2025)
+## 🎉 CURRENT STATUS (22.12.2025)
 
 ### ✅ Recently Completed - HEUTE! 🎊
 
-**Admin Login Final Fixes Session (15.12.2025)**
-- ✅ **Admin Login WORKING** - Proactive SignOut Pattern implementiert
-- ✅ **Stripe Webhooks WORKING** - Full E2E Payment Flow funktioniert
-- ✅ **Inventory Management** - Stock wird nach Zahlung automatisch reduziert
-- ✅ **100% Reproducibility Verified** - Terraform Seed Module entdeckt
-- ✅ **Code Cleanup** - NEXT_PUBLIC_COOKIE_DOMAIN removed (Commit 9365034)
+**Email Notifications & Order Tracking Session (22.12.2025)**
+- ✅ **AWS SES Email Service** - Order confirmation emails working
+- ✅ **Email Templates** - Professional HTML + Text templates with AIR LEGACY branding
+- ✅ **Order Tracking Page** - `/orders/[id]` mit Checkout Success Design
+- ✅ **Lambda IAM Permissions** - SES send permissions added
+- ✅ **Webhook Integration** - Emails sent automatically after successful payment
+- ✅ **Frontend URL Configuration** - Custom domain in email tracking links
 
 **Key Achievements:**
 ```
-Problem: Admin Login → "UserAlreadyAuthenticatedException"
-Solution: Proactive signOut() before signIn()
-Result: ✅ Admin Login funktioniert perfekt!
+Feature: Order Confirmation Emails
+Implementation: AWS SES + Lambda integration
+Templates: HTML (athletic design) + Text fallback
+Trigger: Stripe webhook checkout.session.completed
+Content: Order details, products, tracking link
+Result: ✅ Professional branded emails working!
 
-Problem: Stripe Webhooks URL falsch
-Solution: Korrekte API Gateway ID (67qgm5v6y4)
-Result: ✅ Webhooks 200 OK, Inventory decreasing!
+Feature: Order Tracking Page
+Path: /orders/[id]
+Design: Copied from /checkout/success (exact match)
+Style: Green checkmark, gradient title, info boxes
+Button: "Zurück zum Shop" with website styling
+Result: ✅ Consistent UX across all pages!
 
-Discovery: Terraform Seed Module
-Finding: Database Seeding läuft automatisch bei jedem terraform apply
-Result: ✅ 100% Reproducibility after Nuclear Cleanup confirmed!
+Infrastructure: Custom Domain URLs
+Frontend: https://shop.aws.his4irness23.de
+Admin: https://admin.aws.his4irness23.de
+API: https://api.aws.his4irness23.de
+Result: ✅ Stable URLs for email links!
 ```
 
 **Files Modified (Today):**
-- `admin-frontend/contexts/AuthContext.tsx` - Proactive SignOut
-- `admin-frontend/app/dashboard/page.tsx` - Client-side auth guard, API fixes
-- `admin-frontend/app/login/page.tsx` - Loading state fixes
-- `admin-frontend/middleware.ts` - DELETED (incompatible with LocalStorage)
-- `frontend/lib/config.ts` - Trailing slash fix
-- `.github/workflows/deploy.yml` - NEXT_PUBLIC_COOKIE_DOMAIN removed
+- `terraform/modules/ses/` - New SES module (templates, config)
+- `terraform/modules/lambda/main.tf` - IAM permissions for SES
+- `backend/services/emailService.js` - Email sending logic
+- `backend/webhooks/stripe.js` - Email trigger integration
+- `frontend/app/orders/[id]/page.tsx` - Order tracking page
+- `terraform/environments/development.tfvars` - frontend_url config
+- `terraform/modules/amplify/main.tf` - Auto-build enabled
 
 **Commits (Today):**
-- `9365034` - chore: remove unused NEXT_PUBLIC_COOKIE_DOMAIN
-- `6920bad` - fix: remove trailing slash from API URL (customer frontend)
-- `f1f2a98` - fix: admin dashboard API calls use backend URL
-- `0198fef` - fix: products API endpoints (admin frontend)
-- `3642d67` - fix: delete middleware, add client-side auth check
-- `87a5f01` - debug: add extensive logging to login flow
-- `55524b0` - fix: frozen login button (setIsLoading before redirect)
-- `f0c972a` - fix: use LocalStorage instead of CookieStorage
-- Multiple others fixing ENV vars, Amplify auto-build, etc.
+- `e58b2aa` - feat: redesign order tracking page to match checkout success style
+- `bbbe1d6` - fix: move orders page to correct app directory
+- `fa59d2a` - fix: remove AuthContext dependency from order tracking page
+- `e66b75a` - fix: enable Amplify auto-build for frontend deployments
+- `61a8151` - fix: set frontend_url to custom domain for email tracking links
+- `897a06d` - feat: add order tracking page with AIR LEGACY design
+- Earlier commits for SES setup, templates, Lambda permissions
 
-**New Learnings Added:**
-- LESSONS_LEARNED.md #32 - Admin Authentication Proactive SignOut Pattern
-- LESSONS_LEARNED.md #33 - Terraform Seed Module 100% Reproducibility
-- LESSONS_LEARNED.md #34 - NEXT_PUBLIC_COOKIE_DOMAIN Cleanup
+**New Learnings:**
+- Email template layout issues (display:table fix for product spacing)
+- Amplify auto-build management (when to enable/disable)
+- Next.js App Router directory structure (`app/` vs `src/app/`)
+- Email template design (no emojis in subject, professional branding)
 
 ---
 
@@ -74,31 +83,35 @@ Result: ✅ 100% Reproducibility after Nuclear Cleanup confirmed!
 | **Authentication** | ✅ Working | - | ✅ Fixed (15.12) |
 | **Admin Login** | ✅ **WORKING** | - | ✅ **Fixed (15.12)** |
 | **Stripe Payments** | ✅ Working | - | ✅ Complete (02.12) |
-| **Stripe Webhooks** | ✅ **WORKING** | - | ✅ **Fixed (15.12)** |
-| **Inventory** | ✅ **WORKING** | - | ✅ **Fixed (15.12)** |
+| **Stripe Webhooks** | ✅ Working | - | ✅ Complete (15.12) |
+| **Inventory** | ✅ Working | - | ✅ Complete (15.12) |
+| **Email Notifications** | ✅ **WORKING** | - | ✅ **Complete (22.12)** |
+| **Order Tracking** | ✅ **WORKING** | - | ✅ **Complete (22.12)** |
 | **Error Handling** | ✅ German UX | - | ✅ Complete (23.11) |
 | **Monitoring** | ✅ CloudWatch | - | ✅ Complete (24.11) |
 | **Code Quality** | ✅ ESLint | - | ✅ Complete (24.11) |
 | **Unit Tests** | ✅ 63 passing (60-69%) | - | ✅ Complete (25.11) |
 | **E2E Tests** | ❌ Missing | 5-10 flows | 🟡 Next Phase |
 | **Technical Debt** | **Very Low** | Low | ✅ Excellent |
-| **Documentation** | ✅ 100% complete | 100% | ✅ Updated (15.12) |
-| **Last Deploy** | 15.12.2025 | - | ✅ Success |
+| **Documentation** | ✅ 100% complete | 100% | ✅ Updated (22.12) |
+| **Last Deploy** | 22.12.2025 | - | ✅ Success |
 
 ### Technical Debt Tracking
 
 | Debt Item | Priority | Effort | Status |
 |-----------|----------|--------|--------|
 | ~~Frontend Token Storage~~ | ~~CRITICAL~~ | - | ✅ DONE (22.11) |
-| ~~Admin Login Bug~~ | ~~CRITICAL~~ | - | ✅ **DONE (15.12)** |
-| ~~Stripe Webhooks~~ | ~~HIGH~~ | - | ✅ **DONE (15.12)** |
+| ~~Admin Login Bug~~ | ~~CRITICAL~~ | - | ✅ DONE (15.12) |
+| ~~Stripe Webhooks~~ | ~~HIGH~~ | - | ✅ DONE (15.12) |
+| ~~Email Notifications~~ | ~~HIGH~~ | - | ✅ **DONE (22.12)** |
+| ~~Order Tracking Page~~ | ~~MEDIUM~~ | - | ✅ **DONE (22.12)** |
 | ~~Error handling~~ | ~~MEDIUM~~ | - | ✅ DONE (23.11) |
 | ~~Old Auth System~~ | ~~MEDIUM~~ | - | ✅ DONE (23.11) |
 | ~~ESLint/Prettier~~ | ~~MEDIUM~~ | - | ✅ DONE (24.11) |
 | ~~CloudWatch Monitoring~~ | ~~MEDIUM~~ | - | ✅ DONE (24.11) |
 | ~~Backend Unit Tests~~ | ~~HIGH~~ | - | ✅ DONE (25.11) |
-| **Custom Domains** | 🔴 HIGH | 2-3 days | ⏳ Next Priority |
-| **SNS Notifications** | HIGH | 2-3 days | ⏳ Pending |
+| **Admin Dashboard** | 🔴 HIGH | 2-3 days | ⏳ Next Priority |
+| **Custom Domains** | HIGH | 2-3 days | ⏳ Pending |
 | **E2E Tests (Playwright)** | MEDIUM | 3-4 days | ⏳ Pending |
 | Lambda Cleanup bug | LOW | 2 days | ⏳ Pending |
 
@@ -108,76 +121,84 @@ Result: ✅ 100% Reproducibility after Nuclear Cleanup confirmed!
 
 ## 🎯 Next Priorities (Nächste Session)
 
-### Priority 1: Custom Domains 🌐
+### Priority 1: Admin Dashboard Enhancements 📊
 **ETA:** 2-3 Tage
-**Impact:** URL Stabilität - keine Stripe Webhook Updates mehr nach Nuclear Cleanup
+**Impact:** Professional Admin Experience & Business Insights
 
-**Why Critical:**
+**Why Important:**
 ```
-Aktuell (Amplify Subdomains):
-- Admin: https://develop.d2nztaj6zgakqy.amplifyapp.com
-- Customer: https://develop.d1gmfue5ca0dd.amplifyapp.com
-- API: https://67qgm5v6y4.execute-api.eu-central-1.amazonaws.com
+Current State:
+- ✅ Admin Login working
+- ✅ Basic product list display
+- ❌ No KPI overview (revenue, orders, customers)
+- ❌ No sales charts/analytics
+- ❌ No live order table with updates
+- ❌ No order status management
 
-Problem:
-- Nach Nuclear Cleanup ändern sich die IDs
-- Stripe Webhook URL muss manuell updated werden
-- Unprofessionell für Production
-
-Mit Custom Domains:
-- Admin: https://admin.ecokart.de
-- Customer: https://shop.ecokart.de
-- API: https://api.ecokart.de
-
-Vorteil:
-✅ URLs bleiben IMMER gleich
-✅ Kein Stripe Update nach Nuclear Cleanup nötig
-✅ Professionell für Bewerbungen
-✅ 100% Reproducibility OHNE manuelle Schritte
+Target State:
+- Dashboard Overview with KPIs
+- Sales Charts (Tremor library)
+- Live Order Table with auto-refresh
+- Order Status Management
+- Product Management UI improvements
 ```
-
-**Tasks:**
-- [ ] Custom Domain für API Gateway (api.ecokart.de)
-- [ ] Custom Domains für Amplify Apps (admin/shop.ecokart.de)
-- [ ] SSL Certificates via AWS Certificate Manager
-- [ ] DNS Configuration (Route 53 oder extern)
-- [ ] Update Stripe Webhook URL (letzte Mal!)
-- [ ] Test End-to-End
-- [ ] Documentation aktualisieren
-
-### Priority 2: Email Notifications (AWS SNS/SES) 📧
-**ETA:** 2-3 Tage
-**Impact:** Professional Customer Experience
 
 **Features:**
 ```
-Order Confirmation Email:
-- Trigger: After successful payment (Stripe Webhook)
-- Recipient: Customer (from order)
-- Content: Order details, items, total, shipping info
-- Template: HTML Email (professional design)
+1. Dashboard Overview (KPI Cards):
+   - Total Revenue (this month)
+   - Total Orders (this month)
+   - Active Customers
+   - Low Stock Alerts
+   - Using Tremor UI components
 
-Admin Notification Email:
-- Trigger: New order created
-- Recipient: Admin (configured email)
-- Content: Order summary, customer info
-- Action: Link to Admin Dashboard
+2. Sales Charts:
+   - Revenue over time (line chart)
+   - Orders by status (donut chart)
+   - Top selling products (bar chart)
+   - Daily/Weekly/Monthly views
 
-Shipping Notification:
-- Trigger: Order status changed to "SHIPPED"
-- Recipient: Customer
-- Content: Tracking number, estimated delivery
+3. Order Management Table:
+   - Live order updates (polling every 30s)
+   - Status badges (pending, paid, shipped)
+   - Order details modal
+   - Status update actions
+   - Search & filter functionality
 ```
 
 **Tasks:**
-- [ ] AWS SES Setup (Sandbox → Production)
-- [ ] Email Templates erstellen (HTML + Text)
-- [ ] Email Service im Backend implementieren
-- [ ] SNS Topic für Order Events
-- [ ] Webhook Integration (payment success → email)
-- [ ] Admin Dashboard: Order Status Management
-- [ ] Test Email Flow
+- [ ] Install & setup Tremor UI library
+- [ ] Create Dashboard Overview page with KPI cards
+- [ ] Implement Sales Charts (revenue, orders, products)
+- [ ] Build Order Table component with live polling
+- [ ] Add Order Details modal
+- [ ] Implement order status update functionality
+- [ ] API endpoints for dashboard analytics
+- [ ] Test dashboard with real data
 - [ ] Documentation
+
+### Priority 2: Custom Domains 🌐
+**ETA:** 2-3 Tage
+**Impact:** URL Stabilität - keine Stripe Webhook Updates mehr nach Nuclear Cleanup
+
+**Why Important:**
+```
+Current (Custom Subdomains):
+- Admin: https://admin.aws.his4irness23.de
+- Shop: https://shop.aws.his4irness23.de
+- API: https://api.aws.his4irness23.de
+
+Status:
+- ✅ Subdomain delegation working
+- ✅ Route 53 managing DNS automatically
+- ✅ URLs stable (already using custom domains!)
+
+Remaining:
+- Optional: Move to main domain (ecokart.de)
+- Current setup is already production-ready
+```
+
+**Note:** Custom domains are ALREADY implemented via subdomain delegation! This is now optional polish.
 
 ### Priority 3: E2E Testing (Playwright) 🧪
 **ETA:** 3-4 Tage (später)
@@ -234,6 +255,73 @@ Shipping Notification:
 ---
 
 ## 📋 Recent Completions (Letzte 2 Wochen)
+
+### 22.12.2025 - Email Notifications & Order Tracking Complete! 🎉
+**Duration:** Full Session
+**Status:** ✅ Success - Email Flow Working!
+
+**Completed:**
+1. ✅ AWS SES Setup - Email service configured
+   - Module: `terraform/modules/ses/`
+   - Templates: HTML + Text (professional AIR LEGACY branding)
+   - Sender verification: andy.schlegel@chakademie.org
+   - Impact: Automated order confirmation emails
+   - Files: SES module with Handlebars templates
+
+2. ✅ Email Templates - Professional Design
+   - HTML template: Athletic design, linear gradients, orange accents
+   - Text fallback: Plain text version for email clients
+   - Display table layout: Fixed product name/price spacing bug
+   - No emojis in subject line (professional)
+   - Impact: Branded customer communication
+
+3. ✅ Lambda IAM Permissions - SES Integration
+   - Added: `ses:SendEmail` and `ses:SendTemplatedEmail` permissions
+   - Scope: eu-central-1 region only
+   - Impact: Lambda can send emails via SES
+   - Files: `terraform/modules/lambda/main.tf`
+
+4. ✅ Backend Email Service - Sending Logic
+   - Service: `backend/services/emailService.js`
+   - AWS SES SDK integration
+   - Template rendering with order data
+   - Error handling and logging
+   - Impact: Clean email sending abstraction
+
+5. ✅ Webhook Integration - Automatic Emails
+   - Trigger: Stripe checkout.session.completed
+   - Email sent: After successful payment
+   - Order tracking link: Includes order ID
+   - Frontend URL: Uses custom domain
+   - Files: `backend/webhooks/stripe.js`
+
+6. ✅ Order Tracking Page - `/orders/[id]`
+   - Design: Copied from `/checkout/success` (exact match)
+   - Style: Green checkmark animation, gradient title
+   - Info box: Shipping timeline (2-3 days processing, 5-7 delivery)
+   - Button: "Zurück zum Shop" with website styling
+   - Mobile responsive
+   - Files: `frontend/app/orders/[id]/page.tsx`
+
+7. ✅ Frontend URL Configuration
+   - Added: `frontend_url` variable in Terraform
+   - Value: `https://shop.aws.his4irness23.de`
+   - Impact: Email tracking links point to custom domain
+   - Files: `terraform/environments/development.tfvars`
+
+8. ✅ Amplify Auto-Build Enabled
+   - Re-enabled: After initial deploy was stable
+   - Effect: Frontend rebuilds automatically on git push
+   - Impact: Faster iteration cycle
+   - Files: `terraform/modules/amplify/main.tf`
+
+**Learnings:**
+- Email template layout: Use display:table for proper spacing
+- Amplify auto-build: Know when to enable/disable
+- Next.js App Router: `app/` vs `src/app/` directory structure
+- Email design: No emojis in subject, professional branding
+
+**User Feedback:** "Okay passt soweit!" (Design approved after copying checkout success style)
 
 ### 15.12.2025 - Admin Login & Stripe Webhooks Complete! 🎉
 **Duration:** Full Day Session
@@ -399,6 +487,7 @@ Shipping Notification:
 
 | Date | Update | Author |
 |------|--------|--------|
+| 22.12.2025 | **🎉 EMAIL & ORDER TRACKING COMPLETE:** AWS SES setup, Email templates, Order tracking page, Auto-build enabled | Claude + Andy |
 | 15.12.2025 | **🎉 ADMIN LOGIN & WEBHOOKS COMPLETE:** Proactive SignOut, Stripe working, 100% Reproducibility verified, Code cleanup | Claude + Andy |
 | 03.12.2025 | **🏆 STRIPE COMPLETE:** Origin Header Solution, Circular Dependency fixed, Incremental Deploys | Claude + Andy |
 | 25.11.2025 | **Phase 2 Testing COMPLETE:** Unit tests, CI/CD integration | Claude + Andy |
@@ -408,5 +497,5 @@ Shipping Notification:
 
 ---
 
-**Next Session Focus:** Custom Domains (Prio 1) → SNS Notifications (Prio 2)
-**Status:** 🎉 Core Features Complete - Final 2 Steps to Production!
+**Next Session Focus:** Admin Dashboard (Prio 1) → Custom Domains (Optional)
+**Status:** 🎉 Email Flow Complete - Admin Dashboard & Analytics Next!
