@@ -78,6 +78,7 @@ export async function sendOrderConfirmationEmail(
         quantity: item.quantity,
         unitPrice: item.price.toFixed(2),
         price: (item.price * item.quantity).toFixed(2),
+        imageUrl: item.imageUrl, // Product image for email
       })),
       totalAmount: order.total.toFixed(2),
       shippingAddress: order.shippingAddress,

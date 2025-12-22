@@ -152,10 +152,23 @@
         .product-main {
             display: table-row;
         }
+        .product-image-cell {
+            display: table-cell;
+            vertical-align: middle;
+            width: 100px;
+            padding-right: 15px;
+        }
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 2px solid #f0f0f0;
+        }
         .product-info {
             display: table-cell;
             vertical-align: middle;
-            width: 70%;
+            width: 50%;
             padding-right: 20px;
         }
         .product-name {
@@ -348,6 +361,9 @@
                     {{#each items}}
                     <div class="product-item">
                         <div class="product-main">
+                            <div class="product-image-cell">
+                                <img src="{{this.imageUrl}}" alt="{{this.name}}" class="product-image">
+                            </div>
                             <div class="product-info">
                                 <div class="product-name">{{this.name}}</div>
                                 <div class="product-quantity">Menge: {{this.quantity}}</div>

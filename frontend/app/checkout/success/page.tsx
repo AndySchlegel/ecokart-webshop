@@ -177,11 +177,8 @@ function SuccessContent() {
         )}
 
         <div className="action-buttons">
-          <Link href="/" className="btn-primary">
-            Weiter shoppen
-          </Link>
-          <Link href="/cart" className="btn-secondary">
-            Zurück zum Warenkorb
+          <Link href="/" className="back-to-shop-button">
+            ← Zurück zum Shop
           </Link>
         </div>
       </div>
@@ -328,41 +325,27 @@ function SuccessContent() {
 
         .action-buttons {
           display: flex;
-          gap: 1rem;
           justify-content: center;
+          margin-top: 1rem;
         }
 
-        .btn-primary,
-        .btn-secondary {
-          padding: 1rem 2rem;
-          border-radius: 4px;
-          font-weight: 900;
-          letter-spacing: 1px;
-          text-decoration: none;
+        .back-to-shop-button {
+          background: none;
+          border: 2px solid var(--accent-orange);
+          color: var(--accent-orange);
+          padding: 0.75rem 1.5rem;
+          font-weight: 700;
+          cursor: pointer;
           transition: all 0.3s ease;
-          font-size: 0.95rem;
+          font-size: 1rem;
+          text-decoration: none;
+          display: inline-block;
         }
 
-        .btn-primary {
-          background: var(--accent-green);
+        .back-to-shop-button:hover {
+          background: var(--accent-orange);
           color: #000;
-        }
-
-        .btn-primary:hover {
-          background: #00ff88;
-          transform: translateY(-2px);
-          box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
-        }
-
-        .btn-secondary {
-          background: rgba(255, 255, 255, 0.05);
-          border: 2px solid #333;
-          color: white;
-        }
-
-        .btn-secondary:hover {
-          background: rgba(255, 255, 255, 0.08);
-          border-color: var(--accent-orange);
+          transform: translateX(-5px);
         }
 
         .loading {

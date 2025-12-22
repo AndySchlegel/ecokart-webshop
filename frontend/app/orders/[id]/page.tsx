@@ -109,8 +109,8 @@ export default function OrderTrackingPage() {
         </div>
 
         <div className="action-buttons">
-          <Link href="/" className="btn-primary">
-            Zurück zum Shop
+          <Link href="/" className="back-to-shop-button">
+            ← Zurück zum Shop
           </Link>
         </div>
       </div>
@@ -238,26 +238,27 @@ export default function OrderTrackingPage() {
 
         .action-buttons {
           display: flex;
-          gap: 1rem;
           justify-content: center;
+          margin-top: 1rem;
         }
 
-        .btn-primary {
-          padding: 1rem 2rem;
-          border-radius: 4px;
-          font-weight: 900;
-          letter-spacing: 1px;
-          text-decoration: none;
+        .back-to-shop-button {
+          background: none;
+          border: 2px solid var(--accent-orange);
+          color: var(--accent-orange);
+          padding: 0.75rem 1.5rem;
+          font-weight: 700;
+          cursor: pointer;
           transition: all 0.3s ease;
-          font-size: 0.95rem;
-          background: var(--accent-green);
-          color: #000;
+          font-size: 1rem;
+          text-decoration: none;
+          display: inline-block;
         }
 
-        .btn-primary:hover {
-          background: #00ff88;
-          transform: translateY(-2px);
-          box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+        .back-to-shop-button:hover {
+          background: var(--accent-orange);
+          color: #000;
+          transform: translateX(-5px);
         }
 
         @keyframes fadeInUp {
