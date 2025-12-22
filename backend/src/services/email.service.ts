@@ -85,6 +85,14 @@ export async function sendOrderConfirmationEmail(
       orderTrackingUrl: `${process.env.FRONTEND_URL || 'https://shop.aws.his4irness23.de'}/orders/${order.id}`,
     };
 
+    // DEBUG: Log template data to see if imageUrl is present
+    logger.info('Email template data prepared', {
+      orderId: order.id,
+      itemCount: templateData.items.length,
+      itemsWithImages: templateData.items.filter(item => item.imageUrl).length,
+      firstItemImageUrl: templateData.items[0]?.imageUrl || 'MISSING',
+    });
+
     // SES SendTemplatedEmail Command
     const command = new SendTemplatedEmailCommand({
       Source: senderEmail, // FROM Adresse

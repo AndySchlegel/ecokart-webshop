@@ -361,9 +361,11 @@
                     {{#each items}}
                     <div class="product-item">
                         <div class="product-main">
+                            {{#if this.imageUrl}}
                             <div class="product-image-cell">
                                 <img src="{{this.imageUrl}}" alt="{{this.name}}" class="product-image">
                             </div>
+                            {{/if}}
                             <div class="product-info">
                                 <div class="product-name">{{this.name}}</div>
                                 <div class="product-quantity">Menge: {{this.quantity}}</div>
