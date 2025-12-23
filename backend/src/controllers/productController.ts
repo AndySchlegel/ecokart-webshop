@@ -120,3 +120,38 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ error: 'Failed to delete product' });
   }
 };
+
+// ============================================================================
+// GET /api/admin/products/low-stock
+// ============================================================================
+
+/**
+ * Get products with low stock (below threshold)
+ * Query params: ?threshold=10 (default)
+ */
+export const getLowStockProducts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const threshold = parseInt(req.query.threshold as string) || 10;
+
+    logger.info('Low stock products requested', { action: 'getLowStockProducts', threshold });
+
+    const allProducts = await database.getAllProducts();
+
+    // Filter products below threshold and sort by stock (lowest first)
+    const lowStockProducts = allProducts
+      .filter(product => typeof product.stock === 'number' && product.stock < threshold)
+      .sort((a, b) => (a.stock ?? 0) - (b.stock ?? 0))
+      .map(product => ({
+        id: product.id,
+        name: product.name,
+        stock: product.stock ?? 0
+      }));
+
+    logger.info('Low stock products found', { count: lowStockProducts.length });
+
+    res.json({ products: lowStockProducts });
+  } catch (error) {
+    logger.error('Failed to get low stock products', { action: 'getLowStockProducts' }, error as Error);
+    res.status(500).json({ error: 'Failed to fetch low stock products' });
+  }
+};

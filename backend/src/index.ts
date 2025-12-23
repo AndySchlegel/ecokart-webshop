@@ -31,6 +31,7 @@ import productRoutes from './routes/productRoutes';
 import cartRoutes from './routes/cartRoutes';
 import orderRoutes from './routes/orderRoutes';
 import checkoutRoutes from './routes/checkoutRoutes';
+import adminRoutes from './routes/adminRoutes';
 import * as webhookController from './controllers/webhookController';
 import { logger } from './utils/logger';
 
@@ -144,6 +145,11 @@ app.use('/api/orders', orderRoutes);
 // ➡️ Stripe Checkout Session erstellen, Payment verarbeiten
 // Siehe: ./routes/checkoutRoutes.ts für Details
 app.use('/api/checkout', checkoutRoutes);
+
+// 📊 Admin-Routen (Dashboard & Analytics)
+// ➡️ Admin Statistics, Analytics, Management Endpoints
+// Siehe: ./routes/adminRoutes.ts für Details
+app.use('/api/admin', adminRoutes);
 
 // 404 Handler
 // 💡 Fängt alle Requests zu nicht existierenden Routen ab
