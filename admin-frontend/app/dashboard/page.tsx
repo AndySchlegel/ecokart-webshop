@@ -1,24 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
 
 import type { Article } from '@/lib/articles';
 import { ArticleForm } from './components/ArticleForm';
 import { ArticleTable } from './components/ArticleTable';
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const { signOut, isAuthenticated, isLoading: authLoading } = useAuth();
-
-  // Protect route: redirect to login if not authenticated
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      console.log('[Dashboard] Not authenticated, redirecting to login...');
-      router.push('/login');
-    }
-  }, [isAuthenticated, authLoading, router]);
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -115,23 +103,16 @@ export default function DashboardPage() {
     await loadArticles();
   }
 
-  async function handleLogout() {
-    await signOut();
-  }
-
   return (
-    <main className="page">
-      <header>
-        <div className="page__content">
-          <div>
-            <strong>AIR LEGACY ADMIN</strong>
-          </div>
-          <button onClick={handleLogout} className="button button--logout">
-            Abmelden
-          </button>
-        </div>
-      </header>
-      <section className="page__content" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div className="p-6">
+      {/* Page Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Produktverwaltung</h1>
+        <p className="text-gray-600 mt-1">Produkte erstellen, bearbeiten und löschen</p>
+      </div>
+
+      {/* Content */}
+      <div className="space-y-6">
         {isLoading && (
           <div className="card loading">
             Lade Produkte
@@ -168,7 +149,7 @@ export default function DashboardPage() {
           editingArticle={editingArticle}
           onCancelEdit={() => setEditingArticle(null)}
         />
-      </section>
-    </main>
+      </div>
+    </div>
   );
 }
