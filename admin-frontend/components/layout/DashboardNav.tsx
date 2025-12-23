@@ -58,11 +58,11 @@ export function DashboardNav() {
   };
 
   return (
-    <nav className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col">
+    <nav className="w-64 bg-bg-dark border-r-2 border-accent-orange min-h-screen flex flex-col">
       {/* Logo/Header */}
-      <div className="p-6 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-gray-900">EcoKart Admin</h1>
-        <p className="text-xs text-gray-500 mt-1">Verwaltung & Analytics</p>
+      <div className="p-6 border-b-2 border-accent-orange">
+        <h1 className="text-xl font-bold text-white uppercase tracking-wide">EcoKart Admin</h1>
+        <p className="text-xs text-gray-400 mt-1">Verwaltung & Analytics</p>
       </div>
 
       {/* Navigation Links */}
@@ -74,14 +74,14 @@ export function DashboardNav() {
               key={item.href}
               href={item.href}
               className={`
-                flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors
+                flex items-center space-x-3 px-4 py-3 transition-colors
                 ${active
-                  ? 'bg-green-50 text-green-700 font-medium'
-                  : 'text-gray-700 hover:bg-gray-50'
+                  ? 'bg-accent-orange/10 text-accent-orange font-medium border-l-4 border-accent-orange'
+                  : 'text-gray-300 hover:bg-bg-darker hover:text-accent-orange border-l-4 border-transparent'
                 }
               `}
             >
-              <span className={active ? 'text-green-600' : 'text-gray-400'}>
+              <span className={active ? 'text-accent-orange' : 'text-gray-500'}>
                 {item.icon}
               </span>
               <span>{item.name}</span>
@@ -91,10 +91,10 @@ export function DashboardNav() {
       </div>
 
       {/* Logout Button */}
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t-2 border-accent-orange">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-700 rounded-lg transition-colors"
+          className="w-full flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-red-900/20 hover:text-red-500 transition-colors border-l-4 border-transparent hover:border-red-500"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

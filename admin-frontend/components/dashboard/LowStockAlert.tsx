@@ -50,9 +50,9 @@ export function LowStockAlert({ products }: LowStockAlertProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-bg-dark border-2 border-bg-darker rounded-lg shadow-md p-6 hover:border-accent-orange transition-all">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">
+        <h3 className="text-lg font-semibold text-white">
           Niedriger Lagerbestand
         </h3>
         {products.length > 0 && (
@@ -67,7 +67,7 @@ export function LowStockAlert({ products }: LowStockAlertProps) {
           <svg className="mx-auto h-12 w-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p className="mt-2 text-sm text-gray-500">Alle Produkte haben ausreichend Lagerbestand</p>
+          <p className="mt-2 text-sm text-gray-400">Alle Produkte haben ausreichend Lagerbestand</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -78,12 +78,12 @@ export function LowStockAlert({ products }: LowStockAlertProps) {
             return (
               <div
                 key={product.id}
-                className="flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+                className="flex items-center justify-between p-3 rounded-lg border border-bg-darker hover:bg-bg-darker transition-colors"
               >
                 {/* Left: Warning Icon + Product Name */}
                 <div className="flex items-center space-x-3 flex-1">
                   {warningIcon}
-                  <span className="text-sm font-medium text-gray-900 truncate">
+                  <span className="text-sm font-medium text-white truncate">
                     {product.name}
                   </span>
                 </div>

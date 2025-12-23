@@ -107,8 +107,8 @@ export default function DashboardPage() {
     <div className="p-6">
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Produktverwaltung</h1>
-        <p className="text-gray-600 mt-1">Produkte erstellen, bearbeiten und löschen</p>
+        <h1 className="text-3xl font-bold text-white">Produktverwaltung</h1>
+        <p className="text-gray-400 mt-1">Produkte erstellen, bearbeiten und löschen</p>
       </div>
 
       {/* Content */}

@@ -33,16 +33,16 @@ export function KPICard({ title, value, trend, icon, formatter }: KPICardProps) 
     : value;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-bg-dark border-2 border-bg-darker rounded-lg shadow-md p-6 hover:border-accent-orange transition-all">
       {/* Header with Icon */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-gray-600">{title}</h3>
-        {icon && <div className="text-gray-400">{icon}</div>}
+        <h3 className="text-sm font-medium text-gray-400">{title}</h3>
+        {icon && <div className="text-gray-500">{icon}</div>}
       </div>
 
       {/* Value */}
       <div className="mb-3">
-        <p className="text-3xl font-bold text-gray-900">{formattedValue}</p>
+        <p className="text-3xl font-bold text-white">{formattedValue}</p>
       </div>
 
       {/* Trend Indicator */}
@@ -51,7 +51,7 @@ export function KPICard({ title, value, trend, icon, formatter }: KPICardProps) 
           <span className="mr-1">{trendIcon}</span>
           {Math.abs(trend)}%
         </span>
-        <span className="ml-2 text-xs text-gray-500">vs. vorherige Periode</span>
+        <span className="ml-2 text-xs text-gray-400">vs. vorherige Periode</span>
       </div>
     </div>
   );

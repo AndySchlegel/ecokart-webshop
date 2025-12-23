@@ -46,13 +46,13 @@ export function TopProducts({ products }: TopProductsProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+    <div className="bg-bg-dark border-2 border-bg-darker rounded-lg shadow-md p-6 hover:border-accent-orange transition-all">
+      <h3 className="text-lg font-semibold text-white mb-4">
         Top 5 Produkte
       </h3>
 
       {products.length === 0 ? (
-        <p className="text-gray-500 text-center py-8">Keine Verkaufsdaten verfügbar</p>
+        <p className="text-gray-400 text-center py-8">Keine Verkaufsdaten verfügbar</p>
       ) : (
         <div className="space-y-3">
           {products.map((product, index) => {
@@ -63,21 +63,21 @@ export function TopProducts({ products }: TopProductsProps) {
             return (
               <div
                 key={product.id}
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center justify-between p-3 rounded-lg hover:bg-bg-darker transition-colors"
               >
                 {/* Left: Rank + Product Name */}
                 <div className="flex items-center space-x-3 flex-1">
                   <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold ${badgeColor}`}>
                     {medal || `#${rank}`}
                   </span>
-                  <span className="text-sm font-medium text-gray-900 truncate">
+                  <span className="text-sm font-medium text-white truncate">
                     {product.name}
                   </span>
                 </div>
 
                 {/* Right: Sales Count */}
                 <div className="ml-4">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-accent-orange/10 text-accent-orange">
                     {product.salesCount} verkauft
                   </span>
                 </div>

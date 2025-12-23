@@ -67,8 +67,8 @@ export function RevenueChart({ data }: RevenueChartProps) {
   }));
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+    <div className="bg-bg-dark border-2 border-bg-darker rounded-lg shadow-md p-6 hover:border-accent-orange transition-all">
+      <h3 className="text-lg font-semibold text-white mb-4">
         Umsatz (letzte 7 Tage)
       </h3>
 
@@ -88,7 +88,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
           <Tooltip content={<CustomTooltip />} />
           <Bar
             dataKey="revenue"
-            fill="#10b981"
+            fill="#ff6b00"
             radius={[8, 8, 0, 0]}
             maxBarSize={60}
           />
