@@ -19,8 +19,9 @@ import { RevenueChart, type RevenueDataPoint } from '@/components/dashboard/Reve
 import { TopProducts, type TopProduct } from '@/components/dashboard/TopProducts';
 import { LowStockAlert, type LowStockProduct } from '@/components/dashboard/LowStockAlert';
 
-// API Base URL
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+// API Base URL (server-side ADMIN_API_URL takes precedence, fallback to client-side NEXT_PUBLIC_API_URL)
+const BASE_URL = process.env.ADMIN_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API_URL = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
 
 export default function DashboardOverviewPage() {
   // State
