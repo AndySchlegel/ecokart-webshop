@@ -26,13 +26,15 @@ resource "null_resource" "seed_demo_data" {
   }
 
   # Provisioner: Install dependencies and run seed script
+  # Note: AWS credentials are automatically inherited from the environment
+  # - In CI/CD: GitHub Actions provides AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN
+  # - Locally: AWS_PROFILE from terraform.tfvars or ~/.aws/credentials
   provisioner "local-exec" {
     command = <<-EOT
       echo "📦 Installing seed script dependencies..."
       npm install --prefix ${path.module}/../../scripts --silent
 
       echo "🌱 Running seed data script..."
-      AWS_PROFILE=${var.aws_profile} \
       AWS_REGION=${var.aws_region} \
       ORDERS_TABLE=${aws_dynamodb_table.orders.name} \
       CUSTOMERS_TABLE=${aws_dynamodb_table.users.name} \
