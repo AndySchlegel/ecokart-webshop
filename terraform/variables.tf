@@ -330,16 +330,6 @@ variable "enable_cognito_auth" {
 }
 
 # ----------------------------------------------------------------------------
-# Database Seeding
-# ----------------------------------------------------------------------------
-
-variable "enable_auto_seed" {
-  description = "Automatisches DynamoDB Seeding aktivieren (erstellt Test-Daten beim Deploy)"
-  type        = bool
-  default     = true
-}
-
-# ----------------------------------------------------------------------------
 # Custom Domain Configuration
 # ----------------------------------------------------------------------------
 

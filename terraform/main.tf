@@ -432,12 +432,11 @@ module "amplify_admin" {
 # ----------------------------------------------------------------------------
 # Database Seeding (Optional - nur für Development)
 # ----------------------------------------------------------------------------
-
-module "database_seeding" {
-  source = "./modules/seed"
-
-  aws_region            = var.aws_region
-  backend_path          = "${path.module}/../backend"
-  enable_seeding        = var.enable_auto_seed
-  depends_on_resources  = [module.dynamodb, module.lambda]
-}
+# REMOVED: Old database_seeding module replaced by improved seed script
+# in modules/dynamodb/seed.tf which generates:
+# - 30 days of realistic order data
+# - 40 customers with various registration dates
+# - Strategic product stock levels (high/medium/low/critical mix)
+#
+# The old module was migrating products with original stock values,
+# overwriting the realistic values set by the new seed script.
