@@ -1,10 +1,3 @@
-// ============================================================================
-// 🔐 PASSWORD RESET PAGE - ADMIN FRONTEND
-// ============================================================================
-// Ermöglicht Admins ihr Passwort zurückzusetzen via Email-Code
-// Datum: 26. Dezember 2025
-// ============================================================================
-
 'use client';
 
 import { useState } from 'react';
@@ -15,9 +8,6 @@ import { logger } from '@/lib/logger';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
-
-  // Step 1: Email eingeben → Code anfordern
-  // Step 2: Code + neues Passwort eingeben → Bestätigen
   const [step, setStep] = useState<'request' | 'confirm'>('request');
 
   const [email, setEmail] = useState('');
@@ -29,9 +19,6 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // ----------------------------------------------------------------
-  // Step 1: Reset-Code anfordern
-  // ----------------------------------------------------------------
   const handleRequestCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -43,7 +30,7 @@ export default function ResetPasswordPage() {
 
       await resetPassword({ username: email });
 
-      setSuccess(`Reset-Code wurde an ${email} gesendet. Bitte prüfe deine E-Mails.`);
+      setSuccess(`Reset-Code wurde an ${email} gesendet.`);
       setStep('confirm');
 
       logger.info('Password reset code sent', { email, component: 'ResetPasswordPage' });
@@ -62,15 +49,11 @@ export default function ResetPasswordPage() {
     }
   };
 
-  // ----------------------------------------------------------------
-  // Step 2: Passwort zurücksetzen mit Code
-  // ----------------------------------------------------------------
   const handleConfirmReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    // Validierung
     if (newPassword !== confirmPassword) {
       setError('Passwörter stimmen nicht überein');
       return;
@@ -92,11 +75,9 @@ export default function ResetPasswordPage() {
         newPassword: newPassword,
       });
 
-      setSuccess('Passwort erfolgreich zurückgesetzt! Du wirst weitergeleitet...');
-
       logger.info('Password reset successful', { email, component: 'ResetPasswordPage' });
+      setSuccess('Passwort erfolgreich zurückgesetzt!');
 
-      // Redirect to login after 2 seconds
       setTimeout(() => {
         router.push('/login');
       }, 2000);
@@ -108,7 +89,7 @@ export default function ResetPasswordPage() {
       } else if (err.name === 'ExpiredCodeException') {
         setError('Code ist abgelaufen. Bitte fordere einen neuen an.');
       } else if (err.name === 'InvalidPasswordException') {
-        setError('Passwort erfüllt nicht die Anforderungen (mind. 8 Zeichen, Groß-/Kleinbuchstaben, Zahlen)');
+        setError('Passwort erfüllt nicht die Anforderungen');
       } else {
         setError(err.message || 'Passwort-Reset fehlgeschlagen');
       }
@@ -119,7 +100,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-bg-dark border-2 border-bg-darker rounded-lg shadow-xl p-8">
+      <div className="max-w-md w-full bg-bg-dark border-2 border-accent rounded-lg shadow-2xl p-8">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">
@@ -127,23 +108,23 @@ export default function ResetPasswordPage() {
           </h1>
           <p className="text-gray-400">
             {step === 'request'
-              ? 'Gib deine E-Mail ein um einen Reset-Code zu erhalten'
-              : 'Gib den Code aus deiner E-Mail und dein neues Passwort ein'
+              ? 'Gib deine E-Mail ein für einen Reset-Code'
+              : 'Gib den Code und dein neues Passwort ein'
             }
           </p>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 p-4 bg-red-900/20 border border-red-500 rounded-lg">
-            <p className="text-red-400 text-sm">{error}</p>
+          <div className="mb-6 p-4 bg-red-900/20 border-2 border-red-500 rounded-lg">
+            <p className="text-red-400 text-sm font-semibold text-center">{error}</p>
           </div>
         )}
 
         {/* Success Message */}
         {success && (
-          <div className="mb-6 p-4 bg-green-900/20 border border-green-500 rounded-lg">
-            <p className="text-green-400 text-sm">{success}</p>
+          <div className="mb-6 p-4 bg-green-900/20 border-2 border-green-500 rounded-lg">
+            <p className="text-green-400 text-sm font-semibold text-center">{success}</p>
           </div>
         )}
 
@@ -151,7 +132,7 @@ export default function ResetPasswordPage() {
         {step === 'request' && (
           <form onSubmit={handleRequestCode} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">
                 E-Mail
               </label>
               <input
@@ -160,7 +141,7 @@ export default function ResetPasswordPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-bg-darker border border-bg-lighter rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                className="w-full px-4 py-3 bg-bg-darker border-2 border-bg-lighter rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-accent transition-colors"
                 placeholder="deine@email.com"
                 disabled={loading}
               />
@@ -169,9 +150,9 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-accent hover:bg-accent-dark text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-accent hover:bg-accent-dark text-black font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 uppercase tracking-wider"
             >
-              {loading ? 'Code wird angefordert...' : 'Code anfordern'}
+              {loading ? 'Wird gesendet...' : 'Code anfordern'}
             </button>
           </form>
         )}
@@ -180,7 +161,7 @@ export default function ResetPasswordPage() {
         {step === 'confirm' && (
           <form onSubmit={handleConfirmReset} className="space-y-6">
             <div>
-              <label htmlFor="code" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="code" className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">
                 Reset-Code
               </label>
               <input
@@ -189,17 +170,17 @@ export default function ResetPasswordPage() {
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-bg-darker border border-bg-lighter rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                className="w-full px-4 py-3 bg-bg-darker border-2 border-bg-lighter rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-accent transition-colors"
                 placeholder="123456"
                 disabled={loading}
               />
-              <p className="mt-2 text-sm text-gray-400">
+              <p className="mt-2 text-xs text-gray-400">
                 Prüfe deine E-Mails ({email})
               </p>
             </div>
 
             <div>
-              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="newPassword" className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">
                 Neues Passwort
               </label>
               <input
@@ -208,14 +189,14 @@ export default function ResetPasswordPage() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-bg-darker border border-bg-lighter rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                className="w-full px-4 py-3 bg-bg-darker border-2 border-bg-lighter rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-accent transition-colors"
                 placeholder="••••••••"
                 disabled={loading}
               />
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">
                 Passwort bestätigen
               </label>
               <input
@@ -224,15 +205,15 @@ export default function ResetPasswordPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-bg-darker border border-bg-lighter rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                className="w-full px-4 py-3 bg-bg-darker border-2 border-bg-lighter rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-accent transition-colors"
                 placeholder="••••••••"
                 disabled={loading}
               />
             </div>
 
-            <div className="text-sm text-gray-400">
-              <p className="font-medium mb-1">Passwort-Anforderungen:</p>
-              <ul className="list-disc list-inside space-y-1">
+            <div className="bg-bg-darker border-2 border-bg-lighter rounded-lg p-4">
+              <p className="text-accent font-semibold text-sm mb-2 uppercase tracking-wide">Passwort-Anforderungen:</p>
+              <ul className="text-gray-400 text-sm space-y-1 list-disc list-inside">
                 <li>Mindestens 8 Zeichen</li>
                 <li>Groß- und Kleinbuchstaben</li>
                 <li>Mindestens eine Zahl</li>
@@ -242,18 +223,27 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-accent hover:bg-accent-dark text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-accent hover:bg-accent-dark text-black font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 uppercase tracking-wider"
             >
-              {loading ? 'Passwort wird zurückgesetzt...' : 'Passwort zurücksetzen'}
+              {loading ? 'Wird zurückgesetzt...' : 'Passwort zurücksetzen'}
             </button>
 
-            <button
-              type="button"
-              onClick={() => setStep('request')}
-              className="w-full text-gray-400 hover:text-white text-sm transition-colors"
-            >
-              ← Zurück
-            </button>
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setStep('request');
+                  setCode('');
+                  setNewPassword('');
+                  setConfirmPassword('');
+                  setError('');
+                  setSuccess('');
+                }}
+                className="text-gray-400 hover:text-white text-sm transition-colors"
+              >
+                ← Zurück
+              </button>
+            </div>
           </form>
         )}
 

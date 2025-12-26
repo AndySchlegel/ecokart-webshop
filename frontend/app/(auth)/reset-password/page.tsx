@@ -1,10 +1,3 @@
-// ============================================================================
-// 🔐 PASSWORD RESET PAGE - CUSTOMER SHOP FRONTEND
-// ============================================================================
-// Ermöglicht Kunden ihr Passwort zurückzusetzen via Email-Code
-// Datum: 26. Dezember 2025
-// ============================================================================
-
 'use client';
 
 import { useState } from 'react';
@@ -14,9 +7,6 @@ import Link from 'next/link';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
-
-  // Step 1: Email eingeben → Code anfordern
-  // Step 2: Code + neues Passwort eingeben → Bestätigen
   const [step, setStep] = useState<'request' | 'confirm'>('request');
 
   const [email, setEmail] = useState('');
@@ -28,9 +18,6 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // ----------------------------------------------------------------
-  // Step 1: Reset-Code anfordern
-  // ----------------------------------------------------------------
   const handleRequestCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -39,10 +26,10 @@ export default function ResetPasswordPage() {
 
     try {
       await resetPassword({ username: email });
-
-      setSuccess(`Reset-Code wurde an ${email} gesendet. Bitte prüfe deine E-Mails.`);
+      setSuccess(`Reset-Code wurde an ${email} gesendet.`);
       setStep('confirm');
     } catch (err: any) {
+      console.error('[ResetPassword] Request code failed:', err);
       if (err.name === 'UserNotFoundException') {
         setError('Kein Account mit dieser E-Mail gefunden');
       } else if (err.name === 'LimitExceededException') {
@@ -55,15 +42,11 @@ export default function ResetPasswordPage() {
     }
   };
 
-  // ----------------------------------------------------------------
-  // Step 2: Passwort zurücksetzen mit Code
-  // ----------------------------------------------------------------
   const handleConfirmReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    // Validierung
     if (newPassword !== confirmPassword) {
       setError('Passwörter stimmen nicht überein');
       return;
@@ -77,25 +60,29 @@ export default function ResetPasswordPage() {
     setLoading(true);
 
     try {
+      console.log('[ResetPassword] Confirming reset for:', email);
+
       await confirmResetPassword({
         username: email,
         confirmationCode: code,
         newPassword: newPassword,
       });
 
-      setSuccess('Passwort erfolgreich zurückgesetzt! Du wirst weitergeleitet...');
+      console.log('[ResetPassword] Password reset successful');
+      setSuccess('Passwort erfolgreich zurückgesetzt!');
 
-      // Redirect to login after 2 seconds
       setTimeout(() => {
         router.push('/login');
       }, 2000);
     } catch (err: any) {
+      console.error('[ResetPassword] Confirm reset failed:', err);
+
       if (err.name === 'CodeMismatchException') {
         setError('Falscher Code. Bitte überprüfe den Code aus deiner E-Mail.');
       } else if (err.name === 'ExpiredCodeException') {
         setError('Code ist abgelaufen. Bitte fordere einen neuen an.');
       } else if (err.name === 'InvalidPasswordException') {
-        setError('Passwort erfüllt nicht die Anforderungen (mind. 8 Zeichen, Groß-/Kleinbuchstaben, Zahlen)');
+        setError('Passwort erfüllt nicht die Anforderungen');
       } else {
         setError(err.message || 'Passwort-Reset fehlgeschlagen');
       }
@@ -105,155 +92,313 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Passwort zurücksetzen
-          </h1>
-          <p className="text-gray-600">
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-header">
+          <h1>PASSWORT<br/>ZURÜCKSETZEN</h1>
+          <p>
             {step === 'request'
-              ? 'Gib deine E-Mail ein um einen Reset-Code zu erhalten'
-              : 'Gib den Code aus deiner E-Mail und dein neues Passwort ein'
+              ? 'Gib deine E-Mail ein für einen Reset-Code'
+              : 'Gib den Code und dein neues Passwort ein'
             }
           </p>
         </div>
 
-        {/* Error Message */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600 text-sm">{error}</p>
+          <div className="auth-error">
+            {error}
           </div>
         )}
 
-        {/* Success Message */}
         {success && (
-          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-green-600 text-sm">{success}</p>
+          <div className="auth-success">
+            {success}
           </div>
         )}
 
-        {/* Step 1: Request Code */}
         {step === 'request' && (
-          <form onSubmit={handleRequestCode} className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                E-Mail
-              </label>
+          <form onSubmit={handleRequestCode} className="auth-form">
+            <div className="form-group">
+              <label htmlFor="email">E-MAIL</label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="deine@email.com"
+                required
                 disabled={loading}
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Code wird angefordert...' : 'Code anfordern'}
+            <button type="submit" className="btn-primary" disabled={loading}>
+              {loading ? 'WIRD GESENDET...' : 'CODE ANFORDERN'}
             </button>
           </form>
         )}
 
-        {/* Step 2: Confirm Reset */}
         {step === 'confirm' && (
-          <form onSubmit={handleConfirmReset} className="space-y-6">
-            <div>
-              <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-2">
-                Reset-Code
-              </label>
+          <form onSubmit={handleConfirmReset} className="auth-form">
+            <div className="form-group">
+              <label htmlFor="code">RESET-CODE</label>
               <input
                 id="code"
                 type="text"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="123456"
+                required
                 disabled={loading}
               />
-              <p className="mt-2 text-sm text-gray-500">
+              <small style={{ color: '#999', fontSize: '0.75rem', marginTop: '0.25rem', display: 'block' }}>
                 Prüfe deine E-Mails ({email})
-              </p>
+              </small>
             </div>
 
-            <div>
-              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                Neues Passwort
-              </label>
+            <div className="form-group">
+              <label htmlFor="newPassword">NEUES PASSWORT</label>
               <input
                 id="newPassword"
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="••••••••"
+                required
                 disabled={loading}
               />
             </div>
 
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                Passwort bestätigen
-              </label>
+            <div className="form-group">
+              <label htmlFor="confirmPassword">PASSWORT BESTÄTIGEN</label>
               <input
                 id="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="••••••••"
+                required
                 disabled={loading}
               />
             </div>
 
-            <div className="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg">
-              <p className="font-medium mb-2">Passwort-Anforderungen:</p>
-              <ul className="list-disc list-inside space-y-1">
+            <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '4px' }}>
+              <p style={{ color: 'var(--accent-green)', fontWeight: '700', marginBottom: '0.5rem', fontSize: '0.875rem' }}>PASSWORT-ANFORDERUNGEN:</p>
+              <ul style={{ color: '#999', fontSize: '0.875rem', paddingLeft: '1.25rem' }}>
                 <li>Mindestens 8 Zeichen</li>
                 <li>Groß- und Kleinbuchstaben</li>
                 <li>Mindestens eine Zahl</li>
               </ul>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Passwort wird zurückgesetzt...' : 'Passwort zurücksetzen'}
+            <button type="submit" className="btn-primary" disabled={loading}>
+              {loading ? 'WIRD ZURÜCKGESETZT...' : 'PASSWORT ZURÜCKSETZEN'}
             </button>
 
-            <button
-              type="button"
-              onClick={() => setStep('request')}
-              className="w-full text-gray-600 hover:text-gray-900 text-sm transition-colors"
-            >
-              ← Zurück
-            </button>
+            <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setStep('request');
+                  setCode('');
+                  setNewPassword('');
+                  setConfirmPassword('');
+                  setError('');
+                  setSuccess('');
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#666',
+                  cursor: 'pointer',
+                  fontSize: '0.875rem'
+                }}
+              >
+                ← Zurück
+              </button>
+            </div>
           </form>
         )}
 
-        {/* Back to Login */}
-        <div className="mt-6 text-center">
-          <Link
-            href="/login"
-            className="text-green-600 hover:text-green-700 text-sm transition-colors"
-          >
-            ← Zurück zum Login
-          </Link>
+        <div className="auth-back">
+          <Link href="/login">← Zurück zum Login</Link>
         </div>
       </div>
+
+      <style jsx>{`
+        .auth-container {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+          background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        }
+
+        .auth-card {
+          background: rgba(255, 255, 255, 0.03);
+          border: 2px solid var(--accent-orange);
+          padding: 3rem;
+          border-radius: 4px;
+          width: 100%;
+          max-width: 450px;
+          box-shadow: 0 20px 60px rgba(255, 107, 0, 0.2);
+          animation: slideInUp 0.5s ease;
+        }
+
+        .auth-header {
+          text-align: center;
+          margin-bottom: 2.5rem;
+        }
+
+        .auth-header h1 {
+          font-size: 2.5rem;
+          font-weight: 900;
+          line-height: 1.1;
+          margin-bottom: 0.5rem;
+          background: linear-gradient(135deg, var(--accent-orange), var(--accent-green));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .auth-header p {
+          color: #999;
+          font-size: 1rem;
+        }
+
+        .auth-error {
+          background: rgba(255, 0, 0, 0.1);
+          border: 2px solid #ff0000;
+          color: #ff6666;
+          padding: 1rem;
+          border-radius: 4px;
+          margin-bottom: 1.5rem;
+          text-align: center;
+          font-weight: 600;
+        }
+
+        .auth-success {
+          background: rgba(0, 255, 0, 0.1);
+          border: 2px solid var(--accent-green);
+          color: var(--accent-green);
+          padding: 1rem;
+          border-radius: 4px;
+          margin-bottom: 1.5rem;
+          text-align: center;
+          font-weight: 600;
+        }
+
+        .auth-form {
+          margin-bottom: 2rem;
+        }
+
+        .form-group {
+          margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          font-size: 0.875rem;
+          letter-spacing: 1px;
+          color: var(--accent-green);
+        }
+
+        .form-group input {
+          width: 100%;
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.05);
+          border: 2px solid #333;
+          border-radius: 4px;
+          color: white;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+          outline: none;
+          border-color: var(--accent-orange);
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group input:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .form-group input::placeholder {
+          color: #666;
+        }
+
+        .btn-primary {
+          width: 100%;
+          padding: 1.25rem;
+          background: var(--accent-orange);
+          color: white;
+          border: none;
+          border-radius: 4px;
+          font-size: 1.1rem;
+          font-weight: 900;
+          letter-spacing: 2px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-transform: uppercase;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+          background: #ff8533;
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(255, 107, 0, 0.4);
+        }
+
+        .btn-primary:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .auth-back {
+          text-align: center;
+          margin-top: 1.5rem;
+        }
+
+        .auth-back a {
+          color: #666;
+          text-decoration: none;
+          font-size: 0.875rem;
+          transition: color 0.3s ease;
+        }
+
+        .auth-back a:hover {
+          color: var(--accent-green);
+        }
+
+        @media (max-width: 768px) {
+          .auth-container {
+            padding: 1rem;
+          }
+
+          .auth-card {
+            padding: 2rem;
+          }
+
+          .auth-header h1 {
+            font-size: 2rem;
+          }
+        }
+
+        @keyframes slideInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }
