@@ -31,10 +31,16 @@ const TABLES = {
 };
 
 // Initialize DynamoDB Client
-const client = new DynamoDBClient({
+// Note: In CI/CD (GitHub Actions), AWS credentials are provided via OIDC
+// In local development, use AWS_PROFILE
+const isCI = process.env.CI || process.env.GITHUB_ACTIONS;
+const clientConfig = {
   region: AWS_REGION,
-  ...(AWS_PROFILE && { profile: AWS_PROFILE })
-});
+  // Only use profile in local development (not in CI)
+  ...(!isCI && AWS_PROFILE && { profile: AWS_PROFILE })
+};
+
+const client = new DynamoDBClient(clientConfig);
 const docClient = DynamoDBDocumentClient.from(client);
 
 // ============================================================================
