@@ -78,6 +78,12 @@ export default function LoginPage() {
           </button>
         </form>
 
+        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+          <Link href="/reset-password" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontSize: '0.875rem' }}>
+            Passwort vergessen?
+          </Link>
+        </div>
+
         <div className="auth-footer">
           <p>Noch kein Konto?</p>
           <Link href="/register" className="auth-link">

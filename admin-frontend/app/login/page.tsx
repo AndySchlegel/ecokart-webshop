@@ -90,6 +90,16 @@ export default function LoginPage() {
               {isLoading ? 'Anmeldung läuft...' : 'Anmelden'}
             </button>
           </form>
+          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+            <a
+              href="/reset-password"
+              style={{ color: '#f97316', textDecoration: 'none', fontSize: '0.875rem' }}
+              onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
+              onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
+            >
+              Passwort vergessen?
+            </a>
+          </div>
         </div>
       </section>
     </main>
