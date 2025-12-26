@@ -22,7 +22,7 @@ resource "null_resource" "seed_demo_data" {
   # Triggers: Re-run seed if seed script version changes
   triggers = {
     seed_script_hash = filemd5("${path.module}/../../scripts/seed-data.js")
-    seed_version = "v1.0"
+    seed_version = "v2.0"  # Force re-seed with new stock values
   }
 
   # Provisioner: Install dependencies and run seed script
@@ -52,7 +52,7 @@ output "seed_status" {
   description = "Seed data resource status"
   value = {
     enabled = true
-    version = "v1.0"
+    version = "v2.0"
     tables = {
       products = aws_dynamodb_table.products.name
       users = aws_dynamodb_table.users.name
