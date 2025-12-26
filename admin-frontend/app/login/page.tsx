@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function LoginPage() {
@@ -14,9 +15,7 @@ export default function LoginPage() {
 
   // Redirect to dashboard if already logged in
   useEffect(() => {
-    console.log('[LoginPage useEffect] authLoading:', authLoading, 'isAuthenticated:', isAuthenticated);
     if (!authLoading && isAuthenticated) {
-      console.log('[LoginPage useEffect] Redirecting to dashboard...');
       router.push('/dashboard');
     }
   }, [isAuthenticated, authLoading, router]);
@@ -26,82 +25,122 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
     try {
-      console.log('[LoginPage] Calling login()...');
-      // Login via Cognito mit Admin Group Check
-      // (SignOut wird jetzt automatisch im AuthContext aufgerufen - kein Error Handling mehr nötig)
       await login(email, password);
-
-      console.log('[LoginPage] Login successful, isAuthenticated:', isAuthenticated);
-      console.log('[LoginPage] authLoading:', authLoading);
-
-      // Success! Reset loading state before redirect
       setIsLoading(false);
-
-      console.log('[LoginPage] About to redirect to /dashboard...');
-      // Redirect to dashboard on successful login
       router.push('/dashboard');
-      console.log('[LoginPage] router.push called');
     } catch (err) {
-      console.error('[LoginPage] Login failed:', err);
       setIsLoading(false);
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler beim Login.');
     }
   }
 
   return (
-    <main className="page">
-      <section className="page__content">
-        <div className="card" style={{ maxWidth: '500px', margin: '6rem auto 0' }}>
-          <h1>ADMIN LOGIN</h1>
-          <p>
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-bg-dark border-2 border-accent rounded-lg shadow-2xl p-8 animate-slideUp">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-black mb-2 bg-gradient-to-r from-accent via-accent-dark to-green-500 bg-clip-text text-transparent">
+            ADMIN LOGIN
+          </h1>
+          <p className="text-gray-400">
             Melde dich an, um Produkte zu verwalten
           </p>
-          <div className="message message--info" style={{ fontSize: '0.875rem' }}>
-            <strong>Wichtig:</strong><br />
-            Nur Benutzer in der Cognito Group "admin" haben Zugriff
-          </div>
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '2rem' }}>
-            <label>
-              <span>E-Mail</span>
-              <input
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                type="email"
-                required
-                placeholder="deine-email@example.com"
-              />
-            </label>
-            <label>
-              <span>Passwort</span>
-              <input
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                type="password"
-                required
-                placeholder="••••••••"
-              />
-            </label>
-            {error && (
-              <div className="message message--error">
-                {error}
-              </div>
-            )}
-            <button className="button" type="submit" disabled={isLoading}>
-              {isLoading ? 'Anmeldung läuft...' : 'Anmelden'}
-            </button>
-          </form>
-          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-            <a
-              href="/reset-password"
-              style={{ color: '#f97316', textDecoration: 'none', fontSize: '0.875rem' }}
-              onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
-              onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
-            >
-              Passwort vergessen?
-            </a>
-          </div>
         </div>
-      </section>
-    </main>
+
+        {/* Info Box */}
+        <div className="mb-6 p-4 bg-blue-900/20 border-2 border-blue-500 rounded-lg">
+          <p className="text-blue-400 text-sm font-semibold text-center">
+            <strong>Wichtig:</strong> Nur Benutzer in der Cognito Group "admin" haben Zugriff
+          </p>
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-900/20 border-2 border-red-500 rounded-lg">
+            <p className="text-red-400 text-sm font-semibold text-center">{error}</p>
+          </div>
+        )}
+
+        {/* Login Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">
+              E-Mail
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+              placeholder="deine-email@example.com"
+              className="w-full px-4 py-3 bg-bg-darker border-2 border-bg-lighter rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-accent transition-colors"
+              disabled={isLoading}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">
+              Passwort
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+              placeholder="••••••••"
+              className="w-full px-4 py-3 bg-bg-darker border-2 border-bg-lighter rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-accent transition-colors"
+              disabled={isLoading}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-accent hover:bg-accent-dark text-black font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 uppercase tracking-wider shadow-lg hover:shadow-accent/50"
+          >
+            {isLoading ? 'Anmeldung läuft...' : 'Anmelden'}
+          </button>
+        </form>
+
+        {/* Forgot Password Link */}
+        <div className="mt-6 text-center">
+          <Link
+            href="/reset-password"
+            className="text-accent hover:text-accent-dark text-sm transition-colors"
+          >
+            Passwort vergessen?
+          </Link>
+        </div>
+
+        {/* Back to Dashboard (if needed) */}
+        <div className="mt-4 text-center">
+          <Link
+            href="/dashboard"
+            className="text-gray-400 hover:text-white text-sm transition-colors"
+          >
+            ← Zurück zum Dashboard
+          </Link>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-slideUp {
+          animation: slideUp 0.5s ease-out;
+        }
+      `}</style>
+    </div>
   );
 }
