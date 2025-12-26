@@ -133,6 +133,42 @@ export async function getRevenue7d(): Promise<RevenueDataPoint[]> {
 }
 
 // ============================================================================
+// Revenue 30 Days - Data für Extended Bar Chart
+// ============================================================================
+
+export async function getRevenue30d(): Promise<RevenueDataPoint[]> {
+  try {
+    logger.info('Fetching revenue for last 30 days');
+
+    const allOrders = await database.getAllOrders();
+
+    // Get date strings for last 30 days
+    const dates: string[] = [];
+    for (let i = 29; i >= 0; i--) {
+      const date = new Date(Date.now() - i * 86400000);
+      dates.push(date.toISOString().split('T')[0]);
+    }
+
+    // Group orders by date and calculate revenue
+    const revenueByDate = dates.map(date => {
+      const ordersOnDate = allOrders.filter(o => o.createdAt.startsWith(date));
+      const revenue = ordersOnDate.reduce((sum, o) => sum + o.total, 0);
+
+      return {
+        date,
+        revenue
+      };
+    });
+
+    logger.info('Revenue 30d calculated', { dataPoints: revenueByDate.length });
+    return revenueByDate;
+  } catch (error) {
+    logger.error('Failed to fetch revenue 30d', {}, error as Error);
+    throw error;
+  }
+}
+
+// ============================================================================
 // Top Products - Meistverkaufte Produkte
 // ============================================================================
 
@@ -205,5 +241,6 @@ function calculateTrend(current: number, previous: number): number {
 export const analyticsService = {
   getAdminStats,
   getRevenue7d,
+  getRevenue30d,
   getTopProducts
 };

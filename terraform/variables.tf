@@ -14,6 +14,12 @@ variable "aws_region" {
   default     = "eu-north-1"
 }
 
+variable "aws_profile" {
+  description = "AWS CLI Profile for local execution (used by seed scripts)"
+  type        = string
+  default     = "personal"
+}
+
 variable "project_name" {
   description = "Name des Projekts (wird für Resource-Naming verwendet)"
   type        = string

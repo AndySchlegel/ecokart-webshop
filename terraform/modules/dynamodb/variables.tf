@@ -41,3 +41,15 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "aws_profile" {
+  description = "AWS Profile for seed script execution"
+  type        = string
+  default     = "personal"
+}
+
+variable "aws_region" {
+  description = "AWS Region for seed script execution"
+  type        = string
+  default     = "eu-central-1"
+}

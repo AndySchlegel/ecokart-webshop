@@ -1,0 +1,13 @@
+{
+  "name": "ecokart-seed-data",
+  "version": "1.0.0",
+  "description": "Seed data generator for EcoKart showcase",
+  "main": "seed-data.js",
+  "scripts": {
+    "seed": "node seed-data.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.700.0",
+    "@aws-sdk/lib-dynamodb": "^3.700.0"
+  }
+}

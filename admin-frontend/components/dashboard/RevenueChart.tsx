@@ -30,6 +30,7 @@ export interface RevenueDataPoint {
 
 interface RevenueChartProps {
   data: RevenueDataPoint[];
+  period?: number; // 7 or 30 days
 }
 
 // Custom Tooltip Component
@@ -51,7 +52,7 @@ function CustomTooltip({ active, payload }: any) {
   );
 }
 
-export function RevenueChart({ data }: RevenueChartProps) {
+export function RevenueChart({ data, period = 7 }: RevenueChartProps) {
   // Format date for display (YYYY-MM-DD → DD.MM)
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -69,7 +70,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
   return (
     <div className="bg-bg-dark border-2 border-bg-darker rounded-lg shadow-md p-6 hover:border-accent-orange transition-all">
       <h3 className="text-lg font-semibold text-white mb-4">
-        Umsatz (letzte 7 Tage)
+        Umsatz (letzte {period} Tage)
       </h3>
 
       <ResponsiveContainer width="100%" height={300}>

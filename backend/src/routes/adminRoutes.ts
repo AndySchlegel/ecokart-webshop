@@ -26,6 +26,9 @@ router.get('/stats', analyticsController.getAdminStats);
 // Revenue data for bar chart (last 7 days)
 router.get('/analytics/revenue-7d', analyticsController.getRevenue7d);
 
+// Revenue data for extended bar chart (last 30 days)
+router.get('/analytics/revenue-30d', analyticsController.getRevenue30d);
+
 // Top selling products
 router.get('/analytics/top-products', analyticsController.getTopProducts);
 

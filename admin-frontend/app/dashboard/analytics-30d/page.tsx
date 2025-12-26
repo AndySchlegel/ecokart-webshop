@@ -1,11 +1,11 @@
 // ============================================================================
-// Dashboard Overview Page - Admin Analytics Dashboard
+// Dashboard Analytics 30-Day Page - Extended Analytics View
 // ============================================================================
-// Purpose: Main dashboard page displaying KPIs, charts, and alerts
+// Purpose: Extended dashboard page displaying 30-day KPIs, charts, and alerts
 //
 // Features:
 // - Real-time KPI metrics (Orders, Revenue, Customers, AOV)
-// - Revenue 7-day chart
+// - Revenue 30-day chart
 // - Top 5 products
 // - Low stock alerts
 // - Auto-refresh every 60 seconds
@@ -23,7 +23,7 @@ import { LowStockAlert, type LowStockProduct } from '@/components/dashboard/LowS
 const BASE_URL = process.env.ADMIN_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 const API_URL = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
 
-export default function DashboardOverviewPage() {
+export default function Dashboard30DaysPage() {
   // State
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [revenueData, setRevenueData] = useState<RevenueDataPoint[]>([]);
@@ -41,7 +41,7 @@ export default function DashboardOverviewPage() {
       // Fetch all data in parallel
       const [statsRes, revenueRes, topProductsRes, lowStockRes] = await Promise.all([
         fetch(`${API_URL}/api/admin/stats`),
-        fetch(`${API_URL}/api/admin/analytics/revenue-7d`),
+        fetch(`${API_URL}/api/admin/analytics/revenue-30d`),
         fetch(`${API_URL}/api/admin/analytics/top-products?limit=5`),
         fetch(`${API_URL}/api/admin/products/low-stock?threshold=10`)
       ]);
@@ -135,8 +135,8 @@ export default function DashboardOverviewPage() {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-            <p className="text-gray-400 mt-1">Übersicht über Ihre wichtigsten Kennzahlen</p>
+            <h1 className="text-3xl font-bold text-white">Dashboard (30 Tage)</h1>
+            <p className="text-gray-400 mt-1">Erweiterte Übersicht über Ihre wichtigsten Kennzahlen</p>
           </div>
           <div className="text-right">
             <p className="text-sm text-gray-500">
@@ -161,7 +161,7 @@ export default function DashboardOverviewPage() {
       {/* Charts and Lists Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Revenue Chart */}
-        <RevenueChart data={revenueData} period={7} />
+        <RevenueChart data={revenueData} period={30} />
 
         {/* Top Products */}
         <TopProducts products={topProducts} />

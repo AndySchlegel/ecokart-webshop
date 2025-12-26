@@ -54,6 +54,26 @@ export const getRevenue7d = async (req: Request, res: Response): Promise<void> =
 };
 
 // ============================================================================
+// GET /api/admin/analytics/revenue-30d
+// ============================================================================
+
+/**
+ * Get revenue data for last 30 days (for extended bar chart)
+ */
+export const getRevenue30d = async (req: Request, res: Response): Promise<void> => {
+  try {
+    logger.info('Revenue 30d requested', { action: 'getRevenue30d' });
+
+    const data = await analyticsService.getRevenue30d();
+
+    res.json({ data });
+  } catch (error) {
+    logger.error('Failed to get revenue 30d', { action: 'getRevenue30d' }, error as Error);
+    res.status(500).json({ error: 'Failed to fetch revenue data' });
+  }
+};
+
+// ============================================================================
 // GET /api/admin/analytics/top-products
 // ============================================================================
 

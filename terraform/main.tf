@@ -77,6 +77,10 @@ module "dynamodb" {
   write_capacity               = var.dynamodb_write_capacity
   enable_point_in_time_recovery = var.enable_point_in_time_recovery
 
+  # Seed Data Configuration
+  aws_profile = var.aws_profile
+  aws_region  = var.aws_region
+
   tags = local.common_tags
 }
 
