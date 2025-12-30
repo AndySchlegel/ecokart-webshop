@@ -27,6 +27,38 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
 
   return (
     <>
+      {/* Override globals.css table styles for admin table */}
+      <style jsx>{`
+        .admin-products-table {
+          display: table !important;
+          width: auto !important;
+          min-width: 1200px !important;
+          margin: 0 !important;
+          border-collapse: collapse;
+          table-layout: auto !important;
+        }
+
+        .admin-products-table thead,
+        .admin-products-table tbody,
+        .admin-products-table tr,
+        .admin-products-table th,
+        .admin-products-table td {
+          display: table-cell !important;
+        }
+
+        .admin-products-table thead {
+          display: table-header-group !important;
+        }
+
+        .admin-products-table tbody {
+          display: table-row-group !important;
+        }
+
+        .admin-products-table tr {
+          display: table-row !important;
+        }
+      `}</style>
+
       {/* Header Card */}
       <div className="card">
         <h2>Produkte verwalten</h2>
@@ -45,11 +77,7 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
         boxShadow: '0 8px 32px rgba(255, 107, 0, 0.15)',
         WebkitOverflowScrolling: 'touch'
       }}>
-        <table style={{
-          minWidth: '1200px',
-          width: 'auto',
-          margin: 0
-        }}>
+        <table className="admin-products-table">
         <thead>
           <tr>
             <th>Bild</th>
