@@ -28,7 +28,7 @@ resource "null_resource" "seed_products" {
   # Triggers: Re-run if products.json changes
   triggers = {
     products_hash = filemd5("${path.root}/../backend/src/data/products.json")
-    seed_version = "v1.0"
+    seed_version = "v2.0"  # Bumped after nuclear cleanup
   }
 
   provisioner "local-exec" {
@@ -59,7 +59,7 @@ resource "null_resource" "seed_demo_data" {
   # Triggers: Re-run seed if seed script version changes
   triggers = {
     seed_script_hash = filemd5("${path.root}/scripts/seed-data.js")
-    seed_version = "v5.0"  # Bumped version (changed to two-step process)
+    seed_version = "v6.0"  # Bumped after nuclear cleanup to force re-seed
   }
 
   # Provisioner: Install dependencies and run seed script
