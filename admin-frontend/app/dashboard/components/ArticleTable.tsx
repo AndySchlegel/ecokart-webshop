@@ -26,19 +26,30 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
   }
 
   return (
-    <div className="card">
-      <h2>Produkte verwalten</h2>
-      <p style={{ color: 'var(--text-gray)', marginBottom: '2rem' }}>
-        {articles.length} {articles.length === 1 ? 'Produkt' : 'Produkte'} gefunden
-      </p>
-      {/* Break out of card padding for full-width horizontal scroll */}
+    <>
+      {/* Header Card */}
+      <div className="card">
+        <h2>Produkte verwalten</h2>
+        <p style={{ color: 'var(--text-gray)', marginBottom: 0 }}>
+          {articles.length} {articles.length === 1 ? 'Produkt' : 'Produkte'} gefunden
+        </p>
+      </div>
+
+      {/* Table Container - separate from card for proper scrolling */}
       <div style={{
-        marginLeft: '-2rem',
-        marginRight: '-2rem',
+        background: 'var(--bg-dark)',
+        marginTop: '2rem',
         overflowX: 'auto',
-        overflowY: 'visible'
+        overflowY: 'visible',
+        borderRadius: 0,
+        boxShadow: '0 8px 32px rgba(255, 107, 0, 0.15)',
+        WebkitOverflowScrolling: 'touch'
       }}>
-        <table style={{ minWidth: '1200px', width: 'auto' }}>
+        <table style={{
+          minWidth: '1200px',
+          width: '100%',
+          margin: 0
+        }}>
         <thead>
           <tr>
             <th>Bild</th>
@@ -101,6 +112,6 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
         </tbody>
       </table>
       </div>
-    </div>
+    </>
   );
 }
