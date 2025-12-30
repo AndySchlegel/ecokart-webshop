@@ -213,9 +213,10 @@ function generateOrders(products, customers, days = 30) {
 
       items.push({
         productId: product.id,
-        productName: product.name,
+        name: product.name,  // ✅ Fixed: was "productName", now "name" to match OrderItem interface
         quantity,
         price,
+        imageUrl: product.imageUrl || '/pics/placeholder.jpg',  // ✅ Added: required by OrderItem interface
         subtotal: price * quantity
       });
 
