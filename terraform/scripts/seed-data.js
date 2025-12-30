@@ -18,7 +18,8 @@ const {
   DynamoDBDocumentClient,
   BatchWriteCommand,
   ScanCommand,
-  UpdateCommand
+  UpdateCommand,
+  DeleteCommand
 } = require('@aws-sdk/lib-dynamodb');
 
 // Configuration
@@ -293,6 +294,54 @@ function displayStatistics(orders) {
 }
 
 // ============================================================================
+// DynamoDB Table Cleanup
+// ============================================================================
+
+async function clearTable(tableName, itemType) {
+  console.log(`🗑️  Clearing existing ${itemType} from ${tableName}...`);
+
+  try {
+    // Scan all items
+    const scanResult = await docClient.send(new ScanCommand({
+      TableName: tableName
+    }));
+
+    const items = scanResult.Items || [];
+
+    if (items.length === 0) {
+      console.log(`  No existing ${itemType} to clear.\n`);
+      return;
+    }
+
+    // Delete all items in batches (max 25 per batch)
+    const batchSize = 25;
+    let deleted = 0;
+
+    for (let i = 0; i < items.length; i += batchSize) {
+      const batch = items.slice(i, i + batchSize);
+
+      await docClient.send(new BatchWriteCommand({
+        RequestItems: {
+          [tableName]: batch.map(item => ({
+            DeleteRequest: {
+              Key: { id: item.id }
+            }
+          }))
+        }
+      }));
+
+      deleted += batch.length;
+      process.stdout.write(`\r  Progress: ${deleted}/${items.length}`);
+    }
+
+    console.log(`\n✅ Successfully cleared ${deleted} ${itemType}\n`);
+  } catch (error) {
+    console.error(`❌ Error clearing ${tableName}:`, error);
+    throw error;
+  }
+}
+
+// ============================================================================
 // DynamoDB Batch Write
 // ============================================================================
 
@@ -350,7 +399,11 @@ async function seed() {
     // Step 4: Display statistics
     displayStatistics(orders);
 
-    // Step 5: Write to DynamoDB
+    // Step 5: Clear existing data (ensures clean state)
+    await clearTable(TABLES.customers, 'customers');
+    await clearTable(TABLES.orders, 'orders');
+
+    // Step 6: Write new data to DynamoDB
     await batchWriteItems(TABLES.customers, customers, 'customers');
     await batchWriteItems(TABLES.orders, orders, 'orders');
 

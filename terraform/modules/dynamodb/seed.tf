@@ -22,7 +22,7 @@ resource "null_resource" "seed_demo_data" {
   # Triggers: Re-run seed if seed script version changes
   triggers = {
     seed_script_hash = filemd5("${path.module}/../../scripts/seed-data.js")
-    seed_version = "v3.0"  # Force re-seed with correct OrderItem field names (name, imageUrl)
+    seed_version = "v4.0"  # Clear old data before seeding (prevents data mixing)
   }
 
   # Provisioner: Install dependencies and run seed script
