@@ -86,7 +86,7 @@ export function TopProducts({ products }: TopProductsProps) {
                   </div>
 
                   {/* Product Name */}
-                  <span className="text-sm font-medium text-white truncate">
+                  <span className="text-sm font-medium text-white truncate flex-1 min-w-0">
                     {product.name}
                   </span>
                 </div>
