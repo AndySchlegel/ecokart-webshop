@@ -31,11 +31,14 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
       <p style={{ color: 'var(--text-gray)', marginBottom: '2rem' }}>
         {articles.length} {articles.length === 1 ? 'Produkt' : 'Produkte'} gefunden
       </p>
+      {/* Break out of card padding for full-width horizontal scroll */}
       <div style={{
-        width: '100%',
-        overflowX: 'auto'
+        marginLeft: '-2rem',
+        marginRight: '-2rem',
+        overflowX: 'auto',
+        overflowY: 'visible'
       }}>
-        <table>
+        <table style={{ minWidth: '1200px' }}>
         <thead>
           <tr>
             <th>Bild</th>
