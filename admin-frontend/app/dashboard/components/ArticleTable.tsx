@@ -32,7 +32,7 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
         {articles.length} {articles.length === 1 ? 'Produkt' : 'Produkte'} gefunden
       </p>
       <div className="overflow-x-auto">
-        <table>
+        <table style={{ minWidth: '1200px' }}>
         <thead>
           <tr>
             <th>Bild</th>
