@@ -27,71 +27,73 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
 
   return (
     <>
-      {/* Override globals.css table styles for admin table */}
+      {/* DIV-based Grid Layout - NO HTML table element */}
       <style jsx>{`
-        .admin-products-table {
-          display: table !important;
-          width: auto !important;
-          min-width: 1200px !important;
-          margin: 0 !important;
-          border-collapse: collapse;
-          table-layout: auto !important;
+        .products-grid-container {
+          overflow-x: auto;
+          overflow-y: visible;
+          background: var(--bg-dark);
+          margin-top: 2rem;
+          border-radius: 0;
+          box-shadow: 0 8px 32px rgba(255, 107, 0, 0.15);
+          -webkit-overflow-scrolling: touch;
         }
 
-        .admin-products-table thead,
-        .admin-products-table tbody,
-        .admin-products-table tr,
-        .admin-products-table th,
-        .admin-products-table td {
-          display: table-cell !important;
+        .products-grid {
+          display: grid;
+          grid-template-columns: 80px 200px 100px 120px 100px 100px 100px minmax(250px, 1fr) 220px;
+          min-width: 1200px;
+          width: max-content;
         }
 
-        .admin-products-table thead {
-          display: table-header-group !important;
+        .grid-header {
+          display: contents;
         }
 
-        .admin-products-table tbody {
-          display: table-row-group !important;
+        .grid-header > div {
+          padding: 1rem;
+          text-align: left;
+          font-weight: 700;
+          text-transform: uppercase;
+          font-size: 0.875rem;
+          letter-spacing: 0.1em;
+          color: var(--accent-orange);
+          white-space: nowrap;
+          background: var(--bg-darker);
+          border-bottom: 2px solid var(--accent-orange);
+          position: sticky;
+          top: 0;
+          z-index: 1;
         }
 
-        .admin-products-table tr {
-          display: table-row !important;
+        .grid-row {
+          display: contents;
         }
 
-        /* CRITICAL: Override mobile responsive table rules from globals.css */
-        @media (max-width: 767px) {
-          .admin-products-table {
-            display: table !important;
-          }
+        .grid-row > div {
+          padding: 1.25rem 1rem;
+          border-bottom: 1px solid var(--bg-darker);
+          color: var(--text-light-gray);
+          display: flex;
+          align-items: center;
+        }
 
-          .admin-products-table thead {
-            display: table-header-group !important;
-            position: static !important;
-            top: auto !important;
-            left: auto !important;
-          }
+        .grid-row:hover > div {
+          background: rgba(255, 107, 0, 0.05);
+        }
 
-          .admin-products-table tbody {
-            display: table-row-group !important;
-          }
+        .grid-row img {
+          width: 48px;
+          height: 48px;
+          object-fit: cover;
+          border-radius: 4px;
+          border: 1px solid var(--bg-darker);
+        }
 
-          .admin-products-table tr {
-            display: table-row !important;
-            margin-bottom: 0 !important;
-            border: none !important;
-          }
-
-          .admin-products-table th,
-          .admin-products-table td {
-            display: table-cell !important;
-            padding-left: 1rem !important;
-            text-align: left !important;
-            position: static !important;
-          }
-
-          .admin-products-table td::before {
-            content: none !important;
-          }
+        .grid-actions {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
         }
       `}</style>
 
@@ -103,46 +105,36 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
         </p>
       </div>
 
-      {/* Table Container - separate from card for proper scrolling */}
-      <div style={{
-        background: 'var(--bg-dark)',
-        marginTop: '2rem',
-        overflowX: 'auto',
-        overflowY: 'visible',
-        borderRadius: 0,
-        boxShadow: '0 8px 32px rgba(255, 107, 0, 0.15)',
-        WebkitOverflowScrolling: 'touch'
-      }}>
-        <table className="admin-products-table">
-        <thead>
-          <tr>
-            <th>Bild</th>
-            <th>Name</th>
-            <th>Preis</th>
-            <th>Kategorie</th>
-            <th>Rating</th>
-            <th>Reviews</th>
-            <th>Lager</th>
-            <th>Beschreibung</th>
-            <th>Aktionen</th>
-          </tr>
-        </thead>
-        <tbody>
+      {/* Grid Container - DIV-based, no HTML table */}
+      <div className="products-grid-container">
+        <div className="products-grid">
+          {/* Header Row */}
+          <div className="grid-header">
+            <div>Bild</div>
+            <div>Name</div>
+            <div>Preis</div>
+            <div>Kategorie</div>
+            <div>Rating</div>
+            <div>Reviews</div>
+            <div>Lager</div>
+            <div>Beschreibung</div>
+            <div>Aktionen</div>
+          </div>
+
+          {/* Data Rows */}
           {articles.map((article) => (
-            <tr key={article.id}>
-              <td data-label="Bild">
+            <div key={article.id} className="grid-row">
+              <div>
                 <img src={article.imageUrl} alt={article.name} />
-              </td>
-              <td data-label="Name">{article.name}</td>
-              <td data-label="Preis">{article.price.toFixed(2)} €</td>
-              <td data-label="Kategorie">{article.category ? article.category : '–'}</td>
-              <td data-label="Rating">
+              </div>
+              <div>{article.name}</div>
+              <div>{article.price.toFixed(2)} €</div>
+              <div>{article.category || '–'}</div>
+              <div>
                 {article.rating ? `⭐ ${article.rating.toFixed(1)}` : '-'}
-              </td>
-              <td data-label="Reviews">
-                {article.reviewCount || 0}
-              </td>
-              <td data-label="Lager">
+              </div>
+              <div>{article.reviewCount || 0}</div>
+              <div>
                 {article.stock !== undefined ? (
                   <span style={{
                     color: article.stock <= 0 ? '#dc2626' : article.stock <= 10 ? '#f59e0b' : '#10b981',
@@ -151,30 +143,27 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
                     {article.stock} {article.reserved ? `(${article.reserved} res.)` : ''}
                   </span>
                 ) : '–'}
-              </td>
-              <td data-label="Beschreibung">{article.description}</td>
-              <td data-label="Aktionen">
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  <button
-                    onClick={() => onEdit(article)}
-                    className="button button--secondary"
-                    type="button"
-                  >
-                    Bearbeiten
-                  </button>
-                  <button
-                    onClick={() => void handleDelete(article.id, article.name)}
-                    className="button button--delete"
-                    type="button"
-                  >
-                    Löschen
-                  </button>
-                </div>
-              </td>
-            </tr>
+              </div>
+              <div>{article.description}</div>
+              <div className="grid-actions">
+                <button
+                  onClick={() => onEdit(article)}
+                  className="button button--secondary"
+                  type="button"
+                >
+                  Bearbeiten
+                </button>
+                <button
+                  onClick={() => void handleDelete(article.id, article.name)}
+                  className="button button--delete"
+                  type="button"
+                >
+                  Löschen
+                </button>
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
       </div>
     </>
   );
