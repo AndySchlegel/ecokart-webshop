@@ -57,6 +57,42 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
         .admin-products-table tr {
           display: table-row !important;
         }
+
+        /* CRITICAL: Override mobile responsive table rules from globals.css */
+        @media (max-width: 767px) {
+          .admin-products-table {
+            display: table !important;
+          }
+
+          .admin-products-table thead {
+            display: table-header-group !important;
+            position: static !important;
+            top: auto !important;
+            left: auto !important;
+          }
+
+          .admin-products-table tbody {
+            display: table-row-group !important;
+          }
+
+          .admin-products-table tr {
+            display: table-row !important;
+            margin-bottom: 0 !important;
+            border: none !important;
+          }
+
+          .admin-products-table th,
+          .admin-products-table td {
+            display: table-cell !important;
+            padding-left: 1rem !important;
+            text-align: left !important;
+            position: static !important;
+          }
+
+          .admin-products-table td::before {
+            content: none !important;
+          }
+        }
       `}</style>
 
       {/* Header Card */}
