@@ -31,9 +31,8 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
       <p style={{ color: 'var(--text-gray)', marginBottom: '2rem' }}>
         {articles.length} {articles.length === 1 ? 'Produkt' : 'Produkte'} gefunden
       </p>
-      <div className="overflow-x-auto -mx-6">
-        <div className="inline-block min-w-full px-6">
-          <table className="w-full">
+      <div style={{ overflowX: 'auto', margin: '0 -2rem', padding: '0 2rem' }}>
+        <table style={{ width: 'max-content', minWidth: '100%' }}>
         <thead>
           <tr>
             <th style={{ width: '80px' }}>Bild</th>
@@ -95,7 +94,6 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
           ))}
         </tbody>
       </table>
-        </div>
       </div>
     </div>
   );
