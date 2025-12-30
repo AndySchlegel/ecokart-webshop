@@ -47,7 +47,7 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
       }}>
         <table style={{
           minWidth: '1200px',
-          width: '100%',
+          width: 'auto',
           margin: 0
         }}>
         <thead>
