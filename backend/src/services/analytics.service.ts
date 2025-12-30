@@ -176,6 +176,7 @@ export interface TopProduct {
   id: string;
   name: string;
   salesCount: number;
+  imageUrl: string;  // ✨ Added for dashboard display
 }
 
 export async function getTopProducts(limit: number = 5): Promise<TopProduct[]> {
@@ -183,6 +184,10 @@ export async function getTopProducts(limit: number = 5): Promise<TopProduct[]> {
     logger.info('Fetching top products', { limit });
 
     const allOrders = await database.getAllOrders();
+    const allProducts = await database.getAllProducts();
+
+    // Create product lookup map (id -> product details)
+    const productMap = new Map(allProducts.map(p => [p.id, p]));
 
     // Count sales per product
     const productSales = new Map<string, { name: string; count: number }>();
@@ -203,11 +208,15 @@ export async function getTopProducts(limit: number = 5): Promise<TopProduct[]> {
 
     // Convert to array and sort by count
     const topProducts: TopProduct[] = Array.from(productSales.entries())
-      .map(([id, data]) => ({
-        id,
-        name: data.name,
-        salesCount: data.count
-      }))
+      .map(([id, data]) => {
+        const product = productMap.get(id);
+        return {
+          id,
+          name: data.name,
+          salesCount: data.count,
+          imageUrl: product?.imageUrl || '/pics/placeholder.jpg'  // ✨ Fetch imageUrl from products table
+        };
+      })
       .sort((a, b) => b.salesCount - a.salesCount)
       .slice(0, limit);
 

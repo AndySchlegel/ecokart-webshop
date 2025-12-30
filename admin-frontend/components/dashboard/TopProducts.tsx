@@ -5,7 +5,7 @@
 //
 // Features:
 // - Ranked list with #1, #2, #3, etc.
-// - Product name + sales count
+// - Product thumbnails + name + sales count
 // - Visual ranking badges
 // - Responsive design
 // ============================================================================
@@ -13,11 +13,13 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 export interface TopProduct {
   id: string;
   name: string;
   salesCount: number;
+  imageUrl: string;
 }
 
 interface TopProductsProps {
@@ -65,18 +67,32 @@ export function TopProducts({ products }: TopProductsProps) {
                 key={product.id}
                 className="flex items-center justify-between p-3 rounded-lg hover:bg-bg-darker transition-colors"
               >
-                {/* Left: Rank + Product Name */}
-                <div className="flex items-center space-x-3 flex-1">
-                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold ${badgeColor}`}>
+                {/* Left: Rank Badge + Product Thumbnail + Name */}
+                <div className="flex items-center space-x-3 flex-1 min-w-0">
+                  {/* Rank Badge */}
+                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold flex-shrink-0 ${badgeColor}`}>
                     {medal || `#${rank}`}
                   </span>
+
+                  {/* Product Thumbnail */}
+                  <div className="relative w-12 h-12 flex-shrink-0 rounded overflow-hidden border-2 border-bg-darker">
+                    <Image
+                      src={product.imageUrl}
+                      alt={product.name}
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
+                  </div>
+
+                  {/* Product Name */}
                   <span className="text-sm font-medium text-white truncate">
                     {product.name}
                   </span>
                 </div>
 
                 {/* Right: Sales Count */}
-                <div className="ml-4">
+                <div className="ml-4 flex-shrink-0">
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-accent-orange/10 text-accent-orange">
                     {product.salesCount} verkauft
                   </span>
