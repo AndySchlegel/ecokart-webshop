@@ -58,7 +58,7 @@ resource "null_resource" "seed_demo_data" {
 
   # Triggers: Re-run seed if seed script version changes
   triggers = {
-    seed_script_hash = filemd5("${path.root}/../scripts/seed-data.js")
+    seed_script_hash = filemd5("${path.root}/scripts/seed-data.js")
     seed_version = "v5.0"  # Bumped version (changed to two-step process)
   }
 
@@ -69,14 +69,14 @@ resource "null_resource" "seed_demo_data" {
   provisioner "local-exec" {
     command = <<-EOT
       echo "📦 Step 2/2: Generating Orders and Customers..."
-      npm install --prefix ${path.root}/../scripts --silent
+      npm install --prefix ${path.root}/scripts --silent
 
       echo "🌱 Running seed data script..."
       AWS_REGION=${var.aws_region} \
       ORDERS_TABLE=${aws_dynamodb_table.orders.name} \
       CUSTOMERS_TABLE=${aws_dynamodb_table.users.name} \
       PRODUCTS_TABLE=${aws_dynamodb_table.products.name} \
-      node ${path.root}/../scripts/seed-data.js
+      node ${path.root}/scripts/seed-data.js
 
       echo "✅ Demo data generated successfully!"
     EOT
