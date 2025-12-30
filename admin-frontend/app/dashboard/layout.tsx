@@ -56,7 +56,7 @@ export default function DashboardLayout({
       <DashboardNav />
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1">
         {children}
       </main>
     </div>
