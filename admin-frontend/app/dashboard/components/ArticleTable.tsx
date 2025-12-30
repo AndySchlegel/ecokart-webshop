@@ -38,7 +38,7 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
         overflowX: 'auto',
         overflowY: 'visible'
       }}>
-        <table style={{ minWidth: '1200px' }}>
+        <table style={{ minWidth: '1200px', width: 'auto' }}>
         <thead>
           <tr>
             <th>Bild</th>
