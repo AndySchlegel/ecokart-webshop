@@ -71,7 +71,7 @@ jobs:
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: 🔑 Get GitHub Token from Parameter Store
         id: github-token

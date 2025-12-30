@@ -48,7 +48,7 @@ module "ecokart" {
   enable_point_in_time_recovery = false  # In Production: true
 
   # Lambda Konfiguration
-  lambda_runtime      = "nodejs20.x"
+  lambda_runtime      = "nodejs22.x"
   lambda_memory_size  = 512
   lambda_timeout      = 30
   jwt_secret          = var.jwt_secret

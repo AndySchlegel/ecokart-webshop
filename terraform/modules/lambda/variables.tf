@@ -22,9 +22,9 @@ variable "function_name" {
 # ----------------------------------------------------------------------------
 
 variable "runtime" {
-  description = "Lambda Runtime (z.B. nodejs20.x)"
+  description = "Lambda Runtime (z.B. nodejs22.x)"
   type        = string
-  default     = "nodejs20.x"
+  default     = "nodejs22.x"
 }
 
 variable "memory_size" {
