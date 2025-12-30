@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { QuickSelectModal } from '../../../components/QuickSelectModal';
 
 import { Article } from './types';
 
@@ -17,16 +18,18 @@ export function ArticleCard({ article }: ArticleCardProps) {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const router = useRouter();
-  const [isAdding, setIsAdding] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleAddToCart = async () => {
+  const handleOpenModal = () => {
     if (!user) {
       router.push('/login');
       return;
     }
+    setIsModalOpen(true);
+  };
 
-    setIsAdding(true);
+  const handleAddToCart = async (size?: string, color?: string) => {
     try {
       await addToCart(article.id, 1);
       setShowSuccess(true);
@@ -34,8 +37,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
     } catch (error: any) {
       // Error-Message ist bereits auf Deutsch (aus CartContext)
       alert(error.message || 'Produkt konnte nicht hinzugefügt werden');
-    } finally {
-      setIsAdding(false);
+      throw error; // Re-throw to let modal handle it
     }
   };
 
@@ -125,16 +127,11 @@ export function ArticleCard({ article }: ArticleCardProps) {
           <button
             className="card__cta"
             type="button"
-            onClick={handleAddToCart}
-            disabled={isAdding || isOutOfStock}
+            onClick={handleOpenModal}
+            disabled={isOutOfStock}
             style={isOutOfStock ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
           >
-            {isAdding ? (
-              <>
-                <span className="spinner"></span>
-                Wird hinzugefügt...
-              </>
-            ) : showSuccess ? (
+            {showSuccess ? (
               '✓ Hinzugefügt!'
             ) : isOutOfStock ? (
               'Ausverkauft'
@@ -142,26 +139,16 @@ export function ArticleCard({ article }: ArticleCardProps) {
               'In den Warenkorb'
             )}
           </button>
-
-          {/* Loading Spinner Style */}
-          <style jsx>{`
-            .spinner {
-              display: inline-block;
-              width: 12px;
-              height: 12px;
-              border: 2px solid rgba(255, 255, 255, 0.3);
-              border-top-color: white;
-              border-radius: 50%;
-              animation: spin 0.6s linear infinite;
-              margin-right: 8px;
-            }
-
-            @keyframes spin {
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
         </div>
       </div>
+
+      {/* Quick Select Modal */}
+      <QuickSelectModal
+        product={article}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddToCart={handleAddToCart}
+      />
     </article>
   );
 }
