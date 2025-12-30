@@ -26,22 +26,17 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
   }
 
   return (
-    <div className="card">
+    <div className="card" style={{ overflow: 'hidden' }}>
       <h2>Produkte verwalten</h2>
       <p style={{ color: 'var(--text-gray)', marginBottom: '2rem' }}>
         {articles.length} {articles.length === 1 ? 'Produkt' : 'Produkte'} gefunden
       </p>
       <div style={{
-        overflowX: 'auto',
-        WebkitOverflowScrolling: 'touch',
-        margin: '0 -2rem',
-        padding: '0 2rem'
+        width: '100%',
+        overflowX: 'scroll',
+        overflowY: 'visible'
       }}>
-        <table style={{
-          width: 'max-content',
-          minWidth: '100%',
-          margin: 0
-        }}>
+        <table>
         <thead>
           <tr>
             <th>Bild</th>
