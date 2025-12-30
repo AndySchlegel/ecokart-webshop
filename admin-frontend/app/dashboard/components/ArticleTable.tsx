@@ -31,8 +31,17 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
       <p style={{ color: 'var(--text-gray)', marginBottom: '2rem' }}>
         {articles.length} {articles.length === 1 ? 'Produkt' : 'Produkte'} gefunden
       </p>
-      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-        <table style={{ minWidth: '800px', margin: 0 }}>
+      <div style={{
+        overflowX: 'auto',
+        WebkitOverflowScrolling: 'touch',
+        margin: '0 -2rem',
+        padding: '0 2rem'
+      }}>
+        <table style={{
+          width: 'max-content',
+          minWidth: '100%',
+          margin: 0
+        }}>
         <thead>
           <tr>
             <th>Bild</th>
