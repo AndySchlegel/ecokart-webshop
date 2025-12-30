@@ -31,19 +31,19 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
       <p style={{ color: 'var(--text-gray)', marginBottom: '2rem' }}>
         {articles.length} {articles.length === 1 ? 'Produkt' : 'Produkte'} gefunden
       </p>
-      <div style={{ overflowX: 'auto', margin: '0 -2rem', padding: '0 2rem' }}>
-        <table style={{ width: 'max-content', minWidth: '100%' }}>
+      <div style={{ overflowX: 'scroll', WebkitOverflowScrolling: 'touch' }}>
+        <table style={{ width: 'auto', display: 'table', margin: 0 }}>
         <thead>
           <tr>
-            <th style={{ width: '80px' }}>Bild</th>
-            <th style={{ minWidth: '150px' }}>Name</th>
-            <th style={{ width: '100px' }}>Preis</th>
-            <th style={{ width: '100px' }}>Kategorie</th>
-            <th style={{ width: '80px' }}>Rating</th>
-            <th style={{ width: '80px' }}>Reviews</th>
-            <th style={{ width: '100px' }}>Lager</th>
-            <th style={{ minWidth: '200px' }}>Beschreibung</th>
-            <th style={{ width: '200px' }}>Aktionen</th>
+            <th>Bild</th>
+            <th>Name</th>
+            <th>Preis</th>
+            <th>Kategorie</th>
+            <th>Rating</th>
+            <th>Reviews</th>
+            <th>Lager</th>
+            <th>Beschreibung</th>
+            <th>Aktionen</th>
           </tr>
         </thead>
         <tbody>
