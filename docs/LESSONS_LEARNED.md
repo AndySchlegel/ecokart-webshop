@@ -3350,3 +3350,87 @@ Nuclear Cleanup Flow:
 - ✅ HTTPS by default
 - ✅ Nuclear-safe mit richtiger Konfiguration
 
+
+---
+
+### 36. Amplify Public Folder & Image Deployment (30.12.2025)
+
+**Das Problem:**
+Product images mit lokalen Pfaden (`/pics/filename.jpg`) funktionierten lokal, aber nicht auf deployed Amplify Apps - alle gaben 404 zurück.
+
+**Root Cause:**
+```
+Scenario:
+- Bilder existierten in: admin-frontend/public/pics/
+- Bilder waren in Git committed ✅
+- Amplify deployments liefen erfolgreich ✅
+- Aber: curl https://amplifyapp.com/pics/image.jpg → 404 ❌
+
+Warum?
+Amplify deployed die Bilder NICHT, obwohl sie im public Ordner lagen.
+Grund unklar (Build-Konfiguration? Next.js Output? Amplify Settings?)
+```
+
+**Die Lösung:**
+Statt Debug des Amplify-Problems: **CDN URLs verwenden**
+```javascript
+// VORHER (funktioniert nicht auf Amplify):
+{
+  "imageUrl": "/pics/jordan-shoes-1777572_1280.jpg"
+}
+
+// NACHHER (funktioniert überall):
+{
+  "imageUrl": "https://cdn.pixabay.com/photo/2016/11/19/18/06/feet-1840619_1280.jpg"
+}
+```
+
+**Was ich gelernt habe:**
+
+1. **Local vs. Deployed Paths sind unterschiedlich**
+   - Lokale Next.js Dev Server: `public/` Ordner direkt erreichbar
+   - Amplify Production: Build-Output bestimmt verfügbare Dateien
+   - Nicht alles in `public/` landet automatisch im Deploy
+
+2. **Next.js Image Component Verhalten**
+   - `<Image src="/pics/image.jpg" />` sucht Bild auf Server
+   - Wenn Server das Bild nicht hat → 404
+   - `<img src="/pics/image.jpg" />` verhält sich gleich
+
+3. **CDN URLs sind zuverlässiger**
+   - Externe CDN URLs (Pixabay, Unsplash, CloudFront) funktionieren immer
+   - Keine Abhängigkeit von Frontend-Deployment
+   - Global verfügbar, gecached, schnell
+
+4. **Debug-Reihenfolge bei 404 Bildern**
+   ```
+   1. Check: Ist Datei in Git committed? → git ls-files
+   2. Check: Deployment erfolgreich? → Amplify Console
+   3. Check: Datei auf deployed URL? → curl -I https://app.com/path/image.jpg
+   4. If 404: Use CDN statt local path!
+   ```
+
+**Anwendung im echten Job:**
+- **Static Assets via CDN** - Bilder, Fonts, Icons auf CDN hosten
+- **Don't rely on public folder** - Nicht alles landet im Build-Output
+- **Test deployed URLs** - Lokal funktionierend ≠ Production funktionierend
+- **Pragmatic Decisions** - CDN statt stundenlang Build-Config debuggen
+
+**Alternative Ansätze:**
+- Option A: Amplify Build-Konfiguration fixen (amplify.yml)
+- Option B: Next.js Output-Konfiguration anpassen
+- Option C: Bilder via Terraform zu S3 + CloudFront (wie bereits implementiert für andere Produkte)
+- **Option D (gewählt): Pixabay CDN URLs** - Schnellste Lösung
+
+**Warum CDN die beste Wahl war:**
+- ✅ Sofort funktionsfähig (keine Deployment-Änderungen)
+- ✅ Keine Build-Konfiguration nötig
+- ✅ Global verfügbar & gecached
+- ✅ Keine AWS Kosten
+- ✅ Bilder stammen eh von Pixabay (Public Domain)
+
+**Commits:**
+- `bf45efa` - fix: use Pixabay CDN URLs instead of local /pics/ paths
+- `37949c8` - fix: correct image paths from /images/ to /pics/ (intermediate attempt)
+
+**Lesson:** Wenn local paths nicht auf Amplify funktionieren, use externe CDN URLs statt Deployment zu debuggen.

@@ -1,7 +1,7 @@
 # 🎯 Action Plan - Ecokart Development
 
-**Last Updated:** 22. Dezember 2025
-**Status:** 🎉 **CLOUDFRONT ASSETS INFRASTRUCTURE COMPLETE!** - 100% reproduzierbare Produktbilder! 🚀
+**Last Updated:** 30. Dezember 2025
+**Status:** ✅ **NODE.JS 22 UPGRADE COMPLETE!** + Product Image Paths Fixed 🚀
 
 > **📖 Struktur dieses Dokuments:**
 > - **Current Status** - Wo stehen wir JETZT
@@ -13,11 +13,27 @@
 
 ---
 
-## 🎉 CURRENT STATUS (22.12.2025)
+## 🎉 CURRENT STATUS (30.12.2025)
 
 ### ✅ Recently Completed - HEUTE! 🎊
 
-**CloudFront Assets Infrastructure Session (22.12.2025 - Nachmittag)**
+**Node.js 22 Runtime Upgrade Session (30.12.2025)**
+- ✅ **Lambda Runtime Upgrade** - nodejs20.x → nodejs22.x (AWS Health compliance)
+- ✅ **Terraform Configuration** - Updated runtime in modules/lambda and examples/basic
+- ✅ **GitHub Actions Workflows** - All 4 workflows upgraded to Node.js 22
+- ✅ **Backend Dependencies** - @types/node updated from 20.10.0 → 22.0.0
+- ✅ **package-lock.json Sync** - Regenerated after dependency update
+- ✅ **CI/CD Tests Passing** - 63/63 backend tests successful
+- ✅ **E2E Verification** - User confirmed everything works
+
+**Product Image Path Fix Session (30.12.2025)**
+- ✅ **Root Cause Found** - Local /pics/ images not deployed to Amplify
+- ✅ **Solution Implemented** - Migrated 4 products to Pixabay CDN URLs
+- ✅ **Products Fixed** - Urban Flight Pack, Court Legends Jersey, Velocity Sprint, Street Pulse Neon
+- ✅ **Database Re-Seeded** - DynamoDB updated with CDN URLs
+- ✅ **Admin Dashboard** - Top 5 products now display correctly with images
+
+**Previous Session (22.12.2025 - CloudFront Assets Infrastructure)**
 - ✅ **S3 + CloudFront CDN** - 100% reproduzierbare Produktbilder-Infrastruktur
 - ✅ **Automatic Image Upload** - Terraform null_resource synct Bilder automatisch bei jedem Deploy
 - ✅ **Force Destroy S3** - Nuclear-safe cleanup (S3 Bucket wird trotz Inhalt gelöscht)
@@ -114,7 +130,7 @@ Result: ✅ Stable URLs for email links + fast global image delivery!
 | **E2E Tests** | ❌ Missing | 5-10 flows | 🟡 Next Phase |
 | **Technical Debt** | **Very Low** | Low | ✅ Excellent |
 | **Documentation** | ✅ 100% complete | 100% | ✅ Updated (22.12) |
-| **Last Deploy** | 22.12.2025 | - | ✅ Success |
+| **Last Deploy** | 30.12.2025 | - | ✅ Success |
 
 ### Technical Debt Tracking
 
@@ -507,6 +523,7 @@ Remaining:
 
 | Date | Update | Author |
 |------|--------|--------|
+| 30.12.2025 | **✅ NODE.JS 22 UPGRADE COMPLETE:** Lambda runtime, CI/CD workflows, Dependencies updated + Product image paths fixed | Claude + Andy |
 | 22.12.2025 | **🎉 EMAIL & ORDER TRACKING COMPLETE:** AWS SES setup, Email templates, Order tracking page, Auto-build enabled | Claude + Andy |
 | 15.12.2025 | **🎉 ADMIN LOGIN & WEBHOOKS COMPLETE:** Proactive SignOut, Stripe working, 100% Reproducibility verified, Code cleanup | Claude + Andy |
 | 03.12.2025 | **🏆 STRIPE COMPLETE:** Origin Header Solution, Circular Dependency fixed, Incremental Deploys | Claude + Andy |
@@ -518,4 +535,4 @@ Remaining:
 ---
 
 **Next Session Focus:** Admin Dashboard (Prio 1) → Custom Domains (Optional)
-**Status:** 🎉 Email Flow Complete - Admin Dashboard & Analytics Next!
+**Status:** ✅ Node.js 22 Complete - Admin Dashboard & Analytics Next!

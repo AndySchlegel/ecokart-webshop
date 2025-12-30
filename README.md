@@ -29,7 +29,7 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 
 ## 🚦 Current Status
 
-**Last Updated:** 22. Dezember 2025
+**Last Updated:** 30. Dezember 2025
 
 ### ✅ Implemented Features
 - ✅ **Authentication** - AWS Cognito JWT (User Registration, Login, Email Verification)
@@ -37,9 +37,9 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 - ✅ **Customer Shop** - Next.js 15 Frontend auf AWS Amplify
 - ✅ **Admin Panel** - Product & Inventory Management Dashboard
 - ✅ **Inventory System** - Stock tracking mit reserved logic (Overselling Prevention)
-- ✅ **REST API** - Express.js Backend auf AWS Lambda
+- ✅ **REST API** - Express.js Backend auf AWS Lambda (Node.js 22)
 - ✅ **DynamoDB** - 4 Tables mit Auto-Seeding (31 products)
-- ✅ **CI/CD Pipeline** - GitHub Actions mit OIDC (Branch-based deployment)
+- ✅ **CI/CD Pipeline** - GitHub Actions mit OIDC (Branch-based deployment, Node.js 22)
 - ✅ **Multi-Environment** - Development, Staging, Production
 - ✅ **Payment Integration** - Stripe Checkout & Webhooks (Order Creation, Stock Deduction, Cart Clearing)
 - ✅ **E2E Workflow** - Complete Payment Flow: Products → Cart → Stripe Checkout → Order Creation
@@ -53,6 +53,7 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 - ✅ **Email Notifications** - AWS SES Order Confirmations mit Product Images (CloudFront CDN)
 - ✅ **Assets Infrastructure** - S3 + CloudFront für 100% reproduzierbare Produktbilder
 - ✅ **Automatic Image Upload** - Terraform null_resource synct Bilder bei jedem Deploy
+- ✅ **Node.js 22 Runtime** - Upgraded from Node.js 20 (Lambda + CI/CD workflows)
 
 ### 📋 Next Milestones (Final Steps to Production!)
 1. **Custom Domain Setup** - api.ecokart.de, shop.ecokart.de, admin.ecokart.de (Eliminiert manuelle URL-Updates)
@@ -78,7 +79,7 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 | **E2E Tests** | ❌ Missing | 5-10 flows |
 | **AWS Costs** | ✅ <$10/month | <$10/month |
 | **Documentation** | ✅ 100% complete | 100% |
-| **Last Deploy** | 15.12.2025 | - |
+| **Last Deploy** | 30.12.2025 | - |
 
 ---
 
@@ -249,6 +250,8 @@ See [docs/ACTION_PLAN.md#known-issues](docs/ACTION_PLAN.md#known-issues) for cur
 ## 📈 Roadmap
 
 ### Recently Completed (Dec 2025)
+- ✅ **Node.js 22 Runtime Upgrade** - Lambda + CI/CD workflows upgraded from Node.js 20 (30.12.2025)
+- ✅ **Product Image Path Fix** - Migrated from local /pics/ to Pixabay CDN URLs (30.12.2025)
 - ✅ **CloudFront Assets Infrastructure** - S3 + CloudFront für 100% reproduzierbare Produktbilder (22.12.2025)
 - ✅ **Email Order Confirmations** - AWS SES mit Product Images via CloudFront (22.12.2025)
 - ✅ **Automatic Image Upload** - Terraform null_resource synct Bilder automatisch (22.12.2025)
