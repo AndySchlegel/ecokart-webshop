@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { QuickSelectModal } from '../../../components/QuickSelectModal';
+import { QuickSelectModal } from '@/components/QuickSelectModal';
 
 import { Article } from './types';
 
