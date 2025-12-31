@@ -267,6 +267,115 @@ describe('Integration: Cart → Order Flow', () => {
         });
     }, 30000);
     // ============================================================================
+    // Test 5: Race Condition - Concurrent Stock Reservations
+    // ============================================================================
+    it('should handle concurrent stock reservations atomically (prevent overselling)', async () => {
+        // ----------------------------------------------------------------
+        // Setup: Product with limited stock
+        // ----------------------------------------------------------------
+        const testProductId = 'test-product-race-condition';
+        const initialStock = 5;
+
+        // Seed product with limited stock directly to DB
+        await docClient.send(new lib_dynamodb_1.PutCommand({
+            TableName: 'ecokart-products',
+            Item: {
+                id: testProductId,
+                name: 'Race Condition Test Product',
+                price: 99.99,
+                stock: initialStock,
+                reserved: 0,
+                category: 'test'
+            }
+        }));
+
+        // ----------------------------------------------------------------
+        // Simulate: 3 concurrent users trying to reserve 3 items each
+        // Total demand: 9 items, Available: 5 items
+        // Expected: At most 5 items reserved, at least 1 request fails
+        // ----------------------------------------------------------------
+
+        // Create 3 concurrent add-to-cart requests
+        const concurrentRequests = [
+            (0, supertest_1.default)(app)
+                .post('/api/cart/items')
+                .send({
+                productId: testProductId,
+                quantity: 3
+            }),
+            (0, supertest_1.default)(app)
+                .post('/api/cart/items')
+                .send({
+                productId: testProductId,
+                quantity: 3
+            }),
+            (0, supertest_1.default)(app)
+                .post('/api/cart/items')
+                .send({
+                productId: testProductId,
+                quantity: 3
+            })
+        ];
+
+        // Execute all requests simultaneously
+        const results = await Promise.allSettled(concurrentRequests);
+
+        // ----------------------------------------------------------------
+        // Verify: Only correct number of reservations succeeded
+        // ----------------------------------------------------------------
+
+        // Count successful and failed requests
+        const successfulRequests = results.filter(r => r.status === 'fulfilled' && r.value.status === 200);
+        const failedRequests = results.filter(r =>
+            r.status === 'fulfilled' && r.value.status === 400 ||
+            r.status === 'rejected'
+        );
+
+        // At least one request should have failed (9 demanded, only 5 available)
+        expect(failedRequests.length).toBeGreaterThanOrEqual(1);
+
+        // Failed requests should have "stock" error message
+        failedRequests.forEach(result => {
+            if (result.status === 'fulfilled') {
+                expect(result.value.body.error).toMatch(/stock|available/i);
+            }
+        });
+
+        // ----------------------------------------------------------------
+        // Verify: Final stock state is correct (no overselling)
+        // ----------------------------------------------------------------
+        const productAfterRace = await docClient.send(new lib_dynamodb_1.GetCommand({
+            TableName: 'ecokart-products',
+            Key: { id: testProductId }
+        }));
+
+        const finalReserved = productAfterRace.Item?.reserved || 0;
+        const finalStock = productAfterRace.Item?.stock || 0;
+
+        // Reserved should NEVER exceed available stock
+        expect(finalReserved).toBeLessThanOrEqual(initialStock);
+
+        // Available stock should not be negative
+        const availableStock = finalStock - finalReserved;
+        expect(availableStock).toBeGreaterThanOrEqual(0);
+
+        // Log results for debugging
+        console.log(`Race Condition Test Results:
+          Initial Stock: ${initialStock}
+          Concurrent Requests: 3 × 3 items = 9 total demand
+          Successful Requests: ${successfulRequests.length}
+          Failed Requests: ${failedRequests.length}
+          Final Reserved: ${finalReserved}
+          Final Available: ${availableStock}
+          ✅ No overselling occurred!
+        `);
+
+        // ----------------------------------------------------------------
+        // Cleanup: Clear cart for this test
+        // ----------------------------------------------------------------
+        await (0, supertest_1.default)(app).delete('/api/cart');
+    }, 30000);
+    // ============================================================================
     // Cleanup: Clear test data after each test
     // ============================================================================
     afterEach(async () => {
