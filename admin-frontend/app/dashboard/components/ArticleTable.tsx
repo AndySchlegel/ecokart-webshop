@@ -144,6 +144,72 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
   return (
     <>
       {/* Custom styles for TanStack Table */}
+      <style jsx global>{`
+        /* CRITICAL: Override globals.css responsive table styles */
+        .tanstack-table-wrapper table,
+        .tanstack-table-wrapper thead,
+        .tanstack-table-wrapper tbody,
+        .tanstack-table-wrapper tr,
+        .tanstack-table-wrapper th,
+        .tanstack-table-wrapper td {
+          display: table !important;
+        }
+
+        .tanstack-table-wrapper thead {
+          display: table-header-group !important;
+        }
+
+        .tanstack-table-wrapper tbody {
+          display: table-row-group !important;
+        }
+
+        .tanstack-table-wrapper tr {
+          display: table-row !important;
+        }
+
+        .tanstack-table-wrapper th,
+        .tanstack-table-wrapper td {
+          display: table-cell !important;
+        }
+
+        @media (max-width: 767px) {
+          .tanstack-table-wrapper table,
+          .tanstack-table-wrapper thead,
+          .tanstack-table-wrapper tbody,
+          .tanstack-table-wrapper tr,
+          .tanstack-table-wrapper th,
+          .tanstack-table-wrapper td {
+            display: table !important;
+          }
+
+          .tanstack-table-wrapper thead {
+            display: table-header-group !important;
+          }
+
+          .tanstack-table-wrapper tbody {
+            display: table-row-group !important;
+          }
+
+          .tanstack-table-wrapper tr {
+            display: table-row !important;
+            margin: 0 !important;
+            border: none !important;
+          }
+
+          .tanstack-table-wrapper th,
+          .tanstack-table-wrapper td {
+            display: table-cell !important;
+            position: relative !important;
+            padding-left: 1rem !important;
+            text-align: left !important;
+          }
+
+          .tanstack-table-wrapper td::before {
+            display: none !important;
+          }
+        }
+      `}</style>
+
       <style jsx>{`
         .tanstack-table-container {
           overflow-x: auto !important;
@@ -233,83 +299,10 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
           background: var(--accent-green);
         }
 
-        /* Override any globals.css interference */
-        .tanstack-table,
-        .tanstack-table thead,
-        .tanstack-table tbody,
-        .tanstack-table tr,
-        .tanstack-table th,
-        .tanstack-table td {
-          display: table;
-        }
-
-        .tanstack-table thead {
-          display: table-header-group;
-        }
-
-        .tanstack-table tbody {
-          display: table-row-group;
-        }
-
-        .tanstack-table tr {
-          display: table-row;
-        }
-
-        .tanstack-table th,
-        .tanstack-table td {
-          display: table-cell;
-        }
-
         @media (max-width: 767px) {
           .tanstack-table-container {
             width: 100%;
             max-width: 100vw;
-          }
-
-          .tanstack-table,
-          .tanstack-table thead,
-          .tanstack-table tbody,
-          .tanstack-table tr,
-          .tanstack-table th,
-          .tanstack-table td {
-            display: table;
-          }
-
-          .tanstack-table thead {
-            display: table-header-group;
-          }
-
-          .tanstack-table thead th {
-            position: sticky;
-            top: 0;
-          }
-
-          /* Keep actions sticky on mobile too */
-          .tanstack-table thead th:last-child {
-            position: sticky;
-            right: 0;
-            z-index: 3;
-          }
-
-          .tanstack-table tbody {
-            display: table-row-group;
-          }
-
-          .tanstack-table tr {
-            display: table-row;
-            margin: 0;
-            border: none;
-          }
-
-          .tanstack-table th,
-          .tanstack-table td {
-            display: table-cell;
-          }
-
-          /* Keep actions column sticky on mobile */
-          .tanstack-table tbody td:last-child {
-            position: sticky;
-            right: 0;
           }
         }
       `}</style>
@@ -323,8 +316,9 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
       </div>
 
       {/* TanStack Table */}
-      <div className="tanstack-table-container">
-        <table className="tanstack-table">
+      <div className="tanstack-table-wrapper">
+        <div className="tanstack-table-container">
+          <table className="tanstack-table">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -366,7 +360,8 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     </>
   );
