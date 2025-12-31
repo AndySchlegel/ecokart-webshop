@@ -565,6 +565,44 @@ jobs:
           done
         continue-on-error: true
 
+      # ======================================================================
+      # Setup Terraform for State Cleanup
+      # ======================================================================
+      - name: 🔧 Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.4
+
+      # ======================================================================
+      # Clean Terraform State - Remove Seeding Resources
+      # ======================================================================
+      # WICHTIG für 100% Reproduzierbarkeit:
+      # Nuclear cleanup löscht AWS-Ressourcen, aber Terraform State bleibt in S3.
+      # Wenn die seeding null_resources im State bleiben mit unveränderten Triggers,
+      # werden sie beim nächsten Deploy NICHT neu erstellt → kein Seeding!
+      # Lösung: null_resources aus State entfernen, damit sie beim Deploy neu erstellt werden.
+      - name: 🧹 Clean Terraform State (Seeding Resources)
+        working-directory: terraform
+        run: |
+          echo "🧹 Removing seeding null_resources from Terraform state..."
+          echo "   (Ensures automatic seeding on next deploy)"
+          echo ""
+
+          # Initialize Terraform to access state
+          terraform init
+
+          # Remove seeding null_resources from state
+          echo "   - Removing module.dynamodb.null_resource.seed_products"
+          terraform state rm module.dynamodb.null_resource.seed_products 2>/dev/null || echo "     (already removed)"
+
+          echo "   - Removing module.dynamodb.null_resource.seed_demo_data"
+          terraform state rm module.dynamodb.null_resource.seed_demo_data 2>/dev/null || echo "     (already removed)"
+
+          echo ""
+          echo "✅ Terraform state cleaned"
+          echo "   → Next deploy will automatically seed database!"
+        continue-on-error: true
+
       - name: 📊 Cleanup Summary
         if: always()
         run: |
