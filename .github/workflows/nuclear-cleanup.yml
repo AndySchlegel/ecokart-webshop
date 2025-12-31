@@ -67,6 +67,9 @@ jobs:
           echo "✅ Nuclear cleanup confirmed"
           echo "⚠️  This will delete EVERYTHING without using Terraform"
 
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
       - name: 🔐 Configure AWS Credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
