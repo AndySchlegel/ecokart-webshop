@@ -74,16 +74,39 @@ class ProductsService {
     /**
      * ✅ INVENTORY: Reserve stock (increment reserved field)
      * Used when adding items to cart
+     *
+     * ⚠️ RACE CONDITION PREVENTION:
+     * Uses DynamoDB ConditionExpression to atomically check stock availability.
+     * If multiple users try to reserve the same product simultaneously,
+     * only requests that pass the condition will succeed.
+     *
+     * Example: stock=5, reserved=2, trying to reserve 4
+     * Condition: 5 - 2 >= 4 → FALSE → ConditionalCheckFailedException
      */
     async reserveStock(id, quantity) {
-        await client_1.dynamodb.send(new lib_dynamodb_1.UpdateCommand({
-            TableName: client_1.TableNames.PRODUCTS,
-            Key: { id },
-            UpdateExpression: 'ADD reserved :quantity',
-            ExpressionAttributeValues: {
-                ':quantity': quantity,
-            },
-        }));
+        try {
+            await client_1.dynamodb.send(new lib_dynamodb_1.UpdateCommand({
+                TableName: client_1.TableNames.PRODUCTS,
+                Key: { id },
+                UpdateExpression: 'ADD reserved :quantity',
+                // ✅ ATOMIC CONDITION: Only reserve if enough stock available!
+                // Prevents race condition when multiple users try to buy same product
+                ConditionExpression: 'stock - #reserved >= :quantity',
+                ExpressionAttributeNames: {
+                    '#reserved': 'reserved', // Use attribute name to avoid reserved keyword issues
+                },
+                ExpressionAttributeValues: {
+                    ':quantity': quantity,
+                },
+            }));
+        }
+        catch (error) {
+            // ConditionalCheckFailedException = Not enough stock
+            if (error.name === 'ConditionalCheckFailedException') {
+                throw new Error('Not enough stock available');
+            }
+            throw error;
+        }
     }
     /**
      * ✅ INVENTORY: Release reserved stock (decrement reserved field)

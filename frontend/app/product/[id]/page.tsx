@@ -56,6 +56,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [addedQuantity, setAddedQuantity] = useState(1); // Track last added quantity for success message
   const [error, setError] = useState<string | null>(null);
   const [fromAnchor, setFromAnchor] = useState<string | null>(null);
 
@@ -100,9 +101,10 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     setIsAdding(true);
     try {
       await addToCart(product!.id, quantity);
+      setAddedQuantity(quantity); // Save quantity for success message
       setShowSuccess(true);
       setQuantity(1); // Reset quantity after successful add
-      setTimeout(() => setShowSuccess(false), 2000);
+      setTimeout(() => setShowSuccess(false), 3000); // Show success for 3 seconds
     } catch (error: any) {
       alert(error.message || 'Fehler beim Hinzufügen zum Warenkorb');
     } finally {
@@ -270,13 +272,15 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             {product.stock !== undefined && product.stock - (product.reserved || 0) > 0 && (
               <div className="product-option">
                 <label className="option-label">Menge:</label>
-                <QuantitySelector
-                  quantity={quantity}
-                  onChange={setQuantity}
-                  min={1}
-                  max={product.stock - (product.reserved || 0)}
-                  disabled={isAdding}
-                />
+                <div style={{ display: 'inline-block' }}>
+                  <QuantitySelector
+                    quantity={quantity}
+                    onChange={setQuantity}
+                    min={1}
+                    max={product.stock - (product.reserved || 0)}
+                    disabled={isAdding}
+                  />
+                </div>
                 {/* Stock Warning at 80% */}
                 {quantity > (product.stock - (product.reserved || 0)) * 0.8 && (
                   <p style={{ color: '#f59e0b', marginTop: '0.5rem', fontSize: '0.875rem' }}>
@@ -296,7 +300,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               {isAdding
                 ? 'Wird hinzugefügt...'
                 : showSuccess
-                ? '✓ Zum Warenkorb hinzugefügt!'
+                ? `✓ ${addedQuantity}x zum Warenkorb hinzugefügt!`
                 : (product.stock !== undefined && product.stock - (product.reserved || 0) <= 0)
                 ? 'Ausverkauft'
                 : 'In den Warenkorb'}
