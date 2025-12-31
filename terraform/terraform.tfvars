@@ -21,8 +21,7 @@ aws_region   = "eu-central-1"
 # ----------------------------------------------------------------------------
 # GitHub Configuration
 # ----------------------------------------------------------------------------
-github_owner = "AndySchlegel"
-github_repo  = "Ecokart-Webshop"
+github_repository = "https://github.com/AndySchlegel/Ecokart-Webshop"
 
 # ----------------------------------------------------------------------------
 # Custom Domain Configuration (Subdomain Delegation)
@@ -46,12 +45,27 @@ admin_subdomain = "admin"  # Ergibt: admin.aws.his4irness23.de
 # Cognito Configuration
 # ----------------------------------------------------------------------------
 # Kein pre-created Admin User nötig - Registration über normale UI
-create_admin_user = false
+
+# ----------------------------------------------------------------------------
+# SES Configuration (E-Mail Service)
+# ----------------------------------------------------------------------------
+ses_sender_email = "andy.schlegel@chakademie.org"  # Temporär, bis Production Access
 
 # ----------------------------------------------------------------------------
 # Amplify Configuration
 # ----------------------------------------------------------------------------
-enable_admin_frontend = true
+enable_amplify       = true  # Customer Shop Frontend
+enable_admin_amplify = true  # Admin Frontend
+
+# Basic Auth (optional, für Demo-Schutz)
+basic_auth_enabled  = false  # Customer Shop: Kein Basic Auth
+basic_auth_user     = "demo"
+basic_auth_password = "demo1234"
+
+# Admin Basic Auth (EMPFOHLEN!)
+admin_basic_auth_enabled  = true   # Admin Panel: Basic Auth aktiviert
+admin_basic_auth_user     = "admin"
+admin_basic_auth_password = "admin1234"  # Mind. 7 Zeichen erforderlich
 
 # ----------------------------------------------------------------------------
 # Additional Tags

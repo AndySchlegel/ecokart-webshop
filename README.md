@@ -29,7 +29,7 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 
 ## 🚦 Current Status
 
-**Last Updated:** 31. Dezember 2025
+**Last Updated:** 31. Dezember 2025 (Abend)
 
 ### ✅ Implemented Features
 - ✅ **Authentication** - AWS Cognito JWT (User Registration, Login, Email Verification)
@@ -51,7 +51,11 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 - ✅ **Unit Tests** - Jest + ts-jest, 63 tests passing, 60-69% coverage
 - ✅ **Incremental Deploys** - No more Nuclear cleanup needed for code changes!
 - ✅ **100% Reproducibility** - Terraform Seed Module macht automatic database seeding
-- ✅ **Email Notifications** - AWS SES Order Confirmations mit Product Images (CloudFront CDN)
+- ⏳ **Email Notifications** - AWS SES Order Confirmations (Production Access pending)
+  - ✅ Domain Verification (aws.his4irness23.de)
+  - ✅ DKIM Setup (DNS records in Route53)
+  - ⏳ Production Access Request submitted (Case 176720597300389)
+  - ✅ Template & Integration ready
 - ✅ **Assets Infrastructure** - S3 + CloudFront für 100% reproduzierbare Produktbilder
 - ✅ **Automatic Image Upload** - Terraform null_resource synct Bilder bei jedem Deploy
 - ✅ **Node.js 22 Runtime** - Upgraded from Node.js 20 (Lambda + CI/CD workflows)
@@ -251,6 +255,7 @@ See [docs/ACTION_PLAN.md#known-issues](docs/ACTION_PLAN.md#known-issues) for cur
 ## 📈 Roadmap
 
 ### Recently Completed (Dec 2025)
+- ⏳ **SES Production Access Setup** - Domain verified, request submitted, pending AWS approval (31.12.2025 Abend)
 - ✅ **Admin UI Complete Redesign** - Card-based ProductGrid, iOS-style navigation, showcase-worthy design (31.12.2025)
 - ✅ **Quantity Selector Feature** - Pre-cart quantity selection with stock warnings and validation (31.12.2025)
 - ✅ **Node.js 22 Runtime Upgrade** - Lambda + CI/CD workflows upgraded from Node.js 20 (30.12.2025)
