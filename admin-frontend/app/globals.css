@@ -444,31 +444,36 @@ td img:hover {
 
 /* Responsive Tables */
 @media (max-width: 767px) {
-  /* Stack table on mobile */
-  table, thead, tbody, th, td, tr {
+  /* Stack table on mobile - EXCEPT TanStack Table */
+  table:not(.tanstack-table),
+  table:not(.tanstack-table) thead,
+  table:not(.tanstack-table) tbody,
+  table:not(.tanstack-table) th,
+  table:not(.tanstack-table) td,
+  table:not(.tanstack-table) tr {
     display: block;
   }
 
-  thead tr {
+  table:not(.tanstack-table) thead tr {
     position: absolute;
     top: -9999px;
     left: -9999px;
   }
 
-  tr {
+  table:not(.tanstack-table) tr {
     margin-bottom: 1.5rem;
     border: 2px solid var(--bg-darker);
     background: var(--bg-dark);
   }
 
-  td {
+  table:not(.tanstack-table) td {
     border: none;
     position: relative;
     padding-left: 50%;
     text-align: right;
   }
 
-  td::before {
+  table:not(.tanstack-table) td::before {
     content: attr(data-label);
     position: absolute;
     left: 1rem;
@@ -482,7 +487,7 @@ td img:hover {
     font-size: 0.75rem;
   }
 
-  td img {
+  table:not(.tanstack-table) td img {
     display: block;
     margin: 0 auto;
   }
