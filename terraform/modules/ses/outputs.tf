@@ -21,3 +21,18 @@ output "email_identity_arn" {
   description = "SES email identity ARN"
   value       = aws_ses_email_identity.sender.arn
 }
+
+output "domain_identity" {
+  description = "SES domain identity (for production access)"
+  value       = aws_ses_domain_identity.main.domain
+}
+
+output "domain_verification_token" {
+  description = "Domain verification token (for Route53)"
+  value       = aws_ses_domain_identity.main.verification_token
+}
+
+output "dkim_tokens" {
+  description = "DKIM tokens for email authentication"
+  value       = aws_ses_domain_dkim.main.dkim_tokens
+}

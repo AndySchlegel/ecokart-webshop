@@ -15,7 +15,35 @@
 # ============================================================================
 
 # ----------------------------------------------------------------------------
-# 1. SES Email Identity (Sender E-Mail verifizieren)
+# 1. SES Domain Identity (Domain verifizieren für Production Access)
+# ----------------------------------------------------------------------------
+# Verifiziert die komplette Domain (z.B. his4irness23.de)
+# Requirement für SES Production Access Request
+# DNS Records werden automatisch via Route53 erstellt
+
+resource "aws_ses_domain_identity" "main" {
+  domain = var.domain_name
+}
+
+# DKIM Tokens für Domain Verification (E-Mail Authentifizierung)
+resource "aws_ses_domain_dkim" "main" {
+  domain = aws_ses_domain_identity.main.domain
+}
+
+# DNS Records für DKIM Verification (automatisch via Route53)
+# Diese Records beweisen, dass wir die Domain besitzen
+resource "aws_route53_record" "ses_dkim" {
+  count = 3 # AWS generiert 3 DKIM Tokens
+
+  zone_id = var.route53_zone_id
+  name    = "${aws_ses_domain_dkim.main.dkim_tokens[count.index]}._domainkey"
+  type    = "CNAME"
+  ttl     = 600
+  records = ["${aws_ses_domain_dkim.main.dkim_tokens[count.index]}.dkim.amazonses.com"]
+}
+
+# ----------------------------------------------------------------------------
+# 2. SES Email Identity (Sender E-Mail verifizieren)
 # ----------------------------------------------------------------------------
 # Erstellt eine verifizierte E-Mail Adresse
 # AWS schickt Verification E-Mail an diese Adresse

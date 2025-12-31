@@ -123,14 +123,18 @@ module "cognito" {
 module "ses" {
   source = "./modules/ses"
 
-  project_name = var.project_name
-  environment  = var.environment
-  sender_email = var.ses_sender_email
-  brand_name   = "Ecokart"
+  project_name     = var.project_name
+  environment      = var.environment
+  domain_name      = var.domain_name
+  route53_zone_id  = var.enable_route53 ? module.route53[0].zone_id : ""
+  sender_email     = var.ses_sender_email
+  brand_name       = "Ecokart"
 
   enable_welcome_email = false  # Später aktivieren wenn gewünscht
 
   tags = local.common_tags
+
+  depends_on = [module.route53]
 }
 
 # ----------------------------------------------------------------------------

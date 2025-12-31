@@ -12,6 +12,16 @@ variable "environment" {
   type        = string
 }
 
+variable "domain_name" {
+  description = "Domain name for SES verification (e.g., his4irness23.de)"
+  type        = string
+}
+
+variable "route53_zone_id" {
+  description = "Route53 Hosted Zone ID for DNS records"
+  type        = string
+}
+
 variable "sender_email" {
   description = "E-Mail address to send from (must be verified in SES)"
   type        = string
