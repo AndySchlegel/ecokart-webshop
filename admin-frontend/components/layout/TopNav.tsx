@@ -1,14 +1,14 @@
 // ============================================================================
-// Top Navigation - Admin Header
+// Top Navigation - Admin Header (iOS-Style Segmented Control)
 // ============================================================================
-// Purpose: Horizontal navigation bar for admin dashboard
+// Purpose: Horizontal navigation bar with segmented control for analytics
 //
 // Features:
-// - Navigation links (Analytics, Products)
-// - Active route highlighting
+// - iOS-style segmented control for Analytics (7d/30d)
+// - Clean typography-based design
+// - Active state highlighting
 // - Logout button
 // - Responsive design
-// - Always visible at top
 // ============================================================================
 
 'use client';
@@ -22,33 +22,9 @@ export function TopNav() {
   const pathname = usePathname();
   const { signOut } = useAuth();
 
-  const navItems = [
-    {
-      name: 'Analytics (7 Tage)',
-      href: '/dashboard/overview',
-    },
-    {
-      name: 'Analytics (30 Tage)',
-      href: '/dashboard/analytics-30d',
-    },
-    {
-      name: 'Produkte',
-      href: '/dashboard',
-    }
-  ];
-
-  const isActive = (href: string) => {
-    if (href === '/dashboard/overview') {
-      return pathname === href;
-    }
-    if (href === '/dashboard/analytics-30d') {
-      return pathname === href;
-    }
-    if (href === '/dashboard') {
-      return pathname === '/dashboard';
-    }
-    return pathname === href;
-  };
+  const isAnalytics7d = pathname === '/dashboard/overview';
+  const isAnalytics30d = pathname === '/dashboard/analytics-30d';
+  const isProducts = pathname === '/dashboard';
 
   const handleLogout = async () => {
     await signOut();
@@ -68,14 +44,20 @@ export function TopNav() {
         }
 
         .top-nav-container {
-          max-width: 1600px;
+          max-width: 1800px;
           margin: 0 auto;
-          padding: 1rem 2rem;
+          padding: 1.25rem 2rem;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          gap: 2rem;
-          flex-wrap: wrap;
+          gap: 3rem;
+        }
+
+        @media (max-width: 1024px) {
+          .top-nav-container {
+            gap: 2rem;
+            flex-wrap: wrap;
+          }
         }
 
         @media (max-width: 767px) {
@@ -85,119 +67,164 @@ export function TopNav() {
           }
         }
 
+        /* Brand */
         .top-nav-brand {
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
-
-        .top-nav-brand h1 {
-          font-size: 1.5rem;
+          font-size: 1.25rem;
           font-weight: 900;
           margin: 0;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.1em;
           background: linear-gradient(135deg, var(--accent-orange), var(--accent-green));
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-        }
-
-        .top-nav-brand p {
-          font-size: 0.75rem;
-          color: var(--text-gray);
-          margin: 0;
+          white-space: nowrap;
         }
 
         @media (max-width: 767px) {
-          .top-nav-brand h1 {
-            font-size: 1.25rem;
-          }
-          .top-nav-brand p {
-            display: none;
+          .top-nav-brand {
+            font-size: 1rem;
           }
         }
 
-        .top-nav-links {
+        /* Navigation */
+        .top-nav-navigation {
           display: flex;
-          gap: 0.5rem;
           align-items: center;
-          flex-wrap: wrap;
+          gap: 2rem;
           flex: 1;
-          justify-content: center;
         }
 
         @media (max-width: 1024px) {
-          .top-nav-links {
+          .top-nav-navigation {
             order: 3;
             width: 100%;
             justify-content: flex-start;
           }
         }
 
-        .top-nav-link {
-          padding: 0.75rem 1.5rem;
+        @media (max-width: 767px) {
+          .top-nav-navigation {
+            gap: 1rem;
+            flex-direction: column;
+            align-items: flex-start;
+          }
+        }
+
+        /* Segmented Control */
+        .segmented-control {
+          display: inline-flex;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 107, 0, 0.3);
+          border-radius: 8px;
+          padding: 4px;
+          gap: 4px;
+        }
+
+        .segmented-control-item {
+          padding: 0.625rem 1.25rem;
           font-size: 0.875rem;
           font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.02em;
           color: var(--text-gray);
-          transition: all 0.3s ease;
-          border-bottom: 2px solid transparent;
+          background: transparent;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
           white-space: nowrap;
+          position: relative;
         }
 
-        .top-nav-link:hover {
+        .segmented-control-item:hover {
           color: var(--accent-orange);
+          background: rgba(255, 107, 0, 0.1);
         }
 
-        .top-nav-link.active {
-          color: var(--accent-orange);
-          border-bottom-color: var(--accent-orange);
+        .segmented-control-item.active {
+          color: var(--bg-black);
+          background: var(--accent-orange);
+          font-weight: 700;
+          box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
         }
 
         @media (max-width: 767px) {
-          .top-nav-link {
+          .segmented-control {
+            width: 100%;
+          }
+
+          .segmented-control-item {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            text-align: center;
+          }
+        }
+
+        /* Products Link */
+        .products-link {
+          padding: 0.625rem 1.5rem;
+          font-size: 0.875rem;
+          font-weight: 600;
+          letter-spacing: 0.05em;
+          color: var(--text-gray);
+          background: transparent;
+          border: 1px solid rgba(255, 107, 0, 0.3);
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          white-space: nowrap;
+          text-decoration: none;
+          display: inline-block;
+        }
+
+        .products-link:hover {
+          color: var(--accent-green);
+          border-color: var(--accent-green);
+          background: rgba(0, 255, 135, 0.1);
+        }
+
+        .products-link.active {
+          color: var(--bg-black);
+          background: var(--accent-green);
+          border-color: var(--accent-green);
+          font-weight: 700;
+          box-shadow: 0 2px 8px rgba(0, 255, 135, 0.3);
+        }
+
+        @media (max-width: 767px) {
+          .products-link {
+            width: 100%;
+            text-align: center;
             padding: 0.5rem 1rem;
             font-size: 0.75rem;
           }
         }
 
+        /* Logout Button */
         .top-nav-logout {
-          border: 2px solid #ff4444;
-          border-radius: 0;
-          padding: 0.75rem 1.5rem;
+          border: 1px solid rgba(255, 68, 68, 0.5);
+          border-radius: 8px;
+          padding: 0.625rem 1.5rem;
           font-size: 0.875rem;
-          font-weight: 700;
+          font-weight: 600;
           background: transparent;
           color: #ff4444;
           cursor: pointer;
-          transition: all 0.3s ease;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          position: relative;
-          overflow: hidden;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          letter-spacing: 0.05em;
           white-space: nowrap;
         }
 
-        .top-nav-logout::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: #ff4444;
-          transition: left 0.3s ease;
-          z-index: -1;
-        }
-
         .top-nav-logout:hover {
-          color: var(--bg-black);
+          background: rgba(255, 68, 68, 0.15);
+          border-color: #ff4444;
+          color: #ff6666;
+          box-shadow: 0 2px 8px rgba(255, 68, 68, 0.2);
         }
 
-        .top-nav-logout:hover::before {
-          left: 0;
+        .top-nav-logout:active {
+          transform: scale(0.98);
         }
 
         @media (max-width: 767px) {
@@ -211,22 +238,33 @@ export function TopNav() {
       <nav className="top-nav">
         <div className="top-nav-container">
           {/* Brand */}
-          <div className="top-nav-brand">
-            <h1>EcoKart Admin</h1>
-            <p>Verwaltung & Analytics</p>
-          </div>
+          <h1 className="top-nav-brand">ECOKART</h1>
 
-          {/* Navigation Links */}
-          <div className="top-nav-links">
-            {navItems.map((item) => (
+          {/* Navigation */}
+          <div className="top-nav-navigation">
+            {/* Analytics Segmented Control */}
+            <div className="segmented-control">
               <Link
-                key={item.href}
-                href={item.href}
-                className={`top-nav-link ${isActive(item.href) ? 'active' : ''}`}
+                href="/dashboard/overview"
+                className={`segmented-control-item ${isAnalytics7d ? 'active' : ''}`}
               >
-                {item.name}
+                Analytics 7d
               </Link>
-            ))}
+              <Link
+                href="/dashboard/analytics-30d"
+                className={`segmented-control-item ${isAnalytics30d ? 'active' : ''}`}
+              >
+                Analytics 30d
+              </Link>
+            </div>
+
+            {/* Products Link */}
+            <Link
+              href="/dashboard"
+              className={`products-link ${isProducts ? 'active' : ''}`}
+            >
+              Produkte
+            </Link>
           </div>
 
           {/* Logout Button */}
