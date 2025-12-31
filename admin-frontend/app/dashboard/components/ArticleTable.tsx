@@ -146,16 +146,16 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
       {/* Custom styles for TanStack Table */}
       <style jsx>{`
         .tanstack-table-container {
-          overflow-x: auto;
+          overflow-x: auto !important;
           overflow-y: visible;
           background: var(--bg-dark);
           margin-top: 2rem;
-          margin-left: -1.5rem;
-          margin-right: -1.5rem;
           border-radius: 0;
           box-shadow: 0 8px 32px rgba(255, 107, 0, 0.15);
           -webkit-overflow-scrolling: touch;
           position: relative;
+          width: 100%;
+          max-width: 100%;
         }
 
         .tanstack-table {
@@ -262,8 +262,8 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
 
         @media (max-width: 767px) {
           .tanstack-table-container {
-            margin-left: -1rem;
-            margin-right: -1rem;
+            width: 100%;
+            max-width: 100vw;
           }
 
           .tanstack-table,

@@ -104,12 +104,20 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="p-6">
-      {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">Produktverwaltung</h1>
-        <p className="text-gray-400 mt-1">Produkte erstellen, bearbeiten und löschen</p>
-      </div>
+    <>
+      {/* Override body overflow-x: hidden to allow horizontal scrolling */}
+      <style jsx global>{`
+        body {
+          overflow-x: auto !important;
+        }
+      `}</style>
+
+      <div className="p-6">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white">Produktverwaltung</h1>
+          <p className="text-gray-400 mt-1">Produkte erstellen, bearbeiten und löschen</p>
+        </div>
 
       {/* Content */}
       <div className="space-y-6">
@@ -150,6 +158,7 @@ export default function DashboardPage() {
           onCancelEdit={() => setEditingArticle(null)}
         />
       </div>
-    </div>
+      </div>
+    </>
   );
 }
