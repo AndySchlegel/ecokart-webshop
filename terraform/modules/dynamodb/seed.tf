@@ -13,6 +13,11 @@
 # - 40 customers with various registration dates
 # - Updated product stock levels (high/medium/low/critical mix)
 # - Realistic revenue patterns and sales distribution
+#
+# WICHTIG - 100% Reproduzierbarkeit nach Nuclear Cleanup:
+# - replace_triggered_by koppelt Seeding an Table-IDs
+# - Wenn Tables neu erstellt werden (neue IDs) → Seeding läuft automatisch
+# - Keine manuellen Trigger-Bumps mehr nötig!
 # ============================================================================
 
 # Step 1: Load Products from products.json
@@ -25,10 +30,20 @@ resource "null_resource" "seed_products" {
     aws_dynamodb_table.carts
   ]
 
+  # Lifecycle: Automatically replace when tables are recreated
+  # → Ensures seeding ALWAYS runs after nuclear cleanup + deploy
+  lifecycle {
+    replace_triggered_by = [
+      aws_dynamodb_table.products.id,
+      aws_dynamodb_table.users.id,
+      aws_dynamodb_table.orders.id,
+      aws_dynamodb_table.carts.id
+    ]
+  }
+
   # Triggers: Re-run if products.json changes
   triggers = {
     products_hash = filemd5("${path.root}/../backend/src/data/products.json")
-    seed_version = "v2.0"  # Bumped after nuclear cleanup
   }
 
   provisioner "local-exec" {
@@ -56,10 +71,17 @@ resource "null_resource" "seed_demo_data" {
     null_resource.seed_products
   ]
 
-  # Triggers: Re-run seed if seed script version changes
+  # Lifecycle: Automatically replace when seed_products is replaced
+  # → Ensures demo data seeding runs whenever products are seeded
+  lifecycle {
+    replace_triggered_by = [
+      null_resource.seed_products.id
+    ]
+  }
+
+  # Triggers: Re-run if seed script changes
   triggers = {
     seed_script_hash = filemd5("${path.root}/scripts/seed-data.js")
-    seed_version = "v6.0"  # Bumped after nuclear cleanup to force re-seed
   }
 
   # Provisioner: Install dependencies and run seed script
@@ -91,7 +113,7 @@ output "seed_status" {
   description = "Seed data resource status"
   value = {
     enabled = true
-    version = "v2.0"
+    auto_trigger = "replace_triggered_by table IDs (100% reproduzierbar)"
     tables = {
       products = aws_dynamodb_table.products.name
       users = aws_dynamodb_table.users.name
