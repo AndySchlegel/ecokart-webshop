@@ -117,9 +117,9 @@ export function TopNav() {
           font-size: 0.875rem;
           font-weight: 600;
           letter-spacing: 0.02em;
-          color: var(--text-gray);
-          background: transparent;
-          border: 1px solid rgba(255, 107, 0, 0.3);
+          color: var(--text-light-gray);
+          background: rgba(255, 255, 255, 0.03);
+          border: 2px solid rgba(255, 107, 0, 0.5);
           border-radius: 8px;
           cursor: pointer;
           transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -131,7 +131,8 @@ export function TopNav() {
         .nav-link:hover {
           color: var(--accent-orange);
           border-color: var(--accent-orange);
-          background: rgba(255, 107, 0, 0.1);
+          background: rgba(255, 107, 0, 0.15);
+          box-shadow: 0 0 12px rgba(255, 107, 0, 0.2);
         }
 
         .nav-link.active {
@@ -139,7 +140,7 @@ export function TopNav() {
           background: var(--accent-orange);
           border-color: var(--accent-orange);
           font-weight: 700;
-          box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
+          box-shadow: 0 2px 12px rgba(255, 107, 0, 0.5);
         }
 
         @media (max-width: 767px) {
