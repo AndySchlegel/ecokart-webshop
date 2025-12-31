@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import type { Article } from '@/lib/articles';
 import { ArticleForm } from './components/ArticleForm';
-import { ArticleTable } from './components/ArticleTable';
+import { ProductGrid } from './components/ProductGrid';
 
 export default function DashboardPage() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -124,7 +124,7 @@ export default function DashboardPage() {
           </div>
         )}
         {!isLoading && !error && (
-          <ArticleTable
+          <ProductGrid
             articles={articles}
             onEdit={(article) => {
               setEditingArticle(article);

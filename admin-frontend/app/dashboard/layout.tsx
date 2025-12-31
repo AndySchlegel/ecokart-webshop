@@ -1,10 +1,10 @@
 // ============================================================================
 // Dashboard Layout - Wrapper with Navigation
 // ============================================================================
-// Purpose: Layout for all dashboard pages with sidebar navigation
+// Purpose: Layout for all dashboard pages with top navigation
 //
 // Features:
-// - Sidebar navigation (DashboardNav)
+// - Horizontal top navigation (TopNav)
 // - Protected route (auth check)
 // - Responsive layout
 // - Wraps all /dashboard/* routes
@@ -12,10 +12,10 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { DashboardNav } from '@/components/layout/DashboardNav';
+import { TopNav } from '@/components/layout/TopNav';
 
 export default function DashboardLayout({
   children,
@@ -24,7 +24,6 @@ export default function DashboardLayout({
 }) {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   // Protect route: redirect to login if not authenticated
   useEffect(() => {
@@ -52,27 +51,12 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-bg-black">
-      {/* Sidebar Navigation */}
-      <DashboardNav isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+    <div className="min-h-screen bg-bg-black">
+      {/* Top Navigation */}
+      <TopNav />
 
       {/* Main Content */}
-      <main className="flex-1 relative">
-        {/* Burger Button */}
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="fixed top-4 left-4 z-50 p-3 bg-bg-dark border-2 border-accent-orange rounded-lg hover:bg-accent-orange hover:text-black transition-all"
-          aria-label="Toggle Menu"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {sidebarOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
-
+      <main className="w-full">
         {children}
       </main>
     </div>
