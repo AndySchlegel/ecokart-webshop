@@ -150,9 +150,12 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
           overflow-y: visible;
           background: var(--bg-dark);
           margin-top: 2rem;
+          margin-left: -1.5rem;
+          margin-right: -1.5rem;
           border-radius: 0;
           box-shadow: 0 8px 32px rgba(255, 107, 0, 0.15);
           -webkit-overflow-scrolling: touch;
+          position: relative;
         }
 
         .tanstack-table {
@@ -160,6 +163,7 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
           min-width: 1300px;
           border-collapse: collapse;
           margin: 0;
+          position: relative;
         }
 
         .tanstack-table thead th {
@@ -175,7 +179,16 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
           border-bottom: 2px solid var(--accent-orange);
           position: sticky;
           top: 0;
-          z-index: 1;
+          z-index: 2;
+        }
+
+        /* Sticky Actions Column - Always visible on right */
+        .tanstack-table thead th:last-child {
+          position: sticky;
+          right: 0;
+          z-index: 3;
+          background: var(--bg-darker);
+          box-shadow: -4px 0 8px rgba(0, 0, 0, 0.3);
         }
 
         .tanstack-table tbody td {
@@ -183,10 +196,41 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
           border-bottom: 1px solid var(--bg-darker);
           color: var(--text-light-gray);
           vertical-align: middle;
+          background: var(--bg-dark);
+        }
+
+        /* Sticky Actions Column Cells */
+        .tanstack-table tbody td:last-child {
+          position: sticky;
+          right: 0;
+          z-index: 1;
+          background: var(--bg-dark);
+          box-shadow: -4px 0 8px rgba(0, 0, 0, 0.3);
         }
 
         .tanstack-table tbody tr:hover td {
           background: rgba(255, 107, 0, 0.05);
+        }
+
+        .tanstack-table tbody tr:hover td:last-child {
+          background: rgba(255, 107, 0, 0.05);
+        }
+
+        /* Button Container Styling - Prevent wrapping */
+        .tanstack-table .button {
+          white-space: nowrap;
+          min-width: fit-content;
+        }
+
+        .tanstack-table .button--secondary {
+          border-color: var(--accent-green);
+          color: var(--accent-green);
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+        }
+
+        .tanstack-table .button--secondary::before {
+          background: var(--accent-green);
         }
 
         /* Override any globals.css interference */
@@ -217,6 +261,11 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
         }
 
         @media (max-width: 767px) {
+          .tanstack-table-container {
+            margin-left: -1rem;
+            margin-right: -1rem;
+          }
+
           .tanstack-table,
           .tanstack-table thead,
           .tanstack-table tbody,
@@ -228,7 +277,18 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
 
           .tanstack-table thead {
             display: table-header-group;
-            position: static;
+          }
+
+          .tanstack-table thead th {
+            position: sticky;
+            top: 0;
+          }
+
+          /* Keep actions sticky on mobile too */
+          .tanstack-table thead th:last-child {
+            position: sticky;
+            right: 0;
+            z-index: 3;
           }
 
           .tanstack-table tbody {
@@ -244,7 +304,12 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
           .tanstack-table th,
           .tanstack-table td {
             display: table-cell;
-            position: static;
+          }
+
+          /* Keep actions column sticky on mobile */
+          .tanstack-table tbody td:last-child {
+            position: sticky;
+            right: 0;
           }
         }
       `}</style>
