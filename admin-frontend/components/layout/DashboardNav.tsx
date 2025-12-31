@@ -18,7 +18,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
-export function DashboardNav() {
+type DashboardNavProps = {
+  isOpen: boolean;
+  onToggle: () => void;
+};
+
+export function DashboardNav({ isOpen }: DashboardNavProps) {
   const pathname = usePathname();
   const { signOut } = useAuth();
 
@@ -70,11 +75,16 @@ export function DashboardNav() {
   };
 
   return (
-    <nav className="w-64 bg-bg-dark border-r-2 border-accent-orange min-h-screen flex flex-col">
+    <nav className={`
+      bg-bg-dark border-r-2 border-accent-orange min-h-screen flex flex-col
+      transition-all duration-300 ease-in-out
+      ${isOpen ? 'w-64' : 'w-0 -ml-64'}
+      fixed md:relative z-40
+    `}>
       {/* Logo/Header */}
-      <div className="p-6 border-b-2 border-accent-orange">
-        <h1 className="text-xl font-bold text-white uppercase tracking-wide">EcoKart Admin</h1>
-        <p className="text-xs text-gray-400 mt-1">Verwaltung & Analytics</p>
+      <div className={`p-6 border-b-2 border-accent-orange ${isOpen ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}>
+        <h1 className="text-xl font-bold text-white uppercase tracking-wide whitespace-nowrap">EcoKart Admin</h1>
+        <p className="text-xs text-gray-400 mt-1 whitespace-nowrap">Verwaltung & Analytics</p>
       </div>
 
       {/* Navigation Links */}
