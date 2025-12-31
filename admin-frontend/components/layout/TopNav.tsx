@@ -111,16 +111,25 @@ export function TopNav() {
           }
         }
 
-        /* Nav Link - Uniform style for all navigation items */
+        /* Nav Item Container - Visible border box like original segmented control */
+        .nav-item-box {
+          display: inline-flex;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 107, 0, 0.3);
+          border-radius: 8px;
+          padding: 4px;
+        }
+
+        /* Nav Link inside box */
         .nav-link {
-          padding: 0.625rem 1.5rem;
+          padding: 0.625rem 1.25rem;
           font-size: 0.875rem;
           font-weight: 600;
           letter-spacing: 0.02em;
-          color: var(--text-light-gray);
-          background: rgba(255, 255, 255, 0.03);
-          border: 2px solid rgba(255, 107, 0, 0.5);
-          border-radius: 8px;
+          color: var(--text-gray);
+          background: transparent;
+          border: none;
+          border-radius: 6px;
           cursor: pointer;
           transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
           white-space: nowrap;
@@ -130,17 +139,14 @@ export function TopNav() {
 
         .nav-link:hover {
           color: var(--accent-orange);
-          border-color: var(--accent-orange);
-          background: rgba(255, 107, 0, 0.15);
-          box-shadow: 0 0 12px rgba(255, 107, 0, 0.2);
+          background: rgba(255, 107, 0, 0.1);
         }
 
         .nav-link.active {
           color: var(--bg-black);
           background: var(--accent-orange);
-          border-color: var(--accent-orange);
           font-weight: 700;
-          box-shadow: 0 2px 12px rgba(255, 107, 0, 0.5);
+          box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
         }
 
         @media (max-width: 767px) {
@@ -193,29 +199,35 @@ export function TopNav() {
 
           {/* Navigation */}
           <div className="top-nav-navigation">
-            {/* Analytics 7d */}
-            <Link
-              href="/dashboard/overview"
-              className={`nav-link ${isAnalytics7d ? 'active' : ''}`}
-            >
-              Analytics 7d
-            </Link>
+            {/* Analytics 7d - in box */}
+            <div className="nav-item-box">
+              <Link
+                href="/dashboard/overview"
+                className={`nav-link ${isAnalytics7d ? 'active' : ''}`}
+              >
+                Analytics 7d
+              </Link>
+            </div>
 
-            {/* Analytics 30d */}
-            <Link
-              href="/dashboard/analytics-30d"
-              className={`nav-link ${isAnalytics30d ? 'active' : ''}`}
-            >
-              Analytics 30d
-            </Link>
+            {/* Analytics 30d - in box */}
+            <div className="nav-item-box">
+              <Link
+                href="/dashboard/analytics-30d"
+                className={`nav-link ${isAnalytics30d ? 'active' : ''}`}
+              >
+                Analytics 30d
+              </Link>
+            </div>
 
-            {/* Products */}
-            <Link
-              href="/dashboard"
-              className={`nav-link ${isProducts ? 'active' : ''}`}
-            >
-              Produkte
-            </Link>
+            {/* Products - in box */}
+            <div className="nav-item-box">
+              <Link
+                href="/dashboard"
+                className={`nav-link ${isProducts ? 'active' : ''}`}
+              >
+                Produkte
+              </Link>
+            </div>
           </div>
 
           {/* Logout Button */}
