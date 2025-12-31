@@ -29,13 +29,14 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 
 ## 🚦 Current Status
 
-**Last Updated:** 30. Dezember 2025
+**Last Updated:** 31. Dezember 2025
 
 ### ✅ Implemented Features
 - ✅ **Authentication** - AWS Cognito JWT (User Registration, Login, Email Verification)
 - ✅ **Admin Authentication** - Proactive SignOut, LocalStorage, Client-Side Auth Guards
 - ✅ **Customer Shop** - Next.js 15 Frontend auf AWS Amplify
-- ✅ **Admin Panel** - Product & Inventory Management Dashboard
+- ✅ **Admin Panel** - Modern Card-based Product Management Dashboard (31.12.2025)
+- ✅ **Quantity Selector** - Pre-cart quantity selection with stock warnings (31.12.2025)
 - ✅ **Inventory System** - Stock tracking mit reserved logic (Overselling Prevention)
 - ✅ **REST API** - Express.js Backend auf AWS Lambda (Node.js 22)
 - ✅ **DynamoDB** - 4 Tables mit Auto-Seeding (31 products)
@@ -79,7 +80,7 @@ Dieses Projekt demonstriert professionelle Softwareentwicklung nach 6 Monaten in
 | **E2E Tests** | ❌ Missing | 5-10 flows |
 | **AWS Costs** | ✅ <$10/month | <$10/month |
 | **Documentation** | ✅ 100% complete | 100% |
-| **Last Deploy** | 30.12.2025 | - |
+| **Last Deploy** | 31.12.2025 | - |
 
 ---
 
@@ -250,6 +251,8 @@ See [docs/ACTION_PLAN.md#known-issues](docs/ACTION_PLAN.md#known-issues) for cur
 ## 📈 Roadmap
 
 ### Recently Completed (Dec 2025)
+- ✅ **Admin UI Complete Redesign** - Card-based ProductGrid, iOS-style navigation, showcase-worthy design (31.12.2025)
+- ✅ **Quantity Selector Feature** - Pre-cart quantity selection with stock warnings and validation (31.12.2025)
 - ✅ **Node.js 22 Runtime Upgrade** - Lambda + CI/CD workflows upgraded from Node.js 20 (30.12.2025)
 - ✅ **Product Image Path Fix** - Migrated from local /pics/ to Pixabay CDN URLs (30.12.2025)
 - ✅ **CloudFront Assets Infrastructure** - S3 + CloudFront für 100% reproduzierbare Produktbilder (22.12.2025)
