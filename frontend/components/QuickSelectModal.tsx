@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Article } from '../app/components/types';
+import { QuantitySelector } from './QuantitySelector';
 
 // Sneaker sizes (US sizes) - copied from detail page
 const SHOE_SIZES = ['7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12', '13'];
@@ -34,18 +35,20 @@ type QuickSelectModalProps = {
   product: Article | null;
   isOpen: boolean;
   onClose: () => void;
-  onAddToCart: (size?: string, color?: string) => Promise<void>;
+  onAddToCart: (quantity: number, size?: string, color?: string) => Promise<void>;
 };
 
 export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: QuickSelectModalProps) {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState(COLORS[0].name);
+  const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
 
   // Reset selections when product changes
   useEffect(() => {
     setSelectedSize('');
     setSelectedColor(COLORS[0].name);
+    setQuantity(1);
   }, [product]);
 
   // Close on ESC key
@@ -75,8 +78,9 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
 
     setIsAdding(true);
     try {
-      await onAddToCart(selectedSize, selectedColor);
+      await onAddToCart(quantity, selectedSize, selectedColor);
       onClose();
+      setQuantity(1); // Reset quantity for next use
     } catch (error) {
       // Error is already handled in parent
     } finally {
@@ -169,6 +173,26 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
                   </button>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Quantity Selector */}
+          {!isOutOfStock && availableStock !== null && (
+            <div className="modal-option">
+              <label className="option-label">Menge:</label>
+              <QuantitySelector
+                quantity={quantity}
+                onChange={setQuantity}
+                min={1}
+                max={availableStock}
+                disabled={isAdding}
+              />
+              {/* Stock Warning at 80% */}
+              {quantity > availableStock * 0.8 && (
+                <p style={{ color: '#f59e0b', marginTop: '0.75rem', fontSize: '0.875rem', fontWeight: '600' }}>
+                  ⚠️ Nur noch {availableStock} Stück verfügbar
+                </p>
+              )}
             </div>
           )}
 

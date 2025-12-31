@@ -29,9 +29,9 @@ export function ArticleCard({ article }: ArticleCardProps) {
     setIsModalOpen(true);
   };
 
-  const handleAddToCart = async (size?: string, color?: string) => {
+  const handleAddToCart = async (quantity: number, size?: string, color?: string) => {
     try {
-      await addToCart(article.id, 1);
+      await addToCart(article.id, quantity);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 2000);
     } catch (error: any) {

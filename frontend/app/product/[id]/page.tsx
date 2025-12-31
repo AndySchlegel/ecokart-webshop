@@ -8,6 +8,7 @@ import { useCart } from '../../../contexts/CartContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import { Article } from '../../components/types';
 import { API_BASE_URL } from '../../../lib/config';
+import { QuantitySelector } from '../../../components/QuantitySelector';
 
 // Sneaker sizes (US sizes)
 const SHOE_SIZES = ['7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12', '13'];
@@ -52,6 +53,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState(COLORS[0].name);
+  const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -97,8 +99,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
     setIsAdding(true);
     try {
-      await addToCart(product!.id, 1);
+      await addToCart(product!.id, quantity);
       setShowSuccess(true);
+      setQuantity(1); // Reset quantity after successful add
       setTimeout(() => setShowSuccess(false), 2000);
     } catch (error: any) {
       alert(error.message || 'Fehler beim Hinzufügen zum Warenkorb');
@@ -260,6 +263,26 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                     </button>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Quantity Selector */}
+            {product.stock !== undefined && product.stock - (product.reserved || 0) > 0 && (
+              <div className="product-option">
+                <label className="option-label">Menge:</label>
+                <QuantitySelector
+                  quantity={quantity}
+                  onChange={setQuantity}
+                  min={1}
+                  max={product.stock - (product.reserved || 0)}
+                  disabled={isAdding}
+                />
+                {/* Stock Warning at 80% */}
+                {quantity > (product.stock - (product.reserved || 0)) * 0.8 && (
+                  <p style={{ color: '#f59e0b', marginTop: '0.5rem', fontSize: '0.875rem' }}>
+                    ⚠️ Nur noch {product.stock - (product.reserved || 0)} Stück verfügbar
+                  </p>
+                )}
               </div>
             )}
 
