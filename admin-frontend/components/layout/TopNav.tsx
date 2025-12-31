@@ -93,6 +93,7 @@ export function TopNav() {
           align-items: center;
           gap: 1rem;
           flex: 1;
+          justify-content: center;
         }
 
         @media (max-width: 1024px) {
@@ -199,6 +200,16 @@ export function TopNav() {
 
           {/* Navigation */}
           <div className="top-nav-navigation">
+            {/* Products - in box */}
+            <div className="nav-item-box">
+              <Link
+                href="/dashboard"
+                className={`nav-link ${isProducts ? 'active' : ''}`}
+              >
+                Produkte
+              </Link>
+            </div>
+
             {/* Analytics 7d - in box */}
             <div className="nav-item-box">
               <Link
@@ -216,16 +227,6 @@ export function TopNav() {
                 className={`nav-link ${isAnalytics30d ? 'active' : ''}`}
               >
                 Analytics 30d
-              </Link>
-            </div>
-
-            {/* Products - in box */}
-            <div className="nav-item-box">
-              <Link
-                href="/dashboard"
-                className={`nav-link ${isProducts ? 'active' : ''}`}
-              >
-                Produkte
               </Link>
             </div>
           </div>
