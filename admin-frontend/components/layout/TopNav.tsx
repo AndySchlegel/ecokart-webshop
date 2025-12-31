@@ -91,7 +91,7 @@ export function TopNav() {
         .top-nav-navigation {
           display: flex;
           align-items: center;
-          gap: 2rem;
+          gap: 1rem;
           flex: 1;
         }
 
@@ -105,68 +105,18 @@ export function TopNav() {
 
         @media (max-width: 767px) {
           .top-nav-navigation {
-            gap: 1rem;
+            gap: 0.75rem;
             flex-direction: column;
             align-items: flex-start;
           }
         }
 
-        /* Segmented Control */
-        .segmented-control {
-          display: inline-flex;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 107, 0, 0.3);
-          border-radius: 8px;
-          padding: 4px;
-          gap: 4px;
-        }
-
-        .segmented-control-item {
-          padding: 0.625rem 1.25rem;
-          font-size: 0.875rem;
-          font-weight: 600;
-          letter-spacing: 0.02em;
-          color: var(--text-gray);
-          background: transparent;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-          white-space: nowrap;
-          position: relative;
-        }
-
-        .segmented-control-item:hover {
-          color: var(--accent-orange);
-          background: rgba(255, 107, 0, 0.1);
-        }
-
-        .segmented-control-item.active {
-          color: var(--bg-black);
-          background: var(--accent-orange);
-          font-weight: 700;
-          box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
-        }
-
-        @media (max-width: 767px) {
-          .segmented-control {
-            width: 100%;
-          }
-
-          .segmented-control-item {
-            flex: 1;
-            padding: 0.5rem 0.75rem;
-            font-size: 0.75rem;
-            text-align: center;
-          }
-        }
-
-        /* Products Link */
-        .products-link {
+        /* Nav Link - Uniform style for all navigation items */
+        .nav-link {
           padding: 0.625rem 1.5rem;
           font-size: 0.875rem;
           font-weight: 600;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.02em;
           color: var(--text-gray);
           background: transparent;
           border: 1px solid rgba(255, 107, 0, 0.3);
@@ -178,22 +128,22 @@ export function TopNav() {
           display: inline-block;
         }
 
-        .products-link:hover {
-          color: var(--accent-green);
-          border-color: var(--accent-green);
-          background: rgba(0, 255, 135, 0.1);
+        .nav-link:hover {
+          color: var(--accent-orange);
+          border-color: var(--accent-orange);
+          background: rgba(255, 107, 0, 0.1);
         }
 
-        .products-link.active {
+        .nav-link.active {
           color: var(--bg-black);
-          background: var(--accent-green);
-          border-color: var(--accent-green);
+          background: var(--accent-orange);
+          border-color: var(--accent-orange);
           font-weight: 700;
-          box-shadow: 0 2px 8px rgba(0, 255, 135, 0.3);
+          box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
         }
 
         @media (max-width: 767px) {
-          .products-link {
+          .nav-link {
             width: 100%;
             text-align: center;
             padding: 0.5rem 1rem;
@@ -242,26 +192,26 @@ export function TopNav() {
 
           {/* Navigation */}
           <div className="top-nav-navigation">
-            {/* Analytics Segmented Control */}
-            <div className="segmented-control">
-              <Link
-                href="/dashboard/overview"
-                className={`segmented-control-item ${isAnalytics7d ? 'active' : ''}`}
-              >
-                Analytics 7d
-              </Link>
-              <Link
-                href="/dashboard/analytics-30d"
-                className={`segmented-control-item ${isAnalytics30d ? 'active' : ''}`}
-              >
-                Analytics 30d
-              </Link>
-            </div>
+            {/* Analytics 7d */}
+            <Link
+              href="/dashboard/overview"
+              className={`nav-link ${isAnalytics7d ? 'active' : ''}`}
+            >
+              Analytics 7d
+            </Link>
 
-            {/* Products Link */}
+            {/* Analytics 30d */}
+            <Link
+              href="/dashboard/analytics-30d"
+              className={`nav-link ${isAnalytics30d ? 'active' : ''}`}
+            >
+              Analytics 30d
+            </Link>
+
+            {/* Products */}
             <Link
               href="/dashboard"
-              className={`products-link ${isProducts ? 'active' : ''}`}
+              className={`nav-link ${isProducts ? 'active' : ''}`}
             >
               Produkte
             </Link>
