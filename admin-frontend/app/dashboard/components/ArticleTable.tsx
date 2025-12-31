@@ -212,7 +212,7 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
 
       <style jsx>{`
         .tanstack-table-container {
-          overflow-x: auto !important;
+          overflow-x: scroll !important; /* Force scrollbar to always show */
           overflow-y: visible;
           background: var(--bg-dark);
           margin-top: 2rem;
@@ -222,6 +222,21 @@ export function ArticleTable({ articles, onDelete, onEdit }: ArticleTableProps) 
           position: relative;
           width: 100%;
           max-width: 100%;
+        }
+
+        /* Show scrollbar on webkit browsers */
+        .tanstack-table-container::-webkit-scrollbar {
+          height: 12px;
+          background: var(--bg-darker);
+        }
+
+        .tanstack-table-container::-webkit-scrollbar-thumb {
+          background: var(--accent-orange);
+          border-radius: 6px;
+        }
+
+        .tanstack-table-container::-webkit-scrollbar-thumb:hover {
+          background: var(--accent-green);
         }
 
         .tanstack-table {

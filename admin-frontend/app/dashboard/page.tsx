@@ -104,15 +104,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <>
-      {/* Override body overflow-x: hidden to allow horizontal scrolling */}
-      <style jsx global>{`
-        body {
-          overflow-x: auto !important;
-        }
-      `}</style>
-
-      <div className="p-6">
+    <div className="p-6">
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Produktverwaltung</h1>
@@ -158,7 +150,6 @@ export default function DashboardPage() {
           onCancelEdit={() => setEditingArticle(null)}
         />
       </div>
-      </div>
-    </>
+    </div>
   );
 }
