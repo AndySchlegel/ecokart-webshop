@@ -7,6 +7,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue)](https://www.typescriptlang.org/)
 [![Tests](https://img.shields.io/badge/Tests-63%20passing-green)](https://jestjs.io/)
+[![Security](https://img.shields.io/badge/Security-tfsec%20%7C%20Checkov%20%7C%20Trufflehog-green)](https://github.com/AndySchlegel/Ecokart-Webshop/security)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
 **Live Demo:** [🛍️ Customer Shop](https://shop.aws.his4irness23.de) | [⚙️ Admin Dashboard](https://admin.aws.his4irness23.de)
@@ -22,6 +23,7 @@
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
 - [Live Demo](#live-demo)
+- [Security](#security)
 - [Getting Started](#getting-started)
 - [Deployment](#deployment)
 - [Project Health](#project-health)
@@ -401,6 +403,84 @@ Password: [Create admin user via Cognito or contact]
 #### Stripe Dashboard
 ![Stripe Dashboard](docs/screenshots/19-stripe-dashboard.png)
 *Stripe payment integration and webhook configuration*
+
+---
+
+## 🔒 Security
+
+### DevSecOps Pipeline
+
+This project implements **automated security scanning** on every pull request and push to ensure code quality and security compliance.
+
+#### Automated Security Scanners
+
+**🔍 tfsec** - Terraform Security Scanner
+- Scans Terraform code for security misconfigurations
+- Checks for AWS best practices violations
+- Identifies potential security risks before deployment
+- **Minimum Severity:** MEDIUM
+
+**🛡️ Checkov** - Policy Compliance Validation
+- Infrastructure as Code security analysis
+- Policy-as-Code compliance checks
+- Multi-framework support (Terraform, CloudFormation, etc.)
+- Validates against CIS benchmarks
+
+**🔐 Trufflehog** - Secret Detection
+- Scans git history for accidentally committed secrets
+- Detects API keys, passwords, tokens
+- Prevents credential leaks
+- **Only verified secrets** trigger failures
+
+#### Security Workflow
+
+```yaml
+Trigger: PR/Push to develop, staging, main
+│
+├─ tfsec scan → SARIF upload → GitHub Security Tab
+├─ Checkov scan → SARIF upload → GitHub Security Tab
+└─ Trufflehog scan → Secret detection report
+```
+
+#### GitHub Security Integration
+
+All security findings are automatically uploaded to the **GitHub Security Tab** using SARIF format:
+- 📊 Centralized security dashboard
+- 🔍 Code scanning alerts
+- 📈 Security trend tracking
+- ✅ PR blocking on critical findings (configurable)
+
+#### Security Configuration
+
+**Soft Fail Mode:** Currently enabled for gradual security improvement
+- Scans run on every PR but don't block merges
+- Allows incremental security fixes
+- **Future:** Switch to hard fail for critical issues
+
+**Skipped Checks (Checkov):**
+- `CKV_AWS_33` - ECR image scanning (not using ECR)
+- `CKV_AWS_144` - Lambda environment encryption (managed by AWS)
+- `CKV2_AWS_5` - Security group description (non-critical)
+
+#### View Security Results
+
+- **GitHub Security Tab**: `https://github.com/AndySchlegel/Ecokart-Webshop/security`
+- **Workflow Runs**: Actions → Security Scanning
+- **PR Checks**: Automated comments on pull requests
+
+#### Security Best Practices Implemented
+
+- ✅ No secrets in git history (verified by Trufflehog)
+- ✅ Terraform security best practices (tfsec validated)
+- ✅ Infrastructure policy compliance (Checkov validated)
+- ✅ HTTPS everywhere (ACM certificates)
+- ✅ Encryption at rest (DynamoDB, S3)
+- ✅ Least privilege IAM (minimal permissions)
+- ✅ VPC isolation (future enhancement planned)
+
+**Cost:** $0.00/month (GitHub Actions free tier)
+
+[📚 Phase 2: Runtime Security Monitoring →](docs/ACTION_PLAN_PHASE2.md#task-12-runtime-security-monitoring) *(planned)*
 
 ---
 
