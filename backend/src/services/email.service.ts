@@ -1,22 +1,42 @@
 // ============================================================================
-// E-Mail Service - AWS SES Integration
+// E-Mail Service - Resend Integration
 // ============================================================================
-// Purpose: Versenden von transaktionalen E-Mails via Amazon SES
+// Purpose: Versenden von transaktionalen E-Mails via Resend
 //
 // Features:
-// - Order Confirmation E-Mails (mit Template)
+// - Order Confirmation E-Mails (mit HTML Template)
 // - Welcome E-Mails (optional)
 // - Error Handling & Logging
+//
+// Migration: AWS SES → Resend (1. Januar 2026)
+// Reason: AWS SES Production Access rejected, SendGrid rejected
+// Solution: Resend (developer-friendly email service)
 // ============================================================================
 
-import { SESClient, SendTemplatedEmailCommand } from '@aws-sdk/client-ses';
+import { Resend } from 'resend';
+import Handlebars from 'handlebars';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { logger } from '../utils/logger';
 import type { Order } from '../models/Order';
 
-// SES Client initialisieren
-const sesClient = new SESClient({
-  region: process.env.AWS_REGION || 'eu-central-1',
-});
+// Resend Client initialisieren
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+// ============================================================================
+// Template Loading & Compilation
+// ============================================================================
+
+// Load HTML template from file
+const orderConfirmationTemplateHtml = readFileSync(
+  join(__dirname, '../templates/order-confirmation.html'),
+  'utf-8'
+);
+
+// Compile Handlebars template
+const orderConfirmationTemplate = Handlebars.compile(
+  orderConfirmationTemplateHtml
+);
 
 // ============================================================================
 // E-Mail Service Interface
@@ -58,19 +78,17 @@ export async function sendOrderConfirmationEmail(
   const { order, customerEmail, customerName } = data;
 
   try {
-    logger.info('Sending order confirmation email', {
+    logger.info('Sending order confirmation email via Resend', {
       orderId: order.id,
       customerEmail,
     });
 
-    // SES Sender E-Mail aus Environment Variable
-    const senderEmail = process.env.SES_SENDER_EMAIL;
-    if (!senderEmail) {
-      throw new Error('SES_SENDER_EMAIL environment variable not set');
-    }
+    // FROM Adresse aus Environment Variable
+    const fromEmail = process.env.EMAIL_FROM || 'noreply@aws.his4irness23.de';
 
     // Template Daten vorbereiten
-    const frontendUrl = process.env.FRONTEND_URL || 'https://shop.aws.his4irness23.de';
+    const frontendUrl =
+      process.env.FRONTEND_URL || 'https://shop.aws.his4irness23.de';
     const assetsBaseUrl = process.env.ASSETS_BASE_URL || frontendUrl;
 
     const templateData = {
@@ -108,31 +126,31 @@ export async function sendOrderConfirmationEmail(
       firstItemImageUrl: templateData.items[0]?.imageUrl || 'MISSING',
     });
 
-    // SES SendTemplatedEmail Command
-    const command = new SendTemplatedEmailCommand({
-      Source: senderEmail, // FROM Adresse
-      Destination: {
-        ToAddresses: [customerEmail], // TO Adresse
-      },
-      Template: 'ecokart-order-confirmation', // Template Name (aus Terraform)
-      TemplateData: JSON.stringify(templateData),
-      // Configuration Set für Tracking (optional)
-      ConfigurationSetName: `ecokart-${process.env.ENVIRONMENT || 'development'}`,
+    // Render HTML template with Handlebars
+    const html = orderConfirmationTemplate(templateData);
+
+    // Send email via Resend
+    const { data: resendData, error } = await resend.emails.send({
+      from: fromEmail,
+      to: customerEmail,
+      subject: 'Deine AIR LEGACY Bestellung ist bestätigt',
+      html,
     });
 
-    // E-Mail senden
-    const response = await sesClient.send(command);
+    if (error) {
+      throw new Error(`Resend API error: ${error.message}`);
+    }
 
-    logger.info('Order confirmation email sent successfully', {
+    logger.info('Order confirmation email sent successfully via Resend', {
       orderId: order.id,
       customerEmail,
-      messageId: response.MessageId,
+      emailId: resendData?.id,
     });
   } catch (error) {
     // E-Mail Fehler sollen Order Creation NICHT blockieren!
     // Deshalb nur loggen, nicht werfen
     logger.error(
-      'Failed to send order confirmation email',
+      'Failed to send order confirmation email via Resend',
       {
         orderId: order.id,
         customerEmail,
@@ -154,6 +172,9 @@ export async function sendOrderConfirmationEmail(
  *
  * @param data - User Info
  * @returns Promise<void>
+ *
+ * Note: Currently uses simple HTML instead of template
+ * TODO: Create welcome email template if needed
  */
 export async function sendWelcomeEmail(
   data: WelcomeEmailData
@@ -161,37 +182,63 @@ export async function sendWelcomeEmail(
   const { userName, userEmail, shopUrl } = data;
 
   try {
-    logger.info('Sending welcome email', { userEmail });
+    logger.info('Sending welcome email via Resend', { userEmail });
 
-    const senderEmail = process.env.SES_SENDER_EMAIL;
-    if (!senderEmail) {
-      throw new Error('SES_SENDER_EMAIL environment variable not set');
-    }
+    const fromEmail = process.env.EMAIL_FROM || 'noreply@aws.his4irness23.de';
 
-    const templateData = {
-      userName,
-      shopUrl,
-    };
+    // Simple welcome email HTML
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #000 0%, #1a1a1a 100%); color: #fff; padding: 30px; text-align: center; }
+          .content { padding: 30px; background: #fff; }
+          .button { display: inline-block; background: #FF6B35; color: #fff; padding: 15px 30px; text-decoration: none; border-radius: 5px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>AIR LEGACY</h1>
+            <p>Willkommen bei uns!</p>
+          </div>
+          <div class="content">
+            <h2>Hallo ${userName},</h2>
+            <p>Willkommen bei AIR LEGACY! Wir freuen uns, dass du dabei bist.</p>
+            <p>Entdecke jetzt unsere exklusive Kollektion:</p>
+            <p style="text-align: center; margin: 30px 0;">
+              <a href="${shopUrl}" class="button">Zum Shop</a>
+            </p>
+            <p>Bei Fragen sind wir jederzeit für dich da.</p>
+            <p>Viel Spaß beim Shoppen!</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
 
-    const command = new SendTemplatedEmailCommand({
-      Source: senderEmail,
-      Destination: {
-        ToAddresses: [userEmail],
-      },
-      Template: 'ecokart-welcome',
-      TemplateData: JSON.stringify(templateData),
-      ConfigurationSetName: `ecokart-${process.env.ENVIRONMENT || 'development'}`,
+    const { data: resendData, error } = await resend.emails.send({
+      from: fromEmail,
+      to: userEmail,
+      subject: 'Willkommen bei AIR LEGACY',
+      html,
     });
 
-    const response = await sesClient.send(command);
+    if (error) {
+      throw new Error(`Resend API error: ${error.message}`);
+    }
 
-    logger.info('Welcome email sent successfully', {
+    logger.info('Welcome email sent successfully via Resend', {
       userEmail,
-      messageId: response.MessageId,
+      emailId: resendData?.id,
     });
   } catch (error) {
     logger.error(
-      'Failed to send welcome email',
+      'Failed to send welcome email via Resend',
       { userEmail },
       error instanceof Error ? error : undefined
     );

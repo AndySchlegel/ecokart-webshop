@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestellbestätigung - AIR LEGACY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background-color: #0a0a0a;
+            padding: 0;
+            margin: 0;
+        }
+        .email-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #0a0a0a;
+        }
+        .container {
+            background-color: #ffffff;
+        }
+
+        /* Header - Athletic Black */
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #ffffff;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* Orange Power Accent */
+        .accent-bar {
+            height: 6px;
+            background: linear-gradient(90deg, #FF6B35 0%, #FF8C42 100%);
+        }
+
+        /* Content Area */
+        .content {
+            padding: 50px 30px;
+            background-color: #ffffff;
+        }
+
+        /* Success Badge */
+        .success-badge {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+            color: #ffffff;
+            padding: 20px 30px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 8px;
+        }
+        .success-badge h2 {
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        .greeting {
+            font-size: 18px;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .message {
+            color: #4a4a4a;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        /* Order Number - Athletic Style */
+        .order-box {
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            border: 2px solid #FF6B35;
+            padding: 25px 30px;
+            margin: 40px 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .order-label {
+            font-size: 11px;
+            color: #FF6B35;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+        .order-id {
+            font-size: 20px;
+            font-weight: 900;
+            color: #000000;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        /* Section Title - Power Style */
+        .section-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: #000000;
+            margin: 40px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #FF6B35;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Product List - Clean & Modern */
+        .product-list {
+            margin: 0;
+            background-color: #fafafa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .product-item {
+            background-color: #ffffff;
+            padding: 25px;
+            margin-bottom: 2px;
+            display: table;
+            width: 100%;
+        }
+        .product-item:last-child {
+            margin-bottom: 0;
+        }
+        .product-main {
+            display: table-row;
+        }
+        .product-image-cell {
+            display: table-cell;
+            vertical-align: middle;
+            width: 100px;
+            padding-right: 15px;
+        }
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 2px solid #f0f0f0;
+        }
+        .product-info {
+            display: table-cell;
+            vertical-align: middle;
+            width: 50%;
+            padding-right: 20px;
+        }
+        .product-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        .product-quantity {
+            font-size: 13px;
+            color: #666;
+            font-weight: 600;
+        }
+        .product-price-cell {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
+            width: 30%;
+        }
+        .product-price {
+            font-size: 22px;
+            font-weight: 900;
+            color: #FF6B35;
+            white-space: nowrap;
+        }
+
+        /* Total - Athletic Dark */
+        .total-section {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #ffffff;
+            padding: 30px;
+            margin-top: 2px;
+            border-radius: 0 0 8px 8px;
+        }
+        .total-row {
+            display: table;
+            width: 100%;
+        }
+        .total-label {
+            display: table-cell;
+            vertical-align: middle;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .total-amount-cell {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
+        }
+        .total-amount {
+            font-size: 32px;
+            font-weight: 900;
+            color: #FF6B35;
+            letter-spacing: 1px;
+        }
+
+        /* Address Card - Clean */
+        .address-card {
+            background-color: #f8f8f8;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            border-left: 4px solid #FF6B35;
+        }
+        .address-card strong {
+            display: block;
+            font-size: 16px;
+            color: #000000;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .address-card div {
+            color: #4a4a4a;
+            line-height: 1.8;
+        }
+
+        /* CTA Button - Orange Power */
+        .cta-section {
+            text-align: center;
+            margin: 50px 0;
+        }
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+            color: #ffffff;
+            padding: 18px 50px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Info Box */
+        .info-box {
+            background-color: #f8f8f8;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+            border-left: 4px solid #000000;
+        }
+        .info-box strong {
+            display: block;
+            margin-bottom: 12px;
+            color: #000000;
+            font-weight: 700;
+            font-size: 15px;
+        }
+        .info-box p {
+            color: #4a4a4a;
+            margin: 0;
+            line-height: 1.8;
+        }
+
+        /* Footer - Athletic Dark */
+        .footer {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 40px 30px;
+        }
+        .footer-brand {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .footer-tagline {
+            font-size: 14px;
+            color: #FF6B35;
+            margin-bottom: 25px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .footer-legal {
+            font-size: 12px;
+            color: #888;
+            margin-top: 25px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <div class="container">
+            <!-- Header - Athletic Power -->
+            <div class="header">
+                <div class="logo">AIR LEGACY</div>
+                <h1>Bestellbestätigung</h1>
+            </div>
+
+            <!-- Orange Power Accent -->
+            <div class="accent-bar"></div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Success Badge -->
+                <div class="success-badge">
+                    <h2>Bestellung erfolgreich!</h2>
+                </div>
+
+                <div class="greeting">
+                    Hallo {{customerName}},
+                </div>
+
+                <div class="message">
+                    <p style="margin-bottom: 15px;">
+                        <strong>Deine Bestellung ist bei uns eingegangen.</strong>
+                    </p>
+                    <p>
+                        Vielen Dank für dein Vertrauen in AIR LEGACY. Deine Bestellung wird jetzt für dich vorbereitet und innerhalb von 2-3 Werktagen versendet.
+                    </p>
+                </div>
+
+                <!-- Order Number -->
+                <div class="order-box">
+                    <div class="order-label">Bestellnummer</div>
+                    <div class="order-id">#{{orderId}}</div>
+                </div>
+
+                <!-- Order Details -->
+                <div class="section-title">Deine Produkte</div>
+                <div class="product-list">
+                    {{#each items}}
+                    <div class="product-item">
+                        <div class="product-main">
+                            {{#if this.imageUrl}}
+                            <div class="product-image-cell">
+                                <img src="{{this.imageUrl}}" alt="{{this.name}}" class="product-image">
+                            </div>
+                            {{/if}}
+                            <div class="product-info">
+                                <div class="product-name">{{this.name}}</div>
+                                <div class="product-quantity">Menge: {{this.quantity}}</div>
+                            </div>
+                            <div class="product-price-cell">
+                                <div class="product-price">{{this.price}} €</div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+
+                    <!-- Total -->
+                    <div class="total-section">
+                        <div class="total-row">
+                            <div class="total-label">Gesamtsumme</div>
+                            <div class="total-amount-cell">
+                                <div class="total-amount">{{totalAmount}} €</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Address -->
+                <div class="section-title">Lieferadresse</div>
+                <div class="address-card">
+                    <strong>{{shippingAddress.name}}</strong>
+                    <div>
+                        {{shippingAddress.street}}<br>
+                        {{shippingAddress.postalCode}} {{shippingAddress.city}}<br>
+                        {{shippingAddress.country}}
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+                <div class="info-box">
+                    <strong>Versandinformationen</strong>
+                    <p>
+                        Deine Bestellung wird innerhalb von 2-3 Werktagen bearbeitet und versendet. Du erhältst eine weitere E-Mail mit den Tracking-Informationen, sobald dein Paket unterwegs ist.
+                    </p>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="cta-section">
+                    <a href="{{orderTrackingUrl}}" class="button">
+                        BESTELLUNG VERFOLGEN
+                    </a>
+                </div>
+
+                <div class="message" style="margin-top: 40px;">
+                    <p style="color: #666; font-size: 14px;">
+                        Bei Fragen zu deiner Bestellung kannst du uns jederzeit kontaktieren.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer - Athletic Power -->
+            <div class="footer">
+                <div class="footer-brand">AIR LEGACY</div>
+                <div class="footer-tagline">Performance Meets Style</div>
+                <div class="footer-legal">
+                    Diese E-Mail wurde automatisch generiert.<br>
+                    Bitte antworte nicht direkt auf diese E-Mail.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
