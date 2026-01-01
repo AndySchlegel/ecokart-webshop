@@ -330,6 +330,10 @@ Password: [Create admin user via Cognito or contact]
 ![Product Detail](docs/screenshots/02-product-detail.png)
 *Detailed product view with color selection and quantity selector*
 
+#### Quick Select Modal
+![Quick Select](docs/screenshots/03-quick-select-modal.png)
+*Fast product selection with size/color options directly from catalog*
+
 #### Shopping Cart
 ![Shopping Cart](docs/screenshots/04-shopping-cart.png)
 *Cart overview with item management and checkout button*
@@ -342,59 +346,61 @@ Password: [Create admin user via Cognito or contact]
 ![Order Confirmation](docs/screenshots/06-order-confirmation.png)
 *Success page after successful payment*
 
-### Email Communication
-
-#### Order Confirmation Email
-![Order Email](docs/screenshots/07-order-email.png)
-*Professional order confirmation email with AIR LEGACY branding*
-
 ### Admin Dashboard
 
 #### Analytics Dashboard
-![Admin Dashboard](docs/screenshots/09-admin-dashboard.png)
+![Admin Dashboard](docs/screenshots/07-admin-dashboard.png)
 *Real-time analytics: revenue, orders, customers with trend indicators*
 
 #### Product Management
-![Admin Products](docs/screenshots/11-admin-products.png)
+![Admin Products](docs/screenshots/08-admin-products.png)
 *Product CRUD operations with stock management*
 
-#### Product Edit
-![Product Edit](docs/screenshots/12-admin-product-edit.png)
-*Edit product details, stock, and images*
-
-#### Customer Overview
-![Customers](docs/screenshots/13-admin-customers.png)
-*Customer management with registration dates*
-
 #### Order Management
-![Orders](docs/screenshots/14-admin-orders.png)
+![Orders](docs/screenshots/09-admin-orders.png)
 *Order history with status and details*
+
+#### Category Management
+![Categories](docs/screenshots/10-admin-categories.png)
+*Product category organization and management*
 
 ### Infrastructure
 
+#### Terraform Modules
+![Terraform Modules](docs/screenshots/11-terraform-modules.png)
+*Infrastructure as Code modules overview*
+
 #### GitHub Actions CI/CD
-![GitHub Actions](docs/screenshots/15-github-actions.png)
+![GitHub Actions](docs/screenshots/12-github-actions.png)
 *Automated deployment pipeline with Terraform*
 
-#### Terraform Output
-![Terraform Output](docs/screenshots/16-terraform-output.png)
-*Infrastructure deployment output*
-
-#### AWS Amplify
-![AWS Amplify](docs/screenshots/17-aws-amplify.png)
-*Amplify hosting configuration*
-
 #### AWS Lambda
-![AWS Lambda](docs/screenshots/18-aws-lambda.png)
+![AWS Lambda](docs/screenshots/13-aws-lambda.png)
 *Lambda function configuration*
 
 #### AWS DynamoDB
-![AWS DynamoDB](docs/screenshots/19-aws-dynamodb.png)
+![AWS DynamoDB](docs/screenshots/14-aws-dynamodb.png)
 *DynamoDB tables overview*
 
 #### AWS Cognito
-![AWS Cognito](docs/screenshots/20-aws-cognito.png)
+![AWS Cognito](docs/screenshots/15-aws-cognito.png)
 *Cognito User Pool configuration*
+
+#### AWS Amplify
+![AWS Amplify](docs/screenshots/16-aws-amplify.png)
+*Amplify hosting configuration*
+
+#### AWS CloudFront
+![AWS CloudFront](docs/screenshots/17-aws-cloudfront.png)
+*CloudFront CDN distribution for global asset delivery*
+
+#### AWS Route53
+![AWS Route53](docs/screenshots/18-aws-route53.png)
+*Route53 DNS configuration for custom domains*
+
+#### Stripe Dashboard
+![Stripe Dashboard](docs/screenshots/19-stripe-dashboard.png)
+*Stripe payment integration and webhook configuration*
 
 ---
 
