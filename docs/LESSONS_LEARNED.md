@@ -2202,8 +2202,8 @@ Error: No signatures found matching the expected signature for payload
 
 **Ursache:**
 - `STRIPE_WEBHOOK_SECRET` in Lambda stimmte nicht mit Secret in Stripe Dashboard überein
-- Old Secret: `whsec_f240268...` (in Lambda via GitHub Secrets)
-- New Secret: `whsec_ehbDaRPdS9nOhvTg9JnTbpC5LTBWFd3R` (in Stripe Dashboard)
+- Old Secret: `whsec_f240...` (in Lambda via GitHub Secrets)
+- New Secret: `whsec_ehb...` (in Stripe Dashboard - ROTATED nach Public Leak)
 - **Mismatch** → Signature Verification fails → Webhook aborted
 
 **Problem 2: Cart wurde nicht geleert (trotz Success Log!)**
