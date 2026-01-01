@@ -378,6 +378,7 @@ jobs:
           TF_VAR_jwt_secret: ${{ steps.jwt-secret.outputs.secret }}
           TF_VAR_stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
           TF_VAR_stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          TF_VAR_resend_api_key: ${{ secrets.RESEND_API_KEY }}
         run: |
           echo "📋 Planning deployment for: ${{ steps.env.outputs.environment }}"
           echo "📁 Using config: environments/${{ steps.env.outputs.environment }}.tfvars"
@@ -392,6 +393,7 @@ jobs:
             -var="jwt_secret=${{ steps.jwt-secret.outputs.secret }}" \
             -var="stripe_secret_key=${{ secrets.STRIPE_SECRET_KEY }}" \
             -var="stripe_webhook_secret=${{ secrets.STRIPE_WEBHOOK_SECRET }}" \
+            -var="resend_api_key=${{ secrets.RESEND_API_KEY }}" \
             -out=tfplan
 
           echo "✅ Terraform plan created for ${{ steps.env.outputs.environment }}"
@@ -433,6 +435,7 @@ jobs:
         env:
           TF_VAR_stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
           TF_VAR_stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          TF_VAR_resend_api_key: ${{ secrets.RESEND_API_KEY }}
         run: |
           echo "💥 Destroying infrastructure for: ${{ steps.env.outputs.environment }}"
 
@@ -441,7 +444,8 @@ jobs:
             -var="github_access_token=${{ steps.github-token.outputs.token }}" \
             -var="jwt_secret=${{ steps.jwt-secret.outputs.secret }}" \
             -var="stripe_secret_key=${{ secrets.STRIPE_SECRET_KEY }}" \
-            -var="stripe_webhook_secret=${{ secrets.STRIPE_WEBHOOK_SECRET }}"
+            -var="stripe_webhook_secret=${{ secrets.STRIPE_WEBHOOK_SECRET }}" \
+            -var="resend_api_key=${{ secrets.RESEND_API_KEY }}"
 
           echo "✅ Infrastructure destroyed for ${{ steps.env.outputs.environment }}"
 
