@@ -420,6 +420,38 @@ variable "ses_sender_email" {
   }
 }
 
+variable "resend_api_key" {
+  description = <<EOT
+    Resend API Key for email sending
+
+    Migration: AWS SES → Resend (1. Januar 2026)
+    Reason: AWS SES Production Access rejected, SendGrid rejected
+
+    Resend Setup:
+    - Sign up at https://resend.com
+    - Verify domain (aws.his4irness23.de)
+    - Generate API Key (Settings → API Keys)
+    - Format: re_xxxxxxxxxxxxx
+
+    Benefits:
+    - No approval needed (unlike AWS SES)
+    - Developer-friendly API
+    - 3,000 emails/month free tier
+    - Production-ready from day 1
+
+    Used for:
+    - Order Confirmation Emails
+    - Transactional Emails
+  EOT
+  type        = string
+  sensitive   = true
+
+  validation {
+    condition     = can(regex("^re_[A-Za-z0-9_-]+$", var.resend_api_key))
+    error_message = "Resend API Key muss mit 're_' beginnen."
+  }
+}
+
 # ----------------------------------------------------------------------------
 # Assets (S3 + CloudFront)
 # ----------------------------------------------------------------------------

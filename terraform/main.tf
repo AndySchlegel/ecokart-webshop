@@ -201,8 +201,11 @@ module "lambda" {
     # Stripe Payment Integration
     STRIPE_SECRET_KEY       = var.stripe_secret_key
     STRIPE_WEBHOOK_SECRET   = var.stripe_webhook_secret
-    # SES E-Mail Configuration
+    # SES E-Mail Configuration (Legacy - keeping for backwards compatibility)
     SES_SENDER_EMAIL        = var.ses_sender_email
+    # Resend E-Mail Configuration (Active - Migration from SES, 1. Jan 2026)
+    RESEND_API_KEY          = var.resend_api_key
+    EMAIL_FROM              = "noreply@aws.his4irness23.de"
     # FRONTEND_URL: Use provided URL or fallback to localhost
     # NOTE: Backend will auto-detect the actual frontend URL from request headers (origin, x-frontend-url)
     # This is just a fallback for local development
