@@ -1,11 +1,7 @@
 name: Security Scanning
 
 on:
-  pull_request:
-    branches: [develop, staging, main]
-  push:
-    branches: [develop, staging, main]
-  # Allow manual trigger
+  # Manual trigger only (automatic scans now in deploy.yml)
   workflow_dispatch:
 
 permissions:
