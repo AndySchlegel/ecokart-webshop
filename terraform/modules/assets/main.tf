@@ -70,6 +70,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "assets" {
     id     = "delete-old-versions"
     status = "Enabled"
 
+    # Required by newer AWS provider: must have filter or prefix
+    filter {}
+
     noncurrent_version_expiration {
       noncurrent_days = 30
     }

@@ -274,9 +274,16 @@ resource "aws_iam_role_policy" "lambda_security_monitor" {
   })
 }
 
+# Package Lambda Function Code
+data "archive_file" "security_monitor" {
+  type        = "zip"
+  source_file = "${path.module}/lambda/index.py"
+  output_path = "${path.module}/lambda/security-monitor.zip"
+}
+
 # Lambda Function: Security Monitor
 resource "aws_lambda_function" "security_monitor" {
-  filename      = "${path.module}/lambda/security-monitor.zip"
+  filename      = data.archive_file.security_monitor.output_path
   function_name = "${var.project_name}-security-monitor"
   role          = aws_iam_role.lambda_security_monitor.arn
   handler       = "index.handler"
@@ -284,7 +291,7 @@ resource "aws_lambda_function" "security_monitor" {
   timeout       = 60
   memory_size   = 256
 
-  source_code_hash = filebase64sha256("${path.module}/lambda/security-monitor.zip")
+  source_code_hash = data.archive_file.security_monitor.output_base64sha256
 
   environment {
     variables = {
