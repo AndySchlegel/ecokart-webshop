@@ -58,6 +58,13 @@ env:
   TERRAFORM_VERSION: 1.13.4
   NODE_VERSION: 22
 
+# Permissions for all jobs
+permissions:
+  contents: read
+  security-events: write  # For SARIF uploads (tfsec, checkov)
+  id-token: write         # For OIDC authentication (deploy job)
+  pull-requests: write    # For PR comments (security scans)
+
 jobs:
   # ==========================================================================
   # PRE-DEPLOY SECURITY SCANNING
@@ -155,12 +162,6 @@ jobs:
     name: Deploy to AWS
     runs-on: ubuntu-latest
     needs: [tfsec, checkov, trufflehog]  # Wait for security scans to pass
-
-    # Required for OIDC authentication
-    permissions:
-      id-token: write   # This is critical for OIDC!
-      contents: read
-      security-events: write  # For SARIF uploads
 
     steps:
       # ======================================================================
