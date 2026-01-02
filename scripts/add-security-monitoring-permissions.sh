@@ -13,7 +13,7 @@ set -e  # Exit on error
 
 AWS_REGION="eu-central-1"
 AWS_PROFILE="personal"
-ROLE_NAME="ecokart-github-actions-role"
+ROLE_NAME="GitHubActionsRole-EcokartDeploy"
 ACCOUNT_ID=$(aws sts get-caller-identity --profile "$AWS_PROFILE" --query Account --output text)
 
 echo "============================================================================"
