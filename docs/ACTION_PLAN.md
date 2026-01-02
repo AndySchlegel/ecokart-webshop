@@ -1,7 +1,7 @@
 # 🎯 Action Plan - Ecokart Development
 
-**Last Updated:** 31. Dezember 2025
-**Status:** ❌ **SES REJECTED → SENDGRID MIGRATION** - AWS declined, moving to external email provider! 🔄
+**Last Updated:** 2. Januar 2026
+**Status:** ✅ **SECURITY MONITORING COMPLETE** - Runtime detection + daily compliance scans active! 🔒
 
 > **📖 Struktur dieses Dokuments:**
 > - **Current Status** - Wo stehen wir JETZT
@@ -13,11 +13,46 @@
 
 ---
 
-## 🎉 CURRENT STATUS (31.12.2025)
+## 🎉 CURRENT STATUS (02.01.2026)
 
 ### ✅ Recently Completed - HEUTE! 🎊
 
-**AWS SES Rejection + SendGrid Migration Decision (31.12.2025 - Spätabend)** ❌ → ✅
+**Runtime Security Monitoring Complete (02.01.2026)** ✅
+
+- ✅ **Security Monitoring Module Deployed**
+  - 5 CloudWatch Alarms: Unauthorized calls, root usage, policy changes
+  - IAM Access Analyzer: External resource exposure detection
+  - Lambda Security Monitor: Daily compliance scans at 8 AM UTC
+  - SNS Email Alerts: andy.schlegel23@googlemail.com
+  - Cost: $0.00/month (100% FREE-tier)
+  - Location: `terraform/modules/security-monitoring/`
+
+- ✅ **Comprehensive Security Documentation**
+  - Created: `docs/SECURITY.md` (268 lines)
+  - Coverage: Defense in depth, incident response, best practices
+  - README: Updated with security monitoring section
+  - Result: Production-ready security architecture documented
+
+- ✅ **Stripe Webhook Secret Rotation**
+  - Old Secret: `whsec_ehb...` (leaked in git, ROTATED)
+  - New Secret: `whsec_jFRr...` (active)
+  - GitHub Secrets: Updated
+  - Webhooks: 200 OK ✅
+
+- ✅ **Resend Email Migration Complete**
+  - Migration: AWS SES → Resend API (1. Jan 2026)
+  - API Key: Configured in GitHub Secrets
+  - From: noreply@aws.his4irness23.de
+  - Status: Order confirmations working ✅
+  - Reason: SES rejected (Case 176720597300389)
+
+- ⏳ **SNS Email Confirmation Pending**
+  - Email sent to: andy.schlegel23@googlemail.com
+  - Action required: Click confirmation link
+  - Until confirmed: No security alerts delivered
+  - Check: Inbox + Spam for AWS Notifications
+
+**Previous Session - AWS SES Rejection + Resend Migration (31.12.2025 - 01.01.2026)** ❌ → ✅
 
 - ❌ **AWS SES Production Access REJECTED**
   - Case ID: 176720597300389
@@ -209,8 +244,9 @@ Result: ✅ Stable URLs for email links + fast global image delivery!
 | **Stripe Payments** | ✅ Working | - | ✅ Complete (02.12) |
 | **Stripe Webhooks** | ✅ Working | - | ✅ Complete (15.12) |
 | **Inventory** | ✅ Working | - | ✅ Complete (15.12) |
-| **Email Notifications** | ⏳ **SES Production Access** | - | 🟡 **Pending AWS (31.12)** |
+| **Email Notifications** | ✅ **Resend API** | - | ✅ **Complete (01.01)** |
 | **Order Tracking** | ✅ **WORKING** | - | ✅ **Complete (22.12)** |
+| **Security Monitoring** | ✅ **ACTIVE** | - | ✅ **Complete (02.01)** |
 | **Error Handling** | ✅ German UX | - | ✅ Complete (23.11) |
 | **Monitoring** | ✅ CloudWatch | - | ✅ Complete (24.11) |
 | **Code Quality** | ✅ ESLint | - | ✅ Complete (24.11) |
@@ -245,50 +281,41 @@ Result: ✅ Stable URLs for email links + fast global image delivery!
 
 ## 🎯 Next Priorities (Nächste Session)
 
-### Priority 0: 🔄 SendGrid Email Integration 📧
-**ETA:** 45 Minuten (nächste Session)
-**Impact:** ✅ CRITICAL - Email Notifications für ALLE Kunden
+### Priority 0: 🧹 Codebase Cleanup & Organization 📁
+**ETA:** 1-2 Stunden
+**Impact:** 🎯 WICHTIG - Projekt-Struktur aufräumen, unnötige Dateien löschen
 
-**Current Status:**
-```
-❌ AWS SES: REJECTED (Case 176720597300389)
-✅ Decision: SendGrid Migration
-⏳ SendGrid Account: Not created yet
-⏳ Integration: Pending
-⏳ Testing: Pending
-```
+**Warum jetzt:**
+- User Request: "Wir müssen auch noch am Ende ein großes cleanup machen zu viele Dateien, welche sicher unnötig sind!"
+- Viele alte/unused Files aus früheren Sessions
+- Projekt vor finaler Präsentation aufräumen
 
-**Implementation Plan:**
-1. **SendGrid Account Setup (10min)**
-   - Create account: https://signup.sendgrid.com
-   - Verify domain: his4irness23.de (DNS records in Route53)
-   - Generate API Key
+**Cleanup Bereiche:**
+1. **Terraform Cleanup**
+   - Alte/unused Module entfernen
+   - examples/ Directory prüfen (noch nötig?)
+   - Commented-out Code entfernen
 
-2. **Backend Integration (20min)**
-   - Install: `npm install @sendgrid/mail`
-   - Update: `backend/src/services/email.service.ts`
-   - Replace AWS SES SDK with SendGrid SDK
-   - Test email sending
+2. **Documentation Cleanup**
+   - Alte Session Docs archivieren
+   - Duplicate/outdated Docs konsolidieren
+   - README strukturieren
 
-3. **Terraform Configuration (10min)**
-   - Add: SENDGRID_API_KEY environment variable
-   - Remove: SES module (optional cleanup)
-   - Update: GitHub Secrets with API key
-   - Deploy: `terraform apply`
+3. **Backend/Frontend Cleanup**
+   - Unused Dependencies entfernen
+   - Dead Code eliminieren
+   - Old comments aufräumen
 
-4. **Testing & Documentation (5min)**
-   - Send test order confirmation email
-   - Update documentation
-   - Mark as production-ready ✅
+4. **GitHub Cleanup**
+   - Alte Workflows prüfen
+   - Unused secrets entfernen
+   - Branch cleanup
 
-**Why SendGrid:**
-- ✅ Works IMMEDIATELY (no approval process)
-- ✅ Free tier: 100 emails/day (sufficient for portfolio)
-- ✅ Simpler integration than AWS SES
-- ✅ Like Stripe pattern (external service provider)
-- ✅ Professional sender: noreply@his4irness23.de
-- ✅ Better deliverability than SES sandbox mode
-- ✅ Used by many production applications
+**Vorgehen:**
+1. Files scannen (unused, duplicate, old)
+2. User fragen welche Bereiche priorisiert
+3. Systematisch aufräumen
+4. Git commit mit Cleanup-Dokumentation
 
 ---
 
@@ -658,6 +685,8 @@ Remaining:
 
 | Date | Update | Author |
 |------|--------|--------|
+| 02.01.2026 | **✅ SECURITY MONITORING COMPLETE:** 5 CloudWatch Alarms, IAM Access Analyzer, Daily compliance scans, FREE-tier ($0/month), Stripe secret rotated, Resend migration complete | Claude + Andy |
+| 01.01.2026 | **✅ RESEND EMAIL MIGRATION:** AWS SES rejected → Migrated to Resend API, Order confirmations working | Claude + Andy |
 | 31.12.2025 | **⏳ SES PRODUCTION ACCESS PENDING:** Domain verification SUCCESS, Production access request submitted, Terraform tfvars fixes, Email architecture learnings | Claude + Andy |
 | 30.12.2025 | **✅ NODE.JS 22 UPGRADE COMPLETE:** Lambda runtime, CI/CD workflows, Dependencies updated + Product image paths fixed | Claude + Andy |
 | 22.12.2025 | **🎉 EMAIL & ORDER TRACKING COMPLETE:** AWS SES setup, Email templates, Order tracking page, Auto-build enabled | Claude + Andy |
@@ -670,5 +699,5 @@ Remaining:
 
 ---
 
-**Next Session Focus:** Admin Dashboard (Prio 1) → Custom Domains (Optional)
-**Status:** ✅ Node.js 22 Complete - Admin Dashboard & Analytics Next!
+**Next Session Focus:** Codebase Cleanup (Prio 0) → Admin Dashboard (Prio 1)
+**Status:** ✅ Security Monitoring Complete - Cleanup & Organization Next!
