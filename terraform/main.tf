@@ -468,8 +468,6 @@ module "security_monitoring" {
   project_name   = var.project_name
   environment    = var.environment
   security_email = var.security_email
-
-  tags = local.common_tags
 }
 
 # ----------------------------------------------------------------------------
