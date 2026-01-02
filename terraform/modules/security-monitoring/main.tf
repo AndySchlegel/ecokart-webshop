@@ -10,7 +10,6 @@ resource "aws_sns_topic" "security_alerts" {
     Project     = var.project_name
     Environment = var.environment
     ManagedBy   = "Terraform"
-    Purpose     = "Security Alerts & Notifications"
   }
 }
 
@@ -22,16 +21,18 @@ resource "aws_sns_topic_subscription" "security_email" {
 }
 
 # IAM Access Analyzer - Detects resources shared outside account
-resource "aws_accessanalyzer_analyzer" "main" {
-  analyzer_name = "${var.project_name}-access-analyzer"
-  type          = "ACCOUNT"
-
-  tags = {
-    Project     = var.project_name
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
-}
+# NOTE: Account already has an Access Analyzer (AWS Console default)
+# Only 1 analyzer allowed per account - using existing one instead
+# resource "aws_accessanalyzer_analyzer" "main" {
+#   analyzer_name = "${var.project_name}-access-analyzer"
+#   type          = "ACCOUNT"
+#
+#   tags = {
+#     Project     = var.project_name
+#     Environment = var.environment
+#     ManagedBy   = "Terraform"
+#   }
+# }
 
 # CloudWatch Log Group for Security Events
 resource "aws_cloudwatch_log_group" "security_logs" {

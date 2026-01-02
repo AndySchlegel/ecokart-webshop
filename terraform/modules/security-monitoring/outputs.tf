@@ -3,10 +3,11 @@ output "sns_topic_arn" {
   value       = aws_sns_topic.security_alerts.arn
 }
 
-output "access_analyzer_arn" {
-  description = "ARN of the IAM Access Analyzer"
-  value       = aws_accessanalyzer_analyzer.main.arn
-}
+# Access Analyzer output removed - using existing AWS Console analyzer
+# output "access_analyzer_arn" {
+#   description = "ARN of the IAM Access Analyzer"
+#   value       = aws_accessanalyzer_analyzer.main.arn
+# }
 
 output "lambda_function_name" {
   description = "Name of the security monitor Lambda function"
