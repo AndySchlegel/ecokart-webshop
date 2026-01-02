@@ -31,6 +31,43 @@
 - **User hat MEHRFACH gesagt:** "Wir wollen es reproduzierbar und sauber, nicht schneller!"
 - **Bei wiederkehrenden Problemen:** Root Cause fixen, nicht Symptome!
 
+### 5. 🔐 AWS Profile - KRITISCH!
+
+**⚠️ IMMER `--profile personal` verwenden!**
+
+```bash
+# ✅ RICHTIG - User's eigener AWS Account
+aws s3 ls --profile personal --region eu-central-1
+
+# ❌ FALSCH - default/SSO (alter Sandkasten, eu-north-1)
+aws s3 ls
+```
+
+**User's AWS Accounts:**
+- ✅ **`personal`**: Eigener AWS Account, eu-central-1 → **IMMER verwenden!**
+- ❌ **`default`/SSO**: Alter Sandkasten (Cloudhelden), eu-north-1 → **NIE verwenden!**
+
+**In Scripts:**
+- ALLE `aws` commands MÜSSEN `--profile personal` enthalten
+- ALLE `aws` commands MÜSSEN `--region eu-central-1` enthalten
+- KEINE Ausnahmen!
+
+**Beispiel:**
+```bash
+# IAM
+aws iam list-roles --profile personal --region eu-central-1
+
+# S3
+aws s3 ls --profile personal --region eu-central-1
+
+# Lambda
+aws lambda list-functions --profile personal --region eu-central-1
+```
+
+**User-Zitat:**
+> "Das verwenden wir ab sofort nie, es sei denn ich sage es explizit.
+> Mein eigener AWS Account ist permanent eingeloggt unter --profile personal!"
+
 ---
 
 ## 🛑 Circuit Breaker - Wann STOPPEN

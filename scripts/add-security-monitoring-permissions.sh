@@ -12,8 +12,9 @@
 set -e  # Exit on error
 
 AWS_REGION="eu-central-1"
+AWS_PROFILE="personal"
 ROLE_NAME="ecokart-github-actions-role"
-ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+ACCOUNT_ID=$(aws sts get-caller-identity --profile "$AWS_PROFILE" --query Account --output text)
 
 echo "============================================================================"
 echo "Adding Security Monitoring Permissions"
@@ -33,13 +34,19 @@ create_and_attach_policy() {
   echo "📜 Processing policy: $POLICY_NAME"
 
   # Check if policy exists
-  POLICY_ARN=$(aws iam list-policies --query "Policies[?PolicyName=='$POLICY_NAME'].Arn" --output text)
+  POLICY_ARN=$(aws iam list-policies \
+    --profile "$AWS_PROFILE" \
+    --region "$AWS_REGION" \
+    --query "Policies[?PolicyName=='$POLICY_NAME'].Arn" \
+    --output text)
 
   if [ -n "$POLICY_ARN" ]; then
     echo "  ✅ Policy already exists: $POLICY_NAME"
   else
     echo "  📦 Creating policy: $POLICY_NAME"
     POLICY_ARN=$(aws iam create-policy \
+      --profile "$AWS_PROFILE" \
+      --region "$AWS_REGION" \
       --policy-name "$POLICY_NAME" \
       --policy-document "file://$POLICY_FILE" \
       --query Policy.Arn \
@@ -50,6 +57,8 @@ create_and_attach_policy() {
   # Attach to role
   echo "  🔗 Attaching policy to role..."
   aws iam attach-role-policy \
+    --profile "$AWS_PROFILE" \
+    --region "$AWS_REGION" \
     --role-name "$ROLE_NAME" \
     --policy-arn "$POLICY_ARN" 2>/dev/null && echo "  ✅ Attached" || echo "  ℹ️  Already attached"
 
