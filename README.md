@@ -480,7 +480,94 @@ All security findings are automatically uploaded to the **GitHub Security Tab** 
 
 **Cost:** $0.00/month (GitHub Actions free tier)
 
-[📚 Phase 2: Runtime Security Monitoring →](docs/ACTION_PLAN_PHASE2.md#task-12-runtime-security-monitoring) *(planned)*
+### Runtime Security Monitoring
+
+This project implements **24/7 automated security monitoring** for the production AWS environment.
+
+#### Real-Time CloudWatch Alarms (<5 min detection)
+
+**🚨 Critical Security Events:**
+- **Unauthorized API Calls** - Detects 403/401 errors
+- **Root Account Usage** - Alerts when root user is used (should NEVER happen)
+- **IAM Policy Changes** - Monitors privilege escalation attempts
+- **Security Group Changes** - Detects firewall rule modifications
+- **S3 Bucket Policy Changes** - Prevents accidental public data exposure
+
+**Alert Method:** Email via SNS Topic
+**Response Time:** <5 minutes from event to alert
+
+#### Daily Security Compliance Scan (8 AM UTC)
+
+**Lambda Security Monitor** performs automated daily checks:
+- ✅ **Public S3 Buckets** - Ensures no buckets are publicly accessible
+- ✅ **Security Groups with 0.0.0.0/0** - Detects overly permissive firewall rules
+- ✅ **IAM Users without MFA** - Enforces multi-factor authentication
+- ✅ **IAM Access Analyzer** - Detects resources shared outside account
+
+**Email Reports:** Daily summary (only sends if issues found)
+
+#### AWS Services Used
+
+| Service | Purpose | Cost |
+|---------|---------|------|
+| **CloudWatch Alarms** (5) | Real-time security event detection | $0.00 (first 10 free) |
+| **IAM Access Analyzer** | Detect exposed resources | $0.00 |
+| **EventBridge Rule** | Trigger daily scan | $0.00 (first 1M free) |
+| **Lambda Function** | Security compliance checker | $0.00 (FREE tier) |
+| **SNS Topic** | Email notifications | $0.00 (first 1,000 free) |
+| **CloudWatch Logs** | Security logs (7 days) | $0.00 (FREE tier) |
+| **Total** | | **$0.00/month** |
+
+#### Security Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   Security Monitoring Stack                  │
+├─────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ Real-Time Detection (<5 min)                         │   │
+│  ├──────────────────────────────────────────────────────┤   │
+│  │ CloudTrail → CloudWatch Metrics → Alarms → SNS      │   │
+│  │   • Unauthorized API Calls                           │   │
+│  │   • Root Account Usage                               │   │
+│  │   • Policy Changes (IAM/SG/S3)                       │   │
+│  └──────────────────────────────────────────────────────┘   │
+│                                                               │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ Daily Compliance Scan (8 AM UTC)                     │   │
+│  ├──────────────────────────────────────────────────────┤   │
+│  │ EventBridge → Lambda → SNS                           │   │
+│  │   • Public S3 Buckets                                │   │
+│  │   • Security Group 0.0.0.0/0                         │   │
+│  │   • IAM Users without MFA                            │   │
+│  │   • Access Analyzer Findings                         │   │
+│  └──────────────────────────────────────────────────────┘   │
+│                                                               │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ IAM Access Analyzer (Continuous)                     │   │
+│  ├──────────────────────────────────────────────────────┤   │
+│  │ Detects: Resources shared outside AWS account       │   │
+│  │   • Public S3 buckets                                │   │
+│  │   • Lambda with external access                      │   │
+│  │   • IAM roles assumable externally                   │   │
+│  └──────────────────────────────────────────────────────┘   │
+│                                                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Security Documentation
+
+📚 **[Complete Security Architecture Guide →](docs/SECURITY.md)**
+
+Topics covered:
+- Security Layers (Defense in Depth)
+- Incident Response Procedures
+- Security Best Practices
+- Compliance & Audit
+- Monthly Security Checklist
+
+**Cost:** $0.00/month (100% FREE-tier security stack)
 
 ---
 

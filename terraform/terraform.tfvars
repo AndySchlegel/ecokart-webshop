@@ -52,6 +52,11 @@ admin_subdomain = "admin"  # Ergibt: admin.aws.his4irness23.de
 ses_sender_email = "andy.schlegel@chakademie.org"  # Temporär, bis Production Access
 
 # ----------------------------------------------------------------------------
+# Security Monitoring Configuration
+# ----------------------------------------------------------------------------
+security_email = "andy.schlegel23@googlemail.com"  # Empfänger für Security Alerts
+
+# ----------------------------------------------------------------------------
 # Amplify Configuration
 # ----------------------------------------------------------------------------
 enable_amplify       = true  # Customer Shop Frontend

@@ -206,6 +206,73 @@ output "assets_cloudfront_distribution_id" {
 }
 
 # ----------------------------------------------------------------------------
+# Security Monitoring Outputs
+# ----------------------------------------------------------------------------
+
+output "security_sns_topic_arn" {
+  description = "ARN of the Security Alerts SNS Topic"
+  value       = module.security_monitoring.sns_topic_arn
+}
+
+output "security_access_analyzer_arn" {
+  description = "ARN of the IAM Access Analyzer"
+  value       = module.security_monitoring.access_analyzer_arn
+}
+
+output "security_lambda_function_name" {
+  description = "Name of the Security Monitor Lambda Function"
+  value       = module.security_monitoring.lambda_function_name
+}
+
+output "security_cloudwatch_alarms" {
+  description = "List of CloudWatch Security Alarm Names"
+  value       = module.security_monitoring.cloudwatch_alarms
+}
+
+output "security_daily_scan_schedule" {
+  description = "Daily Security Scan Schedule (cron expression)"
+  value       = module.security_monitoring.daily_scan_schedule
+}
+
+output "security_monitoring_status" {
+  description = "Security Monitoring Setup Instructions"
+  value = <<-EOT
+
+    🔒 SECURITY MONITORING ACTIVATED
+    ────────────────────────────────────────────────────────────────
+
+    Real-Time Detection (<5 min):
+      ✓ Unauthorized API calls
+      ✓ Root account usage
+      ✓ IAM policy changes
+      ✓ Security group changes
+      ✓ S3 bucket policy changes
+
+    Daily Security Scan (8 AM UTC):
+      ✓ Public S3 buckets
+      ✓ Security groups with 0.0.0.0/0
+      ✓ IAM users without MFA
+      ✓ IAM Access Analyzer findings
+
+    📧 IMPORTANT: Confirm SNS Email Subscription!
+    ────────────────────────────────────────────────────────────────
+
+    AWS has sent a subscription confirmation email to: ${var.security_email}
+
+    ⚠️  You MUST click the confirmation link in the email!
+    ⚠️  Until confirmed, NO security alerts will be delivered!
+
+    Check your inbox (and spam folder) for an email from:
+    "AWS Notifications <no-reply@sns.amazonaws.com>"
+
+    Subject: "AWS Notification - Subscription Confirmation"
+
+    Cost: $0.00/month (all FREE-tier resources)
+
+  EOT
+}
+
+# ----------------------------------------------------------------------------
 # Custom Domain Outputs (conditional)
 # ----------------------------------------------------------------------------
 

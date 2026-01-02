@@ -452,6 +452,35 @@ variable "resend_api_key" {
   }
 }
 
+variable "security_email" {
+  description = <<EOT
+    E-Mail address for security alert notifications
+
+    This email receives alerts for:
+    - Unauthorized API calls
+    - Root account usage
+    - IAM/Security Group/S3 policy changes
+    - Daily security compliance scan results
+
+    Important:
+    - MUST confirm SNS subscription (confirmation email will be sent!)
+    - For Development: Personal email OK
+    - For Production: security@domain.com or ops@domain.com recommended
+    - Will receive daily reports at 8 AM UTC
+
+    Alert Types:
+    - Real-time alerts (<5 min): Critical security events
+    - Daily scans (8 AM UTC): Compliance check results
+    - Only sends email if issues are found (or daily summary)
+  EOT
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", var.security_email))
+    error_message = "Must be a valid email address."
+  }
+}
+
 # ----------------------------------------------------------------------------
 # Assets (S3 + CloudFront)
 # ----------------------------------------------------------------------------

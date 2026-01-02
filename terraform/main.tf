@@ -437,6 +437,42 @@ module "amplify_admin" {
 # Zusätzliche Log Groups können hier hinzugefügt werden
 
 # ----------------------------------------------------------------------------
+# Security Monitoring Module - Runtime Security Detection
+# ----------------------------------------------------------------------------
+# Erstellt FREE-tier Security Stack mit:
+# - CloudWatch Alarms (5 real-time security event detectors)
+# - IAM Access Analyzer (detects exposed resources)
+# - SNS Topic (email notifications for security events)
+# - EventBridge Daily Security Scan (Lambda @ 8 AM UTC)
+# - Lambda Security Monitor (compliance checks)
+#
+# Real-time Alarms (<5 min detection):
+# - Unauthorized API calls
+# - Root account usage
+# - IAM policy changes
+# - Security group changes
+# - S3 bucket policy changes
+#
+# Daily Security Scan (8 AM UTC):
+# - Public S3 buckets
+# - Security groups with 0.0.0.0/0
+# - IAM users without MFA
+# - IAM Access Analyzer findings
+#
+# Cost: $0.00/month (all FREE-tier resources)
+# NOTE: After deployment, confirm SNS email subscription!
+
+module "security_monitoring" {
+  source = "./modules/security-monitoring"
+
+  project_name   = var.project_name
+  environment    = var.environment
+  security_email = var.security_email
+
+  tags = local.common_tags
+}
+
+# ----------------------------------------------------------------------------
 # Database Seeding (Optional - nur für Development)
 # ----------------------------------------------------------------------------
 # REMOVED: Old database_seeding module replaced by improved seed script
