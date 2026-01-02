@@ -15,27 +15,7 @@
 name: Deploy Ecokart Infrastructure
 
 on:
-  # Automatic triggers
-  push:
-    branches:
-      - main
-      - develop
-      - staging
-    paths:
-      - 'terraform/**'
-      - 'backend/**'
-      - 'frontend/**'
-      - 'admin-frontend/**'
-      - '.github/workflows/deploy.yml'
-      # Exclude test files and test infrastructure
-      - '!backend/src/**/*.test.ts'
-      - '!backend/src/**/*.integration.test.ts'
-      - '!backend/src/__tests__/**'
-      - '!backend/jest*.config.*'
-      - '!backend/jest*.setup.*'
-      - '!backend/jest*.teardown.*'
-
-  # Manual trigger with options
+  # Manual trigger only (no automatic deploys on push)
   workflow_dispatch:
     inputs:
       environment:
