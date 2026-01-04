@@ -98,6 +98,11 @@ AIR LEGACY is a full-stack e-commerce platform built to demonstrate:
 
 ## 🏗️ Architecture
 
+> **💡 Interactive Architecture Diagram Available!**
+> Explore the full architecture with interactive tooltips, AWS service details, and cost breakdown:
+> **[📊 View Interactive Architecture Presentation](docs/architecture-presentation.html)**
+> _(Open locally in browser - includes hover tooltips for each component)_
+
 ### High-Level Architecture
 
 ```
