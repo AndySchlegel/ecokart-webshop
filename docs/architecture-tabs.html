@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIR LEGACY - Portfolio Architecture Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: white;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* Animated Gradient Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(45deg, #0a0e27, #1a1f3a, #2a1f4a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            top: 50%;
+            right: -150px;
+            animation-delay: 5s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            bottom: -175px;
+            left: 30%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            position: relative;
+            z-index: 10;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px 20px 0 20px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 18px 30px;
+            background: transparent;
+            border: 2px solid transparent;
+            border-radius: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .tab-button:hover::before {
+            opacity: 1;
+        }
+
+        .tab-button:hover {
+            color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-3px);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: rgba(102, 126, 234, 0.5);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab-button.active::before {
+            opacity: 0;
+        }
+
+        /* Tab Content Container */
+        .tab-content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px 20px 40px 20px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Tab 1: Diagram Styles */
+        .diagram-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .diagram-container svg,
+        .diagram-container img,
+        .diagram-container object {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            border-radius: 15px;
+        }
+
+        /* Original architecture-presentation.html styles */
+        .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Glassmorphism Header */
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .header-title {
+            font-size: 4em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-subtitle {
+            font-size: 1.5em;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 30px;
+        }
+
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .header-stat {
+            text-align: center;
+        }
+
+        .header-stat-value {
+            font-size: 2.5em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-stat-label {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        /* Section */
+        .section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2em;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 40px;
+        }
+
+        /* Service Grid */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        /* Glassmorphism Card with 3D */
+        .service-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 35px;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: visible;
+            transform-style: preserve-3d;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px) rotateX(5deg) rotateY(5deg) scale(1.05);
+            box-shadow:
+                0 30px 60px rgba(102, 126, 234, 0.4),
+                0 0 40px rgba(102, 126, 234, 0.2),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        /* Custom SVG Icons */
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px currentColor);
+            transition: all 0.5s;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.2) rotateY(180deg);
+            filter: drop-shadow(0 0 30px currentColor);
+        }
+
+        .service-name {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .service-desc {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            background: rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            background: rgba(102, 126, 234, 0.4);
+            border-color: rgba(102, 126, 234, 0.6);
+            transform: scale(1.1);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: rgba(10, 14, 39, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            border-radius: 20px;
+            padding: 25px;
+            width: 350px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .service-card:hover .tooltip,
+        .stat-box:hover .tooltip {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid rgba(102, 126, 234, 0.5);
+        }
+
+        .tooltip-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #667eea;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .tooltip-section {
+            margin: 15px 0;
+        }
+
+        .tooltip-section-title {
+            font-size: 0.9em;
+            color: #764ba2;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tooltip-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tooltip-list li {
+            padding: 6px 0;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tooltip-list li::before {
+            content: '→';
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Flow Diagram */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.5s;
+            position: relative;
+        }
+
+        .flow-step:hover {
+            transform: scale(1.08) translateY(-10px);
+            border-color: rgba(102, 126, 234, 0.6);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .flow-arrow {
+            font-size: 2.5em;
+            color: #667eea;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .flow-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2em;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s;
+            cursor: pointer;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-value {
+            font-size: 3em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9em;
+        }
+
+        /* Feature List */
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #667eea;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.4s;
+        }
+
+        .feature-item:hover {
+            transform: translateX(15px);
+            background: rgba(255, 255, 255, 0.08);
+            border-left-width: 8px;
+        }
+
+        .feature-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .feature-desc {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.7;
+        }
+
+        /* Tab 3: Lessons Learned Styles */
+        .lessons-header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .lessons-title {
+            font-size: 3.5em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .lessons-subtitle {
+            font-size: 1.3em;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .lesson-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 35px;
+            margin-bottom: 30px;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .lesson-card:hover::before {
+            opacity: 1;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(102, 126, 234, 0.4);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .lesson-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5em;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .lesson-header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 20px;
+        }
+
+        .lesson-title-text {
+            font-size: 1.8em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            padding-right: 70px;
+        }
+
+        .lesson-category {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            margin-bottom: 15px;
+        }
+
+        .lesson-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .lesson-problem {
+            margin-bottom: 20px;
+        }
+
+        .lesson-label {
+            font-size: 0.95em;
+            color: #f093fb;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .lesson-text {
+            color: rgba(255,255,255,0.85);
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+
+        .lesson-solution {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .lesson-impact {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .impact-badge {
+            background: rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-title, .lessons-title {
+                font-size: 2.5em;
+            }
+
+            .section {
+                padding: 30px 20px;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-container {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .tab-button {
+                font-size: 0.9em;
+                padding: 15px 20px;
+            }
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            z-index: 9999;
+            transition: width 0.1s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Background -->
+    <div class="background"></div>
+
+    <!-- Floating Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="switchTab('diagram')">
+                Architecture Diagram
+            </button>
+            <button class="tab-button" onclick="switchTab('details')">
+                Technical Details
+            </button>
+            <button class="tab-button" onclick="switchTab('lessons')">
+                Top 10 Lessons Learned
+            </button>
+        </div>
+    </div>
+
+    <!-- Tab 1: Architecture Diagram -->
+    <div id="diagram" class="tab-content active">
+        <div class="tab-content-wrapper">
+            <div class="diagram-container">
+                <h2 style="font-size: 2.5em; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px;">
+                    Architecture Overview
+                </h2>
+                <p style="color: rgba(255,255,255,0.7); font-size: 1.2em; margin-bottom: 40px;">
+                    High-level view of the AIR LEGACY serverless architecture
+                </p>
+                <object data="architecture-diagram-2-3.drawio.svg" type="image/svg+xml" style="width: 100%; height: auto; min-height: 600px;">
+                    <img src="architecture-diagram-2-3.drawio.svg" alt="Architecture Diagram" style="width: 100%; height: auto;">
+                </object>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 2: Technical Details (COMPLETE ORIGINAL CONTENT) -->
+    <div id="details" class="tab-content">
+        <div class="tab-content-wrapper">
+            <div class="container">
+
+                <!-- Header -->
+                <header>
+                    <div class="header-title">AIR LEGACY</div>
+                    <div class="header-subtitle">Serverless E-Commerce AWS Architecture</div>
+
+                    <div class="header-stats">
+                        <div class="header-stat">
+                            <div class="header-stat-value">15</div>
+                            <div class="header-stat-label">Terraform Modules</div>
+                        </div>
+                        <div class="header-stat">
+                            <div class="header-stat-value">12</div>
+                            <div class="header-stat-label">AWS Services</div>
+                        </div>
+                        <div class="header-stat">
+                            <div class="header-stat-value">100%</div>
+                            <div class="header-stat-label">Serverless</div>
+                        </div>
+                        <div class="header-stat">
+                            <div class="header-stat-value">~$15</div>
+                            <div class="header-stat-label">Monthly Cost</div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Section 1: Frontend Layer -->
+                <div class="section">
+                    <div class="section-title">
+                        <span>Frontend Layer</span>
+                    </div>
+                    <div class="section-subtitle">AWS Amplify + Next.js 14 - Automatically deployed from GitHub</div>
+
+                    <div class="service-grid">
+                        <div class="service-card" onclick="window.open('https://shop.aws.his4irness23.de', '_blank')" style="cursor: pointer;">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- AWS Amplify - Authentic AWS Color #DD344C (Red/Pink) -->
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="#FF9900"/>
+
+                                <!-- Amplify characteristic "A" with wave -->
+                                <path d="M50 25 L70 37.5 L70 62.5 L50 75 L30 62.5 L30 37.5 Z" fill="white" opacity="0.95"/>
+                                <path d="M42 60 L46 50 L50 60 L54 50 L58 60" stroke="#FF9900" stroke-width="3.5" fill="none" opacity="0.95" stroke-linecap="round"/>
+                                <path d="M50 35 L58 48 L42 48 Z" fill="#FF9900" opacity="0.95"/>
+                            </svg>
+
+                            <div class="service-name">Customer Shop 🔗</div>
+                            <div class="service-desc">
+                                Next.js 14 frontend with server-side rendering, deployed on AWS Amplify with automatic builds
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">Next.js 14</span>
+                                <span class="tag">SSR</span>
+                                <span class="tag">TypeScript</span>
+                                <span class="tag">Tailwind CSS</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">Customer Shop Details</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Features</div>
+                                    <ul class="tooltip-list">
+                                        <li>Product browsing with real-time stock</li>
+                                        <li>Shopping cart persistence</li>
+                                        <li>Stripe checkout integration</li>
+                                        <li>Order confirmation emails</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Performance</div>
+                                    <ul class="tooltip-list">
+                                        <li>Global CDN distribution</li>
+                                        <li>Automatic SSL/TLS</li>
+                                        <li>< 2s page load time</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card" onclick="window.open('https://admin.aws.his4irness23.de', '_blank')" style="cursor: pointer;">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- AWS Amplify - Admin with Lock Badge -->
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="#DD344C"/>
+
+                                <!-- Amplify "A" with wave -->
+                                <path d="M50 25 L70 37.5 L70 62.5 L50 75 L30 62.5 L30 37.5 Z" fill="white" opacity="0.95"/>
+                                <path d="M42 60 L46 50 L50 60 L54 50 L58 60" stroke="#DD344C" stroke-width="3.5" fill="none" opacity="0.95" stroke-linecap="round"/>
+                                <path d="M50 35 L58 48 L42 48 Z" fill="#DD344C" opacity="0.95"/>
+
+                                <!-- Admin lock badge -->
+                                <circle cx="68" cy="68" r="10" fill="#DD344C"/>
+                                <rect x="63" y="66" width="10" height="7" rx="2" fill="white" opacity="0.95"/>
+                                <path d="M65 66 L65 63 Q65 61 68 61 Q71 61 71 63 L71 66" stroke="white" stroke-width="1.5" fill="none" opacity="0.95"/>
+                            </svg>
+
+                            <div class="service-name">Admin Dashboard 🔗</div>
+                            <div class="service-desc">
+                                Real-time analytics and management interface with basic auth protection
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">Next.js 14</span>
+                                <span class="tag">Basic Auth</span>
+                                <span class="tag">Analytics</span>
+                                <span class="tag">CRUD</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">Admin Dashboard Details</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Features</div>
+                                    <ul class="tooltip-list">
+                                        <li>Real-time revenue analytics</li>
+                                        <li>Product CRUD operations</li>
+                                        <li>Order management</li>
+                                        <li>Customer overview</li>
+                                        <li>Dynamic trend calculations</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Security</div>
+                                    <ul class="tooltip-list">
+                                        <li>Basic Auth protection</li>
+                                        <li>Cognito JWT validation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: API Layer -->
+                <div class="section">
+                    <div class="section-title">
+                        <span>API Layer</span>
+                    </div>
+                    <div class="section-subtitle">API Gateway + Lambda Backend with Cognito Authorization</div>
+
+                    <div class="service-grid">
+                        <div class="service-card">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- AWS API Gateway - Authentic AWS Purple #8C4FFF -->
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="#8C4FFF"/>
+
+                                <!-- Characteristic code brackets <  > -->
+                                <path d="M35 40 L25 50 L35 60" stroke="white" stroke-width="4" fill="none" opacity="0.95" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M65 40 L75 50 L65 60" stroke="white" stroke-width="4" fill="none" opacity="0.95" stroke-linecap="round" stroke-linejoin="round"/>
+
+                                <!-- Forward slash / in the middle -->
+                                <path d="M55 38 L45 62" stroke="white" stroke-width="4" opacity="0.95" stroke-linecap="round"/>
+                            </svg>
+
+                            <div class="service-name">API Gateway</div>
+                            <div class="service-desc">
+                                REST API with Cognito authorizer, CORS enabled, and rate limiting
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">REST API</span>
+                                <span class="tag">CORS</span>
+                                <span class="tag">Cognito Auth</span>
+                                <span class="tag">Rate Limit</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">API Gateway Details</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Configuration</div>
+                                    <ul class="tooltip-list">
+                                        <li>Custom domain: api.aws.*</li>
+                                        <li>SSL/TLS via ACM</li>
+                                        <li>Throttling: 10k req/s</li>
+                                        <li>Cognito JWT validation</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Endpoints</div>
+                                    <ul class="tooltip-list">
+                                        <li>/api/products (GET, POST)</li>
+                                        <li>/api/orders (GET, POST)</li>
+                                        <li>/api/carts (GET, PUT)</li>
+                                        <li>/api/checkout (POST)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- AWS Lambda - Authentic AWS Orange #ED7100 -->
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="#ED7100"/>
+                                <text x="50" y="68" font-size="50" font-weight="bold" fill="white" text-anchor="middle" opacity="0.95">λ</text>
+                            </svg>
+
+                            <div class="service-name">Lambda Backend</div>
+                            <div class="service-desc">
+                                Node.js 20 with Express.js - Serverless REST API handling all business logic
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">Node.js 20</span>
+                                <span class="tag">Express.js</span>
+                                <span class="tag">512 MB</span>
+                                <span class="tag">30s timeout</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">Lambda Backend Details</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Configuration</div>
+                                    <ul class="tooltip-list">
+                                        <li>Runtime: Node.js 20</li>
+                                        <li>Memory: 512 MB</li>
+                                        <li>Timeout: 30 seconds</li>
+                                        <li>Concurrency: Auto-scaling</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Integrations</div>
+                                    <ul class="tooltip-list">
+                                        <li>DynamoDB for data storage</li>
+                                        <li>Cognito for user auth</li>
+                                        <li>Stripe for payments</li>
+                                        <li>Resend for emails</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- AWS Cognito - Authentic AWS Red/Pink #DD344C -->
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="#DD344C"/>
+
+                                <!-- Characteristic Cognito gear/cog shape -->
+                                <circle cx="50" cy="50" r="20" fill="white" opacity="0.95"/>
+                                <circle cx="50" cy="50" r="12" fill="#DD344C" opacity="0.95"/>
+
+                                <!-- Gear teeth (8 teeth) -->
+                                <rect x="48" y="25" width="4" height="8" fill="white" opacity="0.95" rx="1"/>
+                                <rect x="48" y="67" width="4" height="8" fill="white" opacity="0.95" rx="1"/>
+                                <rect x="25" y="48" width="8" height="4" fill="white" opacity="0.95" rx="1"/>
+                                <rect x="67" y="48" width="8" height="4" fill="white" opacity="0.95" rx="1"/>
+                                <rect x="33" y="33" width="4" height="7" fill="white" opacity="0.95" rx="1" transform="rotate(-45 35 36.5)"/>
+                                <rect x="63" y="33" width="4" height="7" fill="white" opacity="0.95" rx="1" transform="rotate(45 65 36.5)"/>
+                                <rect x="33" y="60" width="4" height="7" fill="white" opacity="0.95" rx="1" transform="rotate(45 35 63.5)"/>
+                                <rect x="63" y="60" width="4" height="7" fill="white" opacity="0.95" rx="1" transform="rotate(-45 65 63.5)"/>
+
+                                <!-- User icon in center -->
+                                <circle cx="50" cy="47" r="4" fill="white" opacity="0.95"/>
+                                <path d="M45 52 Q50 54 55 52" stroke="white" stroke-width="2" fill="none" opacity="0.95"/>
+                            </svg>
+
+                            <div class="service-name">Cognito User Pool</div>
+                            <div class="service-desc">
+                                Email-based authentication with JWT tokens and custom attributes
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">Email Auth</span>
+                                <span class="tag">JWT</span>
+                                <span class="tag">MFA Ready</span>
+                                <span class="tag">Custom Attrs</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">Cognito User Pool Details</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Authentication</div>
+                                    <ul class="tooltip-list">
+                                        <li>Email/Password sign-in</li>
+                                        <li>JWT token generation</li>
+                                        <li>Token refresh support</li>
+                                        <li>MFA ready (not enabled)</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Custom Attributes</div>
+                                    <ul class="tooltip-list">
+                                        <li>User role (customer/admin)</li>
+                                        <li>Metadata storage</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Data Layer -->
+                <div class="section">
+                    <div class="section-title">
+                        <span>Data Layer</span>
+                    </div>
+                    <div class="section-subtitle">DynamoDB NoSQL - 4 Tables with Global Secondary Indexes</div>
+
+                    <div class="service-grid">
+                        <div class="service-card">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- AWS DynamoDB - Authentic AWS Magenta #C925D1 -->
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="#C925D1"/>
+
+                                <!-- Characteristic DynamoDB stack of 3 layers -->
+                                <ellipse cx="50" cy="32" rx="28" ry="9" fill="white" opacity="0.95"/>
+                                <rect x="22" y="32" width="56" height="8" fill="white" opacity="0.95"/>
+                                <ellipse cx="50" cy="40" rx="28" ry="9" fill="white" opacity="0.85"/>
+
+                                <ellipse cx="50" cy="48" rx="28" ry="9" fill="white" opacity="0.8"/>
+                                <rect x="22" y="48" width="56" height="8" fill="white" opacity="0.8"/>
+                                <ellipse cx="50" cy="56" rx="28" ry="9" fill="white" opacity="0.75"/>
+
+                                <ellipse cx="50" cy="64" rx="28" ry="9" fill="white" opacity="0.7"/>
+                                <rect x="22" y="64" width="56" height="8" fill="white" opacity="0.7"/>
+                                <ellipse cx="50" cy="72" rx="28" ry="9" fill="white" opacity="0.65"/>
+                            </svg>
+
+                            <div class="service-name">DynamoDB</div>
+                            <div class="service-desc">
+                                NoSQL database with 4 tables and 3 Global Secondary Indexes for efficient queries
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">Products</span>
+                                <span class="tag">Users</span>
+                                <span class="tag">Carts</span>
+                                <span class="tag">Orders</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">DynamoDB Details</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Tables & Keys</div>
+                                    <ul class="tooltip-list">
+                                        <li>Products: PK=productId</li>
+                                        <li>Users: PK=userId</li>
+                                        <li>Carts: PK=userId</li>
+                                        <li>Orders: PK=orderId</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Global Secondary Indexes</div>
+                                    <ul class="tooltip-list">
+                                        <li>CategoryIndex (products)</li>
+                                        <li>EmailIndex (users)</li>
+                                        <li>UserOrdersIndex (orders)</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Performance</div>
+                                    <ul class="tooltip-list">
+                                        <li>< 10ms read latency</li>
+                                        <li>Provisioned: 5 RCU, 5 WCU</li>
+                                        <li>Cost: ~$2.50/month</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- AWS S3 - Authentic AWS Green #7AA116 -->
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="#7AA116"/>
+
+                                <!-- Characteristic S3 bucket shape -->
+                                <ellipse cx="50" cy="30" rx="24" ry="7" fill="white" opacity="0.95"/>
+                                <path d="M26 30 L26 62 Q26 68 32 68 L68 68 Q74 68 74 62 L74 30 Z" fill="white" opacity="0.95"/>
+                                <ellipse cx="50" cy="30" rx="24" ry="7" fill="none" stroke="white" stroke-width="2" opacity="0.95"/>
+
+                                <!-- Inner depth -->
+                                <ellipse cx="50" cy="36" rx="20" ry="5" fill="#7AA116" opacity="0.2"/>
+                                <ellipse cx="50" cy="42" rx="18" ry="4" fill="#7AA116" opacity="0.15"/>
+
+                                <!-- S3 stripes -->
+                                <path d="M30 48 L70 48" stroke="white" stroke-width="1.5" opacity="0.3"/>
+                                <path d="M31 56 L69 56" stroke="white" stroke-width="1.5" opacity="0.3"/>
+                            </svg>
+
+                            <div class="service-name">S3 + CloudFront</div>
+                            <div class="service-desc">
+                                Product images stored in S3, delivered globally via CloudFront CDN
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">Private Bucket</span>
+                                <span class="tag">Encrypted</span>
+                                <span class="tag">Global CDN</span>
+                                <span class="tag">Lifecycle</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">S3 + CloudFront Details</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">S3 Configuration</div>
+                                    <ul class="tooltip-list">
+                                        <li>Private bucket (no public access)</li>
+                                        <li>Server-side encryption (AES-256)</li>
+                                        <li>Lifecycle rules for old objects</li>
+                                        <li>Versioning enabled</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">CloudFront CDN</div>
+                                    <ul class="tooltip-list">
+                                        <li>Global edge locations</li>
+                                        <li>HTTPS only</li>
+                                        <li>Cache TTL: 24h</li>
+                                        <li>Origin access identity</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Security Monitoring -->
+                <div class="section">
+                    <div class="section-title">
+                        <span>Security Monitoring</span>
+                    </div>
+                    <div class="section-subtitle">$0 Cost - 100% FREE Tier Runtime Security</div>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">CloudWatch Alarms</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">1</div>
+                            <div class="stat-label">Daily Lambda Scan</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">19</div>
+                            <div class="stat-label">Security Resources</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">$0</div>
+                            <div class="stat-label">Monthly Cost</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 12px; vertical-align: middle;">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#FF6B6B" opacity="0.9"/>
+                                <path d="M2 17L12 22L22 17" stroke="#FF6B6B" stroke-width="2" fill="none" opacity="0.9"/>
+                                <path d="M2 12L12 17L22 12" stroke="#FF6B6B" stroke-width="2" fill="none" opacity="0.9"/>
+                                <circle cx="12" cy="7" r="2" fill="white"/>
+                            </svg>
+                            <div class="feature-title" style="display: inline-block;">Real-Time Detection (< 5 min)</div>
+                            <div class="feature-desc">
+                                5 CloudWatch Alarms monitoring: Unauthorized API calls, Root account usage, IAM policy changes, Security group changes, S3 bucket policy changes
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 12px; vertical-align: middle;">
+                                <circle cx="12" cy="12" r="9" stroke="#667eea" stroke-width="2" fill="none" opacity="0.9"/>
+                                <path d="M12 7V12L15 15" stroke="#667eea" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+                                <circle cx="12" cy="12" r="2" fill="#667eea" opacity="0.9"/>
+                            </svg>
+                            <div class="feature-title" style="display: inline-block;">Daily Security Scan (8 AM UTC)</div>
+                            <div class="feature-desc">
+                                Lambda function checks: Public S3 buckets, Security groups with 0.0.0.0/0, IAM users without MFA, IAM Access Analyzer findings
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 12px; vertical-align: middle;">
+                                <rect x="4" y="6" width="16" height="12" rx="2" fill="#10B981" opacity="0.9"/>
+                                <path d="M4 9L12 14L20 9" stroke="white" stroke-width="2" opacity="0.9"/>
+                                <circle cx="18" cy="8" r="3" fill="#FF6B6B"/>
+                                <text x="18" y="10" text-anchor="middle" fill="white" font-size="6" font-weight="bold">!</text>
+                            </svg>
+                            <div class="feature-title" style="display: inline-block;">SNS Email Notifications</div>
+                            <div class="feature-desc">
+                                Immediate email alerts sent to andy.schlegel23@googlemail.com for all security findings and alarms
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 12px; vertical-align: middle;">
+                                <circle cx="12" cy="12" r="9" fill="#8C4FFF" opacity="0.9"/>
+                                <path d="M8 12L10 14L16 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="18" cy="6" r="4" fill="#10B981"/>
+                                <text x="18" y="8.5" text-anchor="middle" fill="white" font-size="6" font-weight="bold">✓</text>
+                            </svg>
+                            <div class="feature-title" style="display: inline-block;">DevSecOps Scanning</div>
+                            <div class="feature-desc">
+                                GitHub Actions runs tfsec, Checkov, and Trufflehog on every PR/Push - SARIF results uploaded to GitHub Security tab
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 5: User Journey -->
+                <div class="section">
+                    <div class="section-title">
+                        <span>User Journey</span>
+                    </div>
+                    <div class="section-subtitle">From browsing to order confirmation</div>
+
+                    <div class="flow-container">
+                        <div class="flow-step">
+                            <div class="flow-number">1</div>
+                            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="28" fill="url(#flow1)"/>
+                                <path d="M20 25 L40 25 L40 45 L20 45 Z" fill="white" opacity="0.9"/>
+                                <defs>
+                                    <linearGradient id="flow1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <h3 style="margin: 15px 0 8px 0;">Browse Products</h3>
+                            <p style="color: rgba(255,255,255,0.7); font-size: 0.9em;">Shop homepage with real-time stock levels</p>
+                        </div>
+
+                        <div class="flow-arrow">→</div>
+
+                        <div class="flow-step">
+                            <div class="flow-number">2</div>
+                            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="28" fill="url(#flow2)"/>
+                                <circle cx="25" cy="30" r="10" stroke="white" stroke-width="3" fill="none"/>
+                                <circle cx="40" cy="30" r="10" stroke="white" stroke-width="3" fill="none"/>
+                                <defs>
+                                    <linearGradient id="flow2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <h3 style="margin: 15px 0 8px 0;">Add to Cart</h3>
+                            <p style="color: rgba(255,255,255,0.7); font-size: 0.9em;">Persistent cart in DynamoDB</p>
+                        </div>
+
+                        <div class="flow-arrow">→</div>
+
+                        <div class="flow-step">
+                            <div class="flow-number">3</div>
+                            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="28" fill="url(#flow3)"/>
+                                <rect x="20" y="25" width="20" height="15" rx="2" fill="white" opacity="0.9"/>
+                                <defs>
+                                    <linearGradient id="flow3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <h3 style="margin: 15px 0 8px 0;">Stripe Checkout</h3>
+                            <p style="color: rgba(255,255,255,0.7); font-size: 0.9em;">Secure payment processing</p>
+                        </div>
+
+                        <div class="flow-arrow">→</div>
+
+                        <div class="flow-step">
+                            <div class="flow-number">4</div>
+                            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="30" cy="30" r="28" fill="url(#flow4)"/>
+                                <rect x="18" y="22" width="24" height="16" rx="2" fill="white" opacity="0.9"/>
+                                <path d="M18 25 L30 32 L42 25" stroke="url(#flow4)" stroke-width="2"/>
+                                <defs>
+                                    <linearGradient id="flow4" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <h3 style="margin: 15px 0 8px 0;">Email Confirmation</h3>
+                            <p style="color: rgba(255,255,255,0.7); font-size: 0.9em;">Resend order confirmation</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 6: Infrastructure -->
+                <div class="section">
+                    <div class="section-title">
+                        <span>Infrastructure as Code</span>
+                    </div>
+                    <div class="section-subtitle">15 Terraform Modules - 100% GitOps Workflow</div>
+
+                    <div class="service-grid">
+                        <div class="service-card">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Terraform recognizable logo with T -->
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="url(#gradient8)"/>
+                                <!-- Terraform characteristic shapes -->
+                                <path d="M30 30 L45 40 L45 65 L30 55 Z" fill="white" opacity="0.9"/>
+                                <path d="M45 40 L60 30 L60 55 L45 65 Z" fill="white" opacity="0.7"/>
+                                <path d="M60 30 L75 40 L75 65 L60 55 Z" fill="white" opacity="0.5"/>
+                                <!-- Large T -->
+                                <text x="50" y="85" text-anchor="middle" fill="white" font-size="20" font-weight="bold" opacity="0.9">T</text>
+                                <defs>
+                                    <linearGradient id="gradient8" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#5b21b6;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+
+                            <div class="service-name">Terraform</div>
+                            <div class="service-desc">
+                                15 modular Terraform configurations managing all AWS infrastructure
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">15 Modules</span>
+                                <span class="tag">100% IaC</span>
+                                <span class="tag">State: S3</span>
+                                <span class="tag">Lock: DynamoDB</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">Terraform Modules</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Core Modules</div>
+                                    <ul class="tooltip-list">
+                                        <li>dynamodb - 4 tables</li>
+                                        <li>lambda - Backend function</li>
+                                        <li>cognito - User pool</li>
+                                        <li>amplify - 2x frontends</li>
+                                        <li>ses - Email templates</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Additional</div>
+                                    <ul class="tooltip-list">
+                                        <li>assets - S3 + CloudFront</li>
+                                        <li>custom-domain - Route53</li>
+                                        <li>security-monitoring</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- GitHub Actions recognizable icon: Octocat with play symbol -->
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="url(#gradient9)"/>
+                                <!-- Simplified GitHub Octocat head -->
+                                <circle cx="50" cy="45" r="22" fill="white" opacity="0.9"/>
+                                <!-- Eyes -->
+                                <circle cx="42" cy="42" r="4" fill="url(#gradient9)"/>
+                                <circle cx="58" cy="42" r="4" fill="url(#gradient9)"/>
+                                <!-- Ears -->
+                                <circle cx="32" cy="30" r="6" fill="white" opacity="0.9"/>
+                                <circle cx="68" cy="30" r="6" fill="white" opacity="0.9"/>
+                                <!-- Actions play symbol -->
+                                <path d="M45 65 L45 80 L60 72.5 Z" fill="white" opacity="0.9"/>
+                                <defs>
+                                    <linearGradient id="gradient9" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#334155;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+
+                            <div class="service-name">GitHub Actions</div>
+                            <div class="service-desc">
+                                Automated CI/CD pipeline with security scanning and manual approval gates
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">Security Scan</span>
+                                <span class="tag">TF Plan</span>
+                                <span class="tag">Manual Gate</span>
+                                <span class="tag">Deploy</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">CI/CD Pipeline</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Workflows</div>
+                                    <ul class="tooltip-list">
+                                        <li>security-scan.yml (tfsec, Checkov)</li>
+                                        <li>deploy.yml (Terraform Apply)</li>
+                                        <li>nuclear-cleanup.yml (Destroy)</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Features</div>
+                                    <ul class="tooltip-list">
+                                        <li>OIDC authentication (no keys!)</li>
+                                        <li>Manual approval for prod</li>
+                                        <li>SARIF upload to Security tab</li>
+                                        <li>~10 min full deploy</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7: External Services -->
+                <div class="section">
+                    <div class="section-title">
+                        <span>External Integrations</span>
+                    </div>
+                    <div class="section-subtitle">3rd Party Services - Payments & Email</div>
+
+                    <div class="service-grid">
+                        <div class="service-card">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Stripe recognizable logo -->
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="url(#gradient10)"/>
+                                <!-- Credit card shape -->
+                                <rect x="20" y="30" width="60" height="40" rx="5" fill="white" opacity="0.9"/>
+                                <!-- Card magnetic stripe -->
+                                <rect x="20" y="40" width="60" height="8" fill="url(#gradient10)" opacity="0.3"/>
+                                <!-- Stripe logo: characteristic curved S stripe -->
+                                <path d="M35 55 Q40 52 45 55 T55 55 Q60 52 65 55" stroke="url(#gradient10)" stroke-width="4" fill="none" opacity="0.9"/>
+                                <defs>
+                                    <linearGradient id="gradient10" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#635bff;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#0a2540;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+
+                            <div class="service-name">Stripe</div>
+                            <div class="service-desc">
+                                Payment processing with checkout sessions and webhook integration
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">Checkout</span>
+                                <span class="tag">Webhooks</span>
+                                <span class="tag">Test Mode</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">Stripe Integration</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Features</div>
+                                    <ul class="tooltip-list">
+                                        <li>Checkout session creation</li>
+                                        <li>Webhook event handling</li>
+                                        <li>Payment intent confirmation</li>
+                                        <li>Test card: 4242 4242 4242 4242</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Security</div>
+                                    <ul class="tooltip-list">
+                                        <li>Webhook signature validation</li>
+                                        <li>Secret stored in Parameter Store</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card">
+                            <svg class="service-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="10" width="80" height="80" rx="15" fill="url(#gradient11)"/>
+                                <rect x="25" y="30" width="50" height="35" rx="5" fill="white" opacity="0.9"/>
+                                <path d="M25 35 L50 47 L75 35" stroke="url(#gradient11)" stroke-width="3"/>
+                                <defs>
+                                    <linearGradient id="gradient11" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#0284c7;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+
+                            <div class="service-name">Resend</div>
+                            <div class="service-desc">
+                                Transactional email service for order confirmations and notifications
+                            </div>
+
+                            <div class="service-tags">
+                                <span class="tag">3K/month FREE</span>
+                                <span class="tag">HTML Templates</span>
+                                <span class="tag">Tracking</span>
+                            </div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">Resend Email Service</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Email Types</div>
+                                    <ul class="tooltip-list">
+                                        <li>Order confirmation emails</li>
+                                        <li>Welcome emails</li>
+                                        <li>Custom HTML templates</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Features</div>
+                                    <ul class="tooltip-list">
+                                        <li>3,000 emails/month FREE</li>
+                                        <li>Template variables support</li>
+                                        <li>Delivery tracking</li>
+                                        <li>From: noreply@ecokart.com</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Stats -->
+                <div class="section">
+                    <div class="section-title">
+                        <span>Project Statistics</span>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-value">~15K</div>
+                            <div class="stat-label">Lines of Code</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">Terraform Modules</div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">15 Terraform Modules</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Core Infrastructure</div>
+                                    <ul class="tooltip-list">
+                                        <li>dynamodb (Tables + GSI)</li>
+                                        <li>lambda (Express.js Monolith, 16 Endpoints)</li>
+                                        <li>api-gateway (REST API)</li>
+                                        <li>cognito (User Pools)</li>
+                                        <li>assets (S3 Buckets)</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Frontend & Operations</div>
+                                    <ul class="tooltip-list">
+                                        <li>amplify-customer (Shop Hosting)</li>
+                                        <li>amplify-admin (Admin Dashboard)</li>
+                                        <li>custom-domain (CloudFront)</li>
+                                        <li>route53 (DNS Configuration)</li>
+                                        <li>ses-resend (Email Service)</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Security & Monitoring</div>
+                                    <ul class="tooltip-list">
+                                        <li>security-monitoring (CloudWatch)</li>
+                                        <li>cloudwatch-logs (Log Groups)</li>
+                                        <li>iam-roles (Permissions)</li>
+                                        <li>parameter-store (Secrets)</li>
+                                        <li>database-seeding (Auto-Setup)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">AWS Services</div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">12 AWS Services</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Core Services</div>
+                                    <ul class="tooltip-list">
+                                        <li>AWS Lambda (Backend Logic)</li>
+                                        <li>API Gateway (REST API)</li>
+                                        <li>DynamoDB (NoSQL Database)</li>
+                                        <li>S3 (Asset Storage)</li>
+                                        <li>CloudFront (CDN)</li>
+                                        <li>Cognito (Authentication)</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Supporting Services</div>
+                                    <ul class="tooltip-list">
+                                        <li>Amplify Hosting (2x - Shop + Admin)</li>
+                                        <li>Route53 (DNS)</li>
+                                        <li>ACM (SSL Certificates)</li>
+                                        <li>CloudWatch (Monitoring & Logs)</li>
+                                        <li>SNS (Notifications)</li>
+                                        <li>EventBridge (Event Orchestration)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">~10min</div>
+                            <div class="stat-label">Deploy Time</div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">Deployment Time</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Full Stack Deployment</div>
+                                    <ul class="tooltip-list">
+                                        <li>~10 minutes from zero to production</li>
+                                        <li>Automated via GitHub Actions</li>
+                                        <li>Terraform Apply + Amplify Build</li>
+                                        <li>Includes database seeding</li>
+                                        <li>Manual approval gate for production</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">CI/CD Pipeline</div>
+                                    <ul class="tooltip-list">
+                                        <li>Security scan (tfsec, Checkov)</li>
+                                        <li>Terraform plan review</li>
+                                        <li>One-click deployment</li>
+                                        <li>Automatic rollback on failure</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">39</div>
+                            <div class="stat-label">Documented Learnings</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">~$15</div>
+                            <div class="stat-label">Monthly Cost</div>
+
+                            <div class="tooltip">
+                                <div class="tooltip-title">Cost Breakdown (~$15/month)</div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Main Costs</div>
+                                    <ul class="tooltip-list">
+                                        <li>AWS Amplify: ~$5.00 (2x Hosting)</li>
+                                        <li>DynamoDB: ~$2.50 (On-Demand)</li>
+                                        <li>CloudWatch: ~$1.00 (Logs + Metrics)</li>
+                                        <li>CloudFront: ~$1.00 (CDN Traffic)</li>
+                                        <li>API Gateway: ~$1.00 (REST Calls)</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">Minor Costs</div>
+                                    <ul class="tooltip-list">
+                                        <li>S3 Storage: ~$0.50</li>
+                                        <li>Route53: ~$0.50 (Hosted Zone)</li>
+                                        <li>Lambda: ~$0.20 (Free Tier)</li>
+                                    </ul>
+                                </div>
+                                <div class="tooltip-section">
+                                    <div class="tooltip-section-title">FREE Services</div>
+                                    <ul class="tooltip-list">
+                                        <li>Cognito (User Auth)</li>
+                                        <li>SNS (Notifications)</li>
+                                        <li>EventBridge (Events)</li>
+                                        <li>ACM (SSL Certificates)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 3: Lessons Learned -->
+    <div id="lessons" class="tab-content">
+        <div class="tab-content-wrapper">
+            <div class="lessons-header">
+                <div class="lessons-title">Top 10 Lessons Learned</div>
+                <div class="lessons-subtitle">From Tutorial to Production-Ready: November 2025 - January 2026</div>
+            </div>
+
+            <!-- PHASE 1: Initial Setup & Crisis Management -->
+
+<!-- Lesson 1 -->
+            <div class="lesson-card">
+                <div class="lesson-number">1</div>
+                <div class="lesson-header">
+                    <div class="lesson-title-text">GitHub Actions OIDC - Eliminating Static AWS Keys</div>
+                    <div class="lesson-category">Phase 1: Security Excellence</div>
+                </div>
+                <div class="lesson-content">
+                    <div class="lesson-problem">
+                        <div class="lesson-label">Old Approach</div>
+                        <div class="lesson-text">
+                            AWS access keys stored as GitHub secrets. Long-lived credentials with manual rotation required. Major security risk if secrets leak or repository is compromised.
+                        </div>
+                    </div>
+                    <div class="lesson-solution">
+                        <div class="lesson-label">Modern Approach</div>
+                        <div class="lesson-text">
+                            Implemented GitHub OIDC with AWS IAM roles. Short-lived tokens (15 min lifetime), no secrets stored in GitHub, automatic rotation. GitHub workflow authenticates directly with AWS using federation trust.
+                        </div>
+                    </div>
+                    <div class="lesson-impact">
+                        <div class="impact-badge">No Stored Keys</div>
+                        <div class="impact-badge">15 Min Token Lifetime</div>
+                        <div class="impact-badge">Auto Rotation</div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Lesson 2 -->
+            <div class="lesson-card">
+                <div class="lesson-number">2</div>
+                <div class="lesson-header">
+                    <div class="lesson-title-text">Git Branching Strategy - Professional Workflow</div>
+                    <div class="lesson-category">Phase 1: Initial Setup</div>
+                </div>
+                <div class="lesson-content">
+                    <div class="lesson-problem">
+                        <div class="lesson-label">The Mistake</div>
+                        <div class="lesson-text">
+                            Initially pushed directly to main branch. Every change went live immediately - risky and unprofessional! No testing environment, no code review.
+                        </div>
+                    </div>
+                    <div class="lesson-solution">
+                        <div class="lesson-label">The Solution</div>
+                        <div class="lesson-text">
+                            Implemented develop → staging → main workflow. Develop for experimentation, staging for final tests, main for production. Pull requests enable code review before merge.
+                        </div>
+                    </div>
+                    <div class="lesson-impact">
+                        <div class="impact-badge">3-Branch Strategy</div>
+                        <div class="impact-badge">Prevents Production Outages</div>
+                        <div class="impact-badge">Team-Ready Workflow</div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Lesson 3 -->
+            <div class="lesson-card">
+                <div class="lesson-number">3</div>
+                <div class="lesson-header">
+                    <div class="lesson-title-text">Terraform State Corruption - The 8-Hour Debugging Marathon</div>
+                    <div class="lesson-category">Phase 1: Crisis Management</div>
+                </div>
+                <div class="lesson-content">
+                    <div class="lesson-problem">
+                        <div class="lesson-label">The Crisis</div>
+                        <div class="lesson-text">
+                            After changing deployment architecture from terraform/examples/basic/ to terraform/ root, state became corrupted. Error: "Provider configuration not present". Resources existed in AWS but Terraform couldn't map them. All infrastructure operations blocked.
+                        </div>
+                    </div>
+                    <div class="lesson-solution">
+                        <div class="lesson-label">The Solution</div>
+                        <div class="lesson-text">
+                            Developed "Nuclear Cleanup" workflow: Manual AWS resource deletion via CLI → State file deletion → Fresh deployment. Automated as GitHub Actions workflow for reproducible disaster recovery. Now when Terraform fails, we have a backup plan.
+                        </div>
+                    </div>
+                    <div class="lesson-impact">
+                        <div class="impact-badge">Nuclear Cleanup Workflow</div>
+                        <div class="impact-badge">8 Hours Debugging</div>
+                        <div class="impact-badge">100% Reproducible Recovery</div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Lesson 4 -->
+            <div class="lesson-card">
+                <div class="lesson-number">4</div>
+                <div class="lesson-header">
+                    <div class="lesson-title-text">Amplify Webhook Permissions - 8 Iterations to Success</div>
+                    <div class="lesson-category">Phase 1: IAM Deep Dive</div>
+                </div>
+                <div class="lesson-content">
+                    <div class="lesson-problem">
+                        <div class="lesson-label">The Error</div>
+                        <div class="lesson-text">
+                            AccessDeniedException: amplify:CreateWebhook on resource. GitHub OIDC role couldn't create Amplify webhooks for automatic deployments. Tried 7 different IAM policy combinations, all failed.
+                        </div>
+                    </div>
+                    <div class="lesson-solution">
+                        <div class="lesson-label">The Solution</div>
+                        <div class="lesson-text">
+                            IAM policy needs TWO separate statements: CreateWebhook on APP resource (arn:aws:amplify:*:*:apps/*), AND GetWebhook on WEBHOOK resource (arn:aws:amplify:*:*:apps/*/webhooks/*). Different actions operate on different resource types!
+                        </div>
+                    </div>
+                    <div class="lesson-impact">
+                        <div class="impact-badge">8 Iterations</div>
+                        <div class="impact-badge">Granular IAM Permissions</div>
+                        <div class="impact-badge">Trial & Error Documented</div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Lesson 5 -->
+            <div class="lesson-card">
+                <div class="lesson-number">5</div>
+                <div class="lesson-header">
+                    <div class="lesson-title-text">Cost Optimization - Environment-Based Sizing</div>
+                    <div class="lesson-category">Phase 1: Business Value</div>
+                </div>
+                <div class="lesson-content">
+                    <div class="lesson-problem">
+                        <div class="lesson-label">The Insight</div>
+                        <div class="lesson-text">
+                            Development doesn't need production-level resources. Running 3 identical environments (dev, staging, prod) at full capacity would cost 360 EUR/month - unsustainable for learning project!
+                        </div>
+                    </div>
+                    <div class="lesson-solution">
+                        <div class="lesson-label">The Strategy</div>
+                        <div class="lesson-text">
+                            Dev: 256 MB Lambda + PAY_PER_REQUEST (~25 EUR). Staging: 512 MB + low provisioned (~50 EUR). Prod: 1024 MB + high provisioned (~120 EUR). Total: 195 EUR/month. Destroy dev when idle saves another 75%!
+                        </div>
+                    </div>
+                    <div class="lesson-impact">
+                        <div class="impact-badge">45% Cost Reduction</div>
+                        <div class="impact-badge">Right-Sized Resources</div>
+                        <div class="impact-badge">Destroy Dev When Idle</div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Lesson 6 -->
+            <div class="lesson-card">
+                <div class="lesson-number">6</div>
+                <div class="lesson-header">
+                    <div class="lesson-title-text">Frontend Token Storage Bug - The Invisible Problem</div>
+                    <div class="lesson-category">Phase 1: Technical Debugging</div>
+                </div>
+                <div class="lesson-content">
+                    <div class="lesson-problem">
+                        <div class="lesson-label">The Mystery</div>
+                        <div class="lesson-text">
+                            Login worked, console showed "User logged in", Lambda logs showed "JWT validated successfully", but cart requests returned 401 Unauthorized. localStorage was EMPTY! Token was received but never persisted.
+                        </div>
+                    </div>
+                    <div class="lesson-solution">
+                        <div class="lesson-label">The Fix</div>
+                        <div class="lesson-text">
+                            Frontend authentication code received tokens from Cognito but didn't save them to localStorage. Added explicit token persistence after login/registration. Now tokens survive page refreshes and subsequent requests work.
+                        </div>
+                    </div>
+                    <div class="lesson-impact">
+                        <div class="impact-badge">State Management Critical</div>
+                        <div class="impact-badge">12 Hours Debugging</div>
+                        <div class="impact-badge">Silent Failure Pattern</div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Lesson 7 -->
+            <div class="lesson-card">
+                <div class="lesson-number">7</div>
+                <div class="lesson-header">
+                    <div class="lesson-title-text">Stripe Webhook Handler - Gateway to Custom Domains</div>
+                    <div class="lesson-category">Phase 2: Real-World Integration</div>
+                </div>
+                <div class="lesson-content">
+                    <div class="lesson-problem">
+                        <div class="lesson-label">The Challenge</div>
+                        <div class="lesson-text">
+                            Async payment flow: Customer redirected to Stripe → Payment → Webhook callback. Webhook signature verification failed due to rotated secret mismatch. Cart not clearing because wrong DynamoDB key (cart.id vs userId). This was the catalyst for implementing complete custom domains!
+                        </div>
+                    </div>
+                    <div class="lesson-solution">
+                        <div class="lesson-label">The Implementation</div>
+                        <div class="lesson-text">
+                            Lambda webhook handler validates Stripe signature (synced secret!), extracts metadata (userId, shippingAddress), creates order in DynamoDB, deducts stock, clears cart (using correct userId key!), triggers email. Idempotent - handles duplicate webhooks safely.
+                        </div>
+                    </div>
+                    <div class="lesson-impact">
+                        <div class="impact-badge">Secure Payment Flow</div>
+                        <div class="impact-badge">Idempotent Design</div>
+                        <div class="impact-badge">Led to Custom Domains</div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Lesson 8 -->
+            <div class="lesson-card">
+                <div class="lesson-number">8</div>
+                <div class="lesson-header">
+                    <div class="lesson-title-text">Terraform Seed Module - 100% Automatic Reproducibility</div>
+                    <div class="lesson-category">Phase 2: Infrastructure Mastery</div>
+                </div>
+                <div class="lesson-content">
+                    <div class="lesson-problem">
+                        <div class="lesson-label">The Discovery</div>
+                        <div class="lesson-text">
+                            After hundreds of nuclear cleanups, database always came back with 31 products seeded! Mystery: Where was the seeding script? Found hidden null_resource in terraform/modules/seed/ using local-exec provisioner with timestamp trigger.
+                        </div>
+                    </div>
+                    <div class="lesson-solution">
+                        <div class="lesson-label">The Magic</div>
+                        <div class="lesson-text">
+                            Terraform null_resource with timestamp() trigger runs npm run dynamodb:migrate:single + create-test-user.js on EVERY apply. Products loaded from JSON, test users created automatically. Zero manual steps post-deployment!
+                        </div>
+                    </div>
+                    <div class="lesson-impact">
+                        <div class="impact-badge">Fully Automated</div>
+                        <div class="impact-badge">100% Reproducible</div>
+                        <div class="impact-badge">Zero Manual Steps</div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Lesson 9 -->
+            <div class="lesson-card">
+                <div class="lesson-number">9</div>
+                <div class="lesson-header">
+                    <div class="lesson-title-text">AWS SES Saga - From Sandbox to Resend in 90 Minutes</div>
+                    <div class="lesson-category">Phase 3: Production Crisis</div>
+                </div>
+                <div class="lesson-content">
+                    <div class="lesson-problem">
+                        <div class="lesson-label">The Crisis Timeline</div>
+                        <div class="lesson-text">
+                            SES remained in sandbox (only verified emails). Requested production access → AWS REJECTED (Case 176720597300389: "Unable to provide details about criteria"). Tried SendGrid → Failed. 1 hour before demo, no production email capability!
+                        </div>
+                    </div>
+                    <div class="lesson-solution">
+                        <div class="lesson-label">The 90-Minute Rescue</div>
+                        <div class="lesson-text">
+                            Pivoted to Resend API: Updated Lambda environment variables, replaced AWS SES SDK with Resend API client, tested with real orders. Zero downtime migration. 3,000 emails/month FREE tier. Production-ready just in time!
+                        </div>
+                    </div>
+                    <div class="lesson-impact">
+                        <div class="impact-badge">90 Min Migration</div>
+                        <div class="impact-badge">Zero Downtime</div>
+                        <div class="impact-badge">Crisis Management</div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Lesson 10 -->
+            <div class="lesson-card">
+                <div class="lesson-number">10</div>
+                <div class="lesson-header">
+                    <div class="lesson-title-text">Security Scanning Reveals Secret Leak - Complete Security Overhaul</div>
+                    <div class="lesson-category">Phase 3: Security Excellence</div>
+                </div>
+                <div class="lesson-content">
+                    <div class="lesson-problem">
+                        <div class="lesson-label">The Discovery</div>
+                        <div class="lesson-text">
+                            Integrated tfsec + Checkov security scanning in GitHub Actions (Phase 3 final polish). Scans revealed Stripe webhook secret leaked in git history! Old secret whsec_ehb... exposed publicly.
+                        </div>
+                    </div>
+                    <div class="lesson-solution">
+                        <div class="lesson-label">The Complete Fix</div>
+                        <div class="lesson-text">
+                            1) Rotated Stripe webhook secret immediately. 2) Updated GitHub Secrets. 3) Implemented CloudWatch Alarms (unauthorized calls, root usage, policy changes). 4) Added IAM Access Analyzer. 5) Lambda security monitor with daily scans (8 AM UTC). 6) SNS email alerts. Total cost: $0 (FREE tier)!
+                        </div>
+                    </div>
+                    <div class="lesson-impact">
+                        <div class="impact-badge">Secret Rotation Complete</div>
+                        <div class="impact-badge">$0 Runtime Security</div>
+                        <div class="impact-badge">Defense in Depth</div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const orbs = document.querySelectorAll('.orb');
+            orbs.forEach((orb, index) => {
+                const speed = 0.5 + (index * 0.1);
+                orb.style.transform = 'translateY(' + (scrolled * speed) + 'px)';
+            });
+        });
+    </script>
+</body>
+</html>
