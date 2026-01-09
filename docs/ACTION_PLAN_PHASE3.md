@@ -1,0 +1,736 @@
+# 🚀 ACTION PLAN PHASE 3 - Final Polish & Feature Enhancements
+
+**Created:** 6. Januar 2026
+**Purpose:** Portfolio Excellence + User Feedback Integration
+**Status:** 🟢 READY TO START
+**Timeline:** 1-2 Wochen
+
+---
+
+## 🎯 Mission Statement
+
+> **"Portfolio-Perfect + Production-Grade UX"**
+>
+> Basierend auf User-Feedback und Portfolio-Anforderungen:
+> - ✅ Architektur-Diagramm mit echten AWS Icons
+> - ✅ Feature-Enhancements aus Freund-Feedback
+> - ✅ Kompletter Repo-Cleanup
+> - ✅ DSGVO-Compliance (Impressum/Datenschutz)
+
+---
+
+## 📊 Die 4 Themen-Bereiche
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                    PHASE 3 STRUCTURE                           │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  📐 BEREICH 1: Architecture Visualization (PRIORITY 1)        │
+│  └─ AWS Flow-Diagramm mit echten Icons (Stephane-Style)       │
+│                                                                │
+│  🎨 BEREICH 2: UX/Feature Enhancements (PRIORITY 1)           │
+│  ├─ Produkt-Tagging & Intelligente Suche                      │
+│  ├─ User Profile & Bestellhistorie                            │
+│  ├─ Favoriten/Wishlist                                        │
+│  ├─ Adress-Validierung (PLZ 5 Stellen)                        │
+│  └─ Impressum & Datenschutz                                   │
+│                                                                │
+│  🧹 BEREICH 3: Repository Cleanup (PRIORITY 2)                │
+│  └─ Dead Code, Unused Files, Dokumentation                    │
+│                                                                │
+│  📚 BEREICH 4: Documentation Polish (PRIORITY 3)              │
+│  └─ README Final Review, Screenshots Update                   │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+# 📐 BEREICH 1: Architecture Visualization
+
+## Task 1.1: AWS Flow-Diagramm (Stephane Maarek Style)
+
+**Priority:** 🔴 CRITICAL (Portfolio-Differentiator!)
+**Effort:** 2-3 Stunden
+**Impact:** ⭐⭐⭐⭐⭐
+
+### Was genau?
+
+Erstelle ein **kompaktes Flow-Diagramm** ähnlich wie in AWS Kursen:
+- **Echte AWS Icons** (die bunten, quadratischen)
+- **Pfeile mit Beschriftungen** (REST API, invoke, query, etc.)
+- **Horizontaler Flow** (links → rechts)
+- **Für Präsentationen geeignet**
+
+### Inspiration (Screenshots vom User):
+
+**Layout-Typ 1:** Vertikaler Flow mit Branching
+```
+         Users
+       /   |   \
+      /    |    \
+Static  REST   Login
+Content  API   (Cognito)
+   |      |      |
+  S3    API GW  Auth
+         |
+       Lambda
+         |
+     DynamoDB
+```
+
+**Layout-Typ 2:** Horizontaler Data Flow
+```
+Client → API Gateway → Lambda → DynamoDB
+            ↓
+         Cognito (Verify Auth)
+```
+
+**Layout-Typ 3:** Service Grid
+```
+API Gateway    Kinesis    DynamoDB    S3    CloudFront
+CloudWatch     Logs       SNS         SQS   Cognito
+```
+
+### Implementierungs-Optionen:
+
+#### **Option A: PowerPoint + AWS Icons** ⭐ EMPFOHLEN
+- Download AWS Architecture Icons (haben wir schon!)
+- Erstelle simple PPT/Keynote Slides
+- Export als PNG/SVG
+- Vorteil: Schnell, flexibel, präsentationsfertig
+
+#### **Option B: Draw.io mit AWS Icons**
+- Import AWS Icon Library in Draw.io
+- Professionelles Flow-Diagramm erstellen
+- Export als SVG
+- Vorteil: Versionierbar, wiederverwendbar
+
+#### **Option C: HTML/CSS Flow-Diagramm**
+- Ähnlich wie infrastructure-overview.html
+- Aber horizontaler Flow statt vertikal
+- Echte AWS Icons als SVG
+- Vorteil: Interaktiv, im Repo versioniert
+
+### Deliverables:
+
+```
+docs/
+├── architecture-flow.png         # Haupt-Diagramm (für README)
+├── architecture-flow.svg         # Vector-Version
+├── architecture-flow.pptx        # Source (editierbar)
+└── architecture-flow-detailed.png # Mit allen Services
+```
+
+### Success Criteria:
+
+- ✅ Zeigt **kompletten Request-Flow** (User → Response)
+- ✅ **Alle 12 AWS Services** sichtbar
+- ✅ **Echte AWS Icons** (bunten, quadratischen)
+- ✅ **Beschriftete Pfeile** (REST API, invoke, query, etc.)
+- ✅ **Präsentationsfertig** (sauber, professionell)
+- ✅ **Im README eingebunden**
+
+---
+
+# 🎨 BEREICH 2: UX/Feature Enhancements
+
+## Task 2.1: Produkt-Tagging & Intelligente Suche
+
+**Priority:** 🟡 MEDIUM
+**Effort:** 4-6 Stunden
+**Impact:** ⭐⭐⭐⭐
+
+### Problem:
+- Kein Produkt-Filtering außer Kategorien
+- Keine Tag-basierte Suche
+- Keine intelligente Suche (Fuzzy, Partial Match)
+
+### Solution:
+
+**Backend (DynamoDB):**
+```typescript
+// Extend Product Schema
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  tags: string[];        // NEW: ["bio", "vegan", "regional"]
+  searchTerms: string[]; // NEW: ["apfel", "äpfel", "apple"]
+}
+
+// DynamoDB GSI for Tag-Based Search
+GSI: TagIndex
+  PK: tag
+  SK: productId
+```
+
+**Frontend (Search Component):**
+```typescript
+// Intelligent Search Features:
+1. Multi-Tag Filter (AND/OR logic)
+2. Fuzzy Search (Fuse.js)
+3. Auto-Suggest
+4. Recent Searches
+```
+
+**Example Tags:**
+- Eigenschaften: `bio`, `vegan`, `regional`, `fair-trade`
+- Allergene: `glutenfrei`, `laktosefrei`, `nussfrei`
+- Saison: `winter`, `sommer`, `ganzjährig`
+- Herkunft: `deutschland`, `spanien`, `lokal`
+
+### Implementation:
+
+```
+1. Database Migration (Terraform Seed Module)
+   - Add tags to existing products
+   - Create TagIndex GSI
+
+2. Backend (Lambda)
+   - /products/search endpoint
+   - Tag-based filtering
+   - Fuzzy search logic
+
+3. Frontend (Next.js)
+   - Search Bar Component
+   - Tag Filter UI
+   - Auto-Suggest
+```
+
+### Success Criteria:
+
+- ✅ Products haben `tags` Feld
+- ✅ Tag-Filter UI in Product List
+- ✅ Intelligente Suche (Fuzzy, Partial)
+- ✅ Min. 3-5 Tags pro Produkt
+- ✅ Performance: <200ms Search Response
+
+---
+
+## Task 2.2: User Profile & Bestellhistorie
+
+**Priority:** 🟡 MEDIUM
+**Effort:** 6-8 Stunden
+**Impact:** ⭐⭐⭐⭐⭐
+
+### Problem:
+- Kein User Profile/Dashboard
+- Keine Bestellhistorie sichtbar
+- User weiß nicht, ob er eingeloggt ist
+
+### Solution:
+
+**Frontend Changes:**
+
+```typescript
+// New Pages:
+/profile          → User Dashboard
+/profile/orders   → Order History
+/profile/settings → Account Settings
+
+// New Components:
+<UserProfileCard />     → Name, Email, Member Since
+<OrderHistoryList />    → Past Orders mit Status
+<LoginStatusBadge />    → Header: "Eingeloggt als X"
+```
+
+**Backend (Lambda):**
+```typescript
+// New Endpoints:
+GET  /users/me          → Current User Info
+GET  /users/me/orders   → User's Order History
+PUT  /users/me          → Update Profile
+```
+
+**Features:**
+
+1. **Profile Dashboard**
+   - Name, Email anzeigen
+   - Member Since
+   - Order Count
+   - Quick Links (Orders, Settings, Logout)
+
+2. **Order History**
+   - Liste aller Bestellungen
+   - Status (Pending, Completed, Cancelled)
+   - Order Details (Produkte, Preis, Datum)
+   - Re-Order Button
+
+3. **Login Status Indicator**
+   - Header: Avatar + Name
+   - Dropdown: Profile, Orders, Logout
+   - Mobile: Hamburger Menu
+
+### UI Layout:
+
+```
+┌────────────────────────────────────┐
+│  Header: [Avatar] Max Mustermann ▼ │
+│  ├─ Mein Profil                    │
+│  ├─ Bestellungen                   │
+│  ├─ Einstellungen                  │
+│  └─ Abmelden                       │
+├────────────────────────────────────┤
+│  Dashboard                         │
+│  ┌────────────┬──────────────────┐ │
+│  │ Profile    │ Recent Orders    │ │
+│  │ Info       │ - Order #123     │ │
+│  │            │ - Order #122     │ │
+│  └────────────┴──────────────────┘ │
+└────────────────────────────────────┘
+```
+
+### Success Criteria:
+
+- ✅ User Dashboard Page
+- ✅ Order History mit Details
+- ✅ Login Status in Header
+- ✅ Responsive Design
+- ✅ Cognito-Integration
+
+---
+
+## Task 2.3: Favoriten/Wishlist
+
+**Priority:** 🟢 LOW (Nice-to-Have)
+**Effort:** 4-6 Stunden
+**Impact:** ⭐⭐⭐
+
+### Problem:
+- Keine Möglichkeit, Produkte zu speichern
+- User muss Produkte jedes Mal suchen
+
+### Solution:
+
+**DynamoDB Schema:**
+```typescript
+// New Table: Favorites
+{
+  userId: string;      // PK
+  productId: string;   // SK
+  addedAt: string;
+  notes?: string;      // Optional: "Für Geburtstag"
+}
+```
+
+**Backend:**
+```typescript
+POST   /favorites/:productId   → Add to Favorites
+DELETE /favorites/:productId   → Remove from Favorites
+GET    /favorites              → Get User's Favorites
+```
+
+**Frontend:**
+```typescript
+// Product Card
+<HeartIcon
+  onClick={toggleFavorite}
+  filled={isFavorite}
+/>
+
+// Favorites Page
+/favorites → Grid of Favorite Products
+```
+
+### Success Criteria:
+
+- ✅ Heart Icon on Product Cards
+- ✅ Favorites Page (/favorites)
+- ✅ Add/Remove funktioniert
+- ✅ Persistiert in DynamoDB
+- ✅ Responsive Design
+
+---
+
+## Task 2.4: Adress-Validierung (PLZ 5 Stellen)
+
+**Priority:** 🔴 CRITICAL (Bugfix!)
+**Effort:** 1-2 Stunden
+**Impact:** ⭐⭐⭐⭐
+
+### Problem:
+- PLZ kann 6+ Zahlen haben
+- Keine Input-Validierung
+- Uncool für Demo/Production
+
+### Solution:
+
+**Frontend Validation:**
+```typescript
+// Checkout Form
+<input
+  type="text"
+  pattern="[0-9]{5}"
+  maxLength={5}
+  placeholder="12345"
+  required
+/>
+
+// React Hook Form Schema
+const checkoutSchema = z.object({
+  zipCode: z.string()
+    .regex(/^[0-9]{5}$/, "PLZ muss 5 Ziffern haben")
+    .or(z.literal("99999")) // Test-PLZ erlauben
+});
+```
+
+**Backend Validation (Lambda):**
+```typescript
+function validateAddress(address) {
+  // Allow test addresses
+  const testZipCodes = ["99999", "12345"];
+
+  if (testZipCodes.includes(address.zipCode)) {
+    return { valid: true, test: true };
+  }
+
+  // Real validation
+  if (!/^[0-9]{5}$/.test(address.zipCode)) {
+    throw new Error("Invalid PLZ format");
+  }
+
+  return { valid: true, test: false };
+}
+```
+
+### Success Criteria:
+
+- ✅ PLZ max 5 Ziffern
+- ✅ Frontend Validation (Real-time)
+- ✅ Backend Validation (Lambda)
+- ✅ Test-PLZ weiterhin erlaubt (99999, 12345)
+- ✅ Error Messages klar & hilfreich
+
+---
+
+## Task 2.5: Impressum & Datenschutz (DSGVO)
+
+**Priority:** 🔴 CRITICAL (Legal!)
+**Effort:** 2-3 Stunden
+**Impact:** ⭐⭐⭐⭐⭐
+
+### Problem:
+- Kein Impressum
+- Keine Datenschutzerklärung
+- DSGVO-Verstoß (auch für Demo!)
+
+### Solution:
+
+**New Pages:**
+```
+/impressum      → Impressum (Legal Notice)
+/datenschutz    → Datenschutzerklärung (Privacy Policy)
+/agb            → AGB (Terms of Service) - Optional
+```
+
+**Content:**
+
+#### Impressum Template:
+```markdown
+# Impressum
+
+**Angaben gemäß § 5 TMG:**
+
+AIR LEGACY E-Commerce Demonstration
+Max Mustermann (Portfolio Project)
+Musterstraße 123
+12345 Musterstadt
+
+**Kontakt:**
+E-Mail: demo@air-legacy.de
+Telefon: +49 (0) 123 456789
+
+**Hinweis:**
+Dies ist ein Portfolio-Projekt zu Demonstrationszwecken.
+Es werden keine echten Produkte verkauft.
+
+**Haftungsausschluss:**
+Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung.
+```
+
+#### Datenschutz Template:
+```markdown
+# Datenschutzerklärung
+
+**1. Datenschutz auf einen Blick**
+
+Dies ist ein Demo-Projekt. Folgende Daten werden verarbeitet:
+- E-Mail-Adresse (für Registrierung)
+- Name und Adresse (für Demo-Bestellungen)
+- Bestellhistorie
+
+**2. Hosting & AWS Services**
+
+Diese Anwendung nutzt AWS Services:
+- AWS Cognito (Authentifizierung)
+- AWS DynamoDB (Datenspeicherung)
+- AWS Lambda (Backend-Logik)
+
+**3. Cookies**
+
+Wir verwenden nur technisch notwendige Cookies:
+- Session-Token (Authentifizierung)
+- Shopping Cart State
+
+**4. Ihre Rechte**
+
+- Auskunft über gespeicherte Daten
+- Löschung Ihrer Daten
+- Widerruf der Einwilligung
+
+**Kontakt:** demo@air-legacy.de
+```
+
+**Footer Links:**
+```html
+<footer>
+  <a href="/impressum">Impressum</a>
+  <a href="/datenschutz">Datenschutz</a>
+  <a href="/agb">AGB</a>
+</footer>
+```
+
+### Success Criteria:
+
+- ✅ /impressum Page vorhanden
+- ✅ /datenschutz Page vorhanden
+- ✅ Footer Links auf allen Seiten
+- ✅ DSGVO-konform (für Demo-Zwecke)
+- ✅ Responsive Design
+
+---
+
+# 🧹 BEREICH 3: Repository Cleanup
+
+## Task 3.1: Dead Code & Unused Files Removal
+
+**Priority:** 🟡 MEDIUM
+**Effort:** 3-4 Stunden
+**Impact:** ⭐⭐⭐⭐
+
+### What to Clean:
+
+**1. Unused Files:**
+```bash
+# Find & Remove:
+- Old screenshots (docs/screenshots/Bildschirmfoto*.png)
+- Duplicate docs (architecture-diagram.drawio, architecture-diagram.html)
+- Test files ohne Tests
+- Commented-out code blocks
+- .DS_Store, .env.example duplicates
+```
+
+**2. Dead Code:**
+```typescript
+// Backend:
+- Unused Lambda functions
+- Deprecated API endpoints
+- Old migration scripts
+
+// Frontend:
+- Unused components
+- Old CSS files
+- Commented imports
+```
+
+**3. Documentation:**
+```markdown
+# Update/Remove:
+- Outdated setup guides
+- Old session docs (consolidate)
+- Duplicate README sections
+```
+
+### Cleanup Checklist:
+
+```bash
+# 1. Git History Cleanup (Optional)
+- Remove large files from history
+- BFG Repo-Cleaner für alte commits
+
+# 2. File Structure
+docs/
+├── screenshots/          → Keep only final 10-15
+├── sessions/             → Archive old, keep recent
+├── guides/               → Consolidate duplicates
+└── archive/              → Move obsolete files
+
+# 3. Code Quality
+- ESLint: Fix all warnings
+- Remove console.logs (Production)
+- Remove TODO comments (or create Issues)
+```
+
+### Tools:
+
+```bash
+# Find unused exports
+npx ts-prune
+
+# Find dead CSS
+npx purgecss
+
+# Analyze bundle size
+npx webpack-bundle-analyzer
+
+# Find large files
+git ls-files -z | xargs -0 du -h | sort -hr | head -20
+```
+
+### Success Criteria:
+
+- ✅ Repo size < 50 MB
+- ✅ No duplicate files
+- ✅ No commented code blocks
+- ✅ ESLint warnings = 0
+- ✅ Clear folder structure
+
+---
+
+# 📚 BEREICH 4: Documentation Polish
+
+## Task 4.1: README Final Review
+
+**Priority:** 🟢 LOW
+**Effort:** 2-3 Stunden
+**Impact:** ⭐⭐⭐
+
+### Checklist:
+
+**1. Architecture Section:**
+- [ ] Update ASCII diagram
+- [ ] Add link to Flow-Diagramm (Task 1.1)
+- [ ] Update service count (if changed)
+
+**2. Screenshots:**
+- [ ] Update with new features (Profile, Search)
+- [ ] Rename to descriptive names
+- [ ] Compress images (<500 KB each)
+
+**3. Getting Started:**
+- [ ] Test setup instructions
+- [ ] Update prerequisites
+- [ ] Add troubleshooting section
+
+**4. Features List:**
+- [ ] Add new features (Tags, Profile, Wishlist)
+- [ ] Update demo credentials
+- [ ] Add feature screenshots
+
+**5. Badges:**
+- [ ] Update test coverage
+- [ ] Add security badges
+- [ ] Update deployment status
+
+### Success Criteria:
+
+- ✅ README is up-to-date
+- ✅ All links work
+- ✅ Screenshots current
+- ✅ Setup instructions tested
+
+---
+
+# 🎯 Implementierungs-Strategie
+
+## Empfohlene Reihenfolge:
+
+### **Sprint 1: Quick Wins (1-2 Tage)** ✅ COMPLETED (9. Jan 2026)
+1. ✅ Task 2.4: Adress-Validierung (1-2h) - BUGFIX! **[DONE]**
+   - Frontend: Real-time validation (5-digit only)
+   - Backend: Validation utility + 17 unit tests
+   - ADR dokumentiert (docs/ADR_ADDRESS_VALIDATION.md)
+   - Commits: 19f3cb4, 0757475
+
+2. ✅ Task 2.5: Impressum & Datenschutz (2-3h) - LEGAL! **[DONE]**
+   - /impressum Page (§5 TMG konform)
+   - /datenschutz Page (DSGVO Art. 13/14)
+   - Footer Component (4-column responsive)
+   - Commits: af3bd3a, c07bc9e
+
+3. ✅ Task 1.1: AWS Flow-Diagramm (2-3h) - PORTFOLIO! **[DONE - früher]**
+   - 3-Tab Architecture Presentation
+   - Top 10 Lessons Learned integriert
+
+**Status:** Alle Sprint 1 Tasks abgeschlossen! 🎉
+
+### **Sprint 2: Feature Enhancements (3-4 Tage)** ⏳ OPTIONAL
+4. ⏳ Task 2.1: Produkt-Tagging & Suche (4-6h) - OPTIONAL
+5. ⏳ Task 2.2: User Profile & Bestellhistorie (6-8h) - OPTIONAL
+6. ⏳ Task 2.3: Favoriten/Wishlist (4-6h) - OPTIONAL
+
+**Status:** Optional - Portfolio ist auch ohne diese Features showcase-ready
+
+### **Sprint 3: Polish (1-2 Tage)** ⏳ NEXT
+7. ⏳ Task 3.1: Repository Cleanup (3-4h) - EMPFOHLEN
+8. ⏳ Task 4.1: README Final Review (2-3h) - EMPFOHLEN
+
+**Status:** Nächste sinnvolle Schritte für finales Polish
+
+---
+
+## ⏱️ Zeitaufwand Total
+
+**Minimum (Nur Critical):** ~10 Stunden
+- Task 1.1: Flow-Diagramm (2h)
+- Task 2.4: PLZ-Validierung (1h)
+- Task 2.5: Impressum/Datenschutz (2h)
+- Task 3.1: Cleanup (3h)
+- Task 4.1: README (2h)
+
+**Empfohlen (mit Features):** ~25 Stunden
+- Alle Tasks ohne Wishlist
+
+**Maximum (Alles):** ~35 Stunden
+- Alle Tasks inklusive Wishlist
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# 1. Read this plan
+cat docs/ACTION_PLAN_PHASE3.md
+
+# 2. Start with Task 2.4 (Bugfix!)
+# PLZ-Validierung implementieren
+
+# 3. Then Task 2.5 (Legal!)
+# Impressum & Datenschutz Pages
+
+# 4. Then Task 1.1 (Portfolio!)
+# AWS Flow-Diagramm erstellen
+
+# 5. Commit & Deploy
+git add .
+git commit -m "feat: Phase 3 Quick Wins"
+git push
+```
+
+---
+
+## 📝 Success Criteria (Stand: 9. Jan 2026)
+
+**Phase 3 - Sprint 1 Quick Wins:** ✅ ABGESCHLOSSEN
+
+- ✅ **Diagramm:** 3-Tab Architecture Presentation (interactive)
+- ✅ **Legal:** Impressum & Datenschutz (DSGVO-konform)
+- ✅ **Quality:** PLZ-Validierung (5-stellig, 17 tests)
+- ⏳ **Features:** Profile, Bestellhistorie - OPTIONAL (nicht kritisch)
+- ⏳ **Cleanup:** Repo aufgeräumt - EMPFOHLEN (nächster Schritt)
+- ⏳ **Docs:** README final review - EMPFOHLEN (nächster Schritt)
+
+**Portfolio-Ready Status:**
+
+- ✅ Kann in 30 Sekunden erklärt werden
+- ✅ Diagramm zeigt Architektur auf einen Blick
+- ✅ Features sind modern & professionell
+- ✅ Code ist dokumentiert (ADR, README, Architecture Tabs)
+- ✅ DSGVO-konform (Impressum, Datenschutz, Footer)
+- ⏳ Code Cleanup empfohlen (aber nicht kritisch)
+
+---
+
+**Let's go! 🚀**
