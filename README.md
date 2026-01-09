@@ -100,8 +100,8 @@ AIR LEGACY is a full-stack e-commerce platform built to demonstrate:
 
 > **💡 Interactive Architecture Diagram Available!**
 > Explore the full architecture with interactive tooltips, AWS service details, and cost breakdown:
-> **[📊 View Interactive Architecture Presentation](docs/architecture-presentation.html)**
-> _(Open locally in browser - includes hover tooltips for each component)_
+> **[📊 View Interactive Architecture Presentation](docs/architecture-tabs.html)**
+> _(3-tab presentation: Architecture Diagram, Technical Details, Top 10 Lessons Learned - Open locally in browser)_
 
 ### High-Level Architecture
 
@@ -1140,7 +1140,7 @@ Cloud Engineer | Full-Stack Developer | DevOps Enthusiast
 ---
 
 **Project Status:** ✅ Production-Ready (with Phase 2 enhancements in progress)
-**Last Updated:** 2. Januar 2026
+**Last Updated:** 9. Januar 2026
 **Environment:** Development (Deployed)
 **AWS Region:** eu-north-1 (Stockholm)
 
@@ -1157,7 +1157,7 @@ See [docs/ACTION_PLAN_PHASE2.md](docs/ACTION_PLAN_PHASE2.md) for details on:
 - ✅ Runtime Security Monitoring (CloudWatch + Lambda) - COMPLETED
 - ✅ Real-time Dashboard Analytics - COMPLETED
 - ✅ Quantity Selector Implementation - COMPLETED
-- Interactive Architecture Diagram
+- ✅ Interactive Architecture Diagram (3-Tab Presentation) - COMPLETED
 - E2E Testing with Playwright
 - PWA Implementation
 
