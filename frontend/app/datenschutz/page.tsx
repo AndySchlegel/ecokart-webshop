@@ -1,10 +1,6 @@
-import Link from 'next/link';
-import type { Metadata } from 'next';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Datenschutzerklärung - AIR LEGACY',
-  description: 'Datenschutzerklärung für AIR LEGACY E-Commerce Demo',
-};
+import Link from 'next/link';
 
 export default function DatenschutzPage() {
   return (
