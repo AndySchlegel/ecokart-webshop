@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import React from 'react';
 import { Providers } from './providers';
+import Footer from '../components/Footer';
 
 // Metadata beschreibt Titel und Kurztext für die Demo-Seite.
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body>
         <Providers>
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>
