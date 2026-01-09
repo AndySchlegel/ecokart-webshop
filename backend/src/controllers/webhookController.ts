@@ -28,6 +28,7 @@ import { stripe } from '../config/stripe';
 import database from '../config/database-adapter';
 import { logger } from '../utils/logger';
 import { emailService } from '../services/email.service';
+import { validateShippingAddress } from '../utils/validation';
 
 // Webhook Secret (aus Stripe CLI oder Dashboard)
 // Für lokales Development: Set via Environment Variable
@@ -164,6 +165,20 @@ async function handleCheckoutSessionCompleted(
   } catch (err) {
     logger.error('Failed to parse shipping address', { shippingAddressJson });
     throw new Error('Invalid shipping address in metadata');
+  }
+
+  // Validiere Shipping Address (inkl. PLZ-Format)
+  if (shippingAddress) {
+    const validationResult = validateShippingAddress(shippingAddress);
+    if (!validationResult.success) {
+      logger.error('Invalid shipping address in webhook', {
+        sessionId: session.id,
+        error: validationResult.error,
+        field: validationResult.field,
+        zipCode: shippingAddress.zipCode
+      });
+      throw new Error(`Invalid shipping address: ${validationResult.error}`);
+    }
   }
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

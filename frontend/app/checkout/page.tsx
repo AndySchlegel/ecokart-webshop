@@ -131,8 +131,16 @@ export default function CheckoutPage() {
                   type="text"
                   id="zipCode"
                   value={shippingAddress.zipCode}
-                  onChange={(e) => setShippingAddress({ ...shippingAddress, zipCode: e.target.value })}
+                  onChange={(e) => {
+                    // Only allow numbers, max 5 digits
+                    const value = e.target.value.replace(/\D/g, '').slice(0, 5);
+                    setShippingAddress({ ...shippingAddress, zipCode: value });
+                  }}
                   placeholder="12345"
+                  pattern="[0-9]{5}"
+                  maxLength={5}
+                  minLength={5}
+                  title="Bitte gib eine 5-stellige Postleitzahl ein"
                   required
                 />
               </div>

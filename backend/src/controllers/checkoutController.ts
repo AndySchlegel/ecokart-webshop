@@ -34,6 +34,7 @@ import { Request, Response } from 'express';
 import { stripe, FRONTEND_URL } from '../config/stripe';
 import database from '../config/database-adapter';
 import { logger } from '../utils/logger';
+import { validateShippingAddress } from '../utils/validation';
 
 // ============================================================================
 // 🔐 TYPE DEFINITIONS
@@ -178,15 +179,19 @@ export const createCheckoutSession = async (
       return res.status(400).json({ error: 'Shipping address is required' });
     }
 
-    // Validiere alle Pflichtfelder
-    const requiredFields: (keyof ShippingAddress)[] = ['street', 'city', 'zipCode', 'country'];
-    const missingFields = requiredFields.filter(field => !shippingAddress[field]);
+    // Validiere Shipping Address (inkl. PLZ-Format)
+    const validationResult = validateShippingAddress(shippingAddress);
 
-    if (missingFields.length > 0) {
-      logger.warn('Checkout attempted with incomplete address', { userId, missingFields });
+    if (!validationResult.success) {
+      logger.warn('Checkout attempted with invalid address', {
+        userId,
+        error: validationResult.error,
+        field: validationResult.field,
+        zipCode: shippingAddress.zipCode
+      });
       return res.status(400).json({
-        error: 'Incomplete shipping address',
-        missingFields
+        error: validationResult.error,
+        field: validationResult.field
       });
     }
 
