@@ -8,10 +8,10 @@ export default function CategoryTabs() {
   const activeGroup = searchParams.get('targetGroup') || 'alle';
 
   const tabs = [
-    { id: 'alle', label: 'Alle', icon: '🏠' },
-    { id: 'kinder', label: 'Kinder', icon: '👦' },
-    { id: 'männer', label: 'Männer', icon: '👨' },
-    { id: 'frauen', label: 'Frauen', icon: '👩' }
+    { id: 'alle', label: 'Alle' },
+    { id: 'kinder', label: 'Kinder' },
+    { id: 'männer', label: 'Männer' },
+    { id: 'frauen', label: 'Frauen' }
   ];
 
   const handleTabClick = (tabId: string) => {
@@ -37,8 +37,7 @@ export default function CategoryTabs() {
             onClick={() => handleTabClick(tab.id)}
             type="button"
           >
-            <span className="tab-icon">{tab.icon}</span>
-            <span className="tab-label">{tab.label}</span>
+            {tab.label}
           </button>
         ))}
       </div>
@@ -71,7 +70,7 @@ export default function CategoryTabs() {
 
         .tab {
           flex: 1;
-          min-width: 120px;
+          min-width: 100px;
           padding: 1rem 1.5rem;
           background: transparent;
           border: none;
@@ -81,10 +80,8 @@ export default function CategoryTabs() {
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
           white-space: nowrap;
         }
 
@@ -99,45 +96,22 @@ export default function CategoryTabs() {
           background: rgba(255, 107, 0, 0.1);
         }
 
-        .tab-icon {
-          font-size: 1.2rem;
-        }
-
-        .tab-label {
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-
-        /* Mobile: Stack tabs or make them scrollable */
+        /* Mobile: Make tabs scrollable */
         @media (max-width: 640px) {
           .tab {
-            min-width: 100px;
+            min-width: 90px;
             padding: 0.875rem 1rem;
             font-size: 0.875rem;
-          }
-
-          .tab-icon {
-            font-size: 1rem;
-          }
-
-          .tab-label {
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
           }
         }
 
         @media (max-width: 480px) {
           .tab {
-            flex-direction: column;
-            gap: 0.25rem;
-            padding: 0.75rem 0.5rem;
-          }
-
-          .tab-icon {
-            font-size: 1.25rem;
-          }
-
-          .tab-label {
-            font-size: 0.75rem;
+            min-width: 80px;
+            padding: 0.75rem 0.75rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
           }
         }
       `}</style>
