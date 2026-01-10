@@ -1,6 +1,5 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocumentClient, PutCommand } = require('@aws-sdk/lib-dynamodb');
-const { fromSSO } = require('@aws-sdk/credential-providers');
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
@@ -25,12 +24,9 @@ if (process.env.DYNAMODB_ENDPOINT) {
       secretAccessKey: 'local',
     };
   }
-} else if (process.env.AWS_PROFILE) {
-  // Use AWS SSO credentials from profile
-  config.credentials = fromSSO({
-    profile: process.env.AWS_PROFILE,
-  });
 }
+// If AWS_PROFILE is set, the SDK will automatically use it from default credential chain
+// No need to explicitly configure fromSSO() - supports both SSO and standard profiles
 
 const client = new DynamoDBClient(config);
 const dynamodb = DynamoDBDocumentClient.from(client);
@@ -62,6 +58,10 @@ async function migrateProducts() {
             reserved: product.reserved || 0,  // ← Reserved-Feld
             rating: product.rating || 0,
             reviewCount: product.reviewCount || 0,
+            // Phase 3: Tagging & Categorization
+            targetGroup: product.targetGroup || 'unisex',
+            tags: product.tags || [],
+            searchTerms: product.searchTerms || [],
           }
         }));
 

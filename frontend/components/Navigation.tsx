@@ -263,7 +263,6 @@ export default function Navigation() {
           <button type="button" onClick={() => handleCategoryClick('shoes')}>Schuhe</button>
           <button type="button" onClick={() => handleCategoryClick('apparel')}>Bekleidung</button>
           <button type="button" onClick={() => handleCategoryClick('accessories')}>Accessoires</button>
-          <button type="button" onClick={() => handleCategoryClick('sale')}>Sale</button>
         </nav>
 
         <div className="sidebar-divider"></div>
