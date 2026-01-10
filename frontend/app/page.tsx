@@ -115,15 +115,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Category Tabs Navigation */}
-      <CategoryTabs />
-
-      {/* Tag Filter (will extract tags from products) */}
-      <Suspense fallback={null}>
-        <TagFilterWrapper articles={articles} />
-      </Suspense>
-
-      {/* Featured Products */}
+      {/* Category Tabs Navigation + Tag Filter + Products */}
+      {/* IMPORTANT: All wrapped in Suspense because they use useSearchParams() */}
       <Suspense
         fallback={
           <main className="page" id="featured-products" ref={productsRef}>
@@ -139,6 +132,8 @@ export default function HomePage() {
           </main>
         }
       >
+        <CategoryTabs />
+        <TagFilterWrapper articles={articles} />
         <FeaturedProducts
           articles={articles}
           error={error}
