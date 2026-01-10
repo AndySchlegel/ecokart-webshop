@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
 import Navigation from '../components/Navigation';
+import CategoryTabs from '../components/CategoryTabs';
+import TagFilter from '../components/TagFilter';
 import { ArticleList } from '@/components/ArticleList';
 import { Article } from '@/components/types';
 import { API_BASE_URL } from '@/lib/config';
@@ -113,6 +115,14 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Category Tabs Navigation */}
+      <CategoryTabs />
+
+      {/* Tag Filter (will extract tags from products) */}
+      <Suspense fallback={null}>
+        <TagFilterWrapper articles={articles} />
+      </Suspense>
+
       {/* Featured Products */}
       <Suspense
         fallback={
@@ -147,9 +157,26 @@ type FeaturedProductsProps = {
   productsRef: React.RefObject<HTMLElement>;
 };
 
+// Helper component to extract and display tags
+function TagFilterWrapper({ articles }: { articles: Article[] }) {
+  const availableTags = useMemo(() => {
+    const tagSet = new Set<string>();
+    articles.forEach((article: any) => {
+      if (article.tags && Array.isArray(article.tags)) {
+        article.tags.forEach((tag: string) => tagSet.add(tag));
+      }
+    });
+    return Array.from(tagSet).sort();
+  }, [articles]);
+
+  return <TagFilter availableTags={availableTags} />;
+}
+
 function FeaturedProducts({ articles, error, isLoading, productsRef }: FeaturedProductsProps) {
   const searchParams = useSearchParams();
   const normalizedCategory = searchParams.get('category')?.toLowerCase() ?? null;
+  const targetGroup = searchParams.get('targetGroup')?.toLowerCase() ?? null;
+  const tags = searchParams.get('tags')?.split(',').filter(Boolean) || [];
   const searchQuery = searchParams.get('search')?.toLowerCase() ?? null;
   const minPrice = searchParams.get('minPrice') ? parseFloat(searchParams.get('minPrice')!) : null;
   const maxPrice = searchParams.get('maxPrice') ? parseFloat(searchParams.get('maxPrice')!) : null;
@@ -158,12 +185,29 @@ function FeaturedProducts({ articles, error, isLoading, productsRef }: FeaturedP
   const filteredArticles = useMemo(() => {
     let result = articles;
 
-    // Filter by search query first
+    // Filter by search query first (including searchTerms)
     if (searchQuery) {
-      result = result.filter((article) => {
+      result = result.filter((article: any) => {
         const name = article.name.toLowerCase();
         const description = article.description?.toLowerCase() ?? '';
-        return name.includes(searchQuery) || description.includes(searchQuery);
+        const searchTerms = article.searchTerms?.join(' ').toLowerCase() ?? '';
+        return name.includes(searchQuery) || description.includes(searchQuery) || searchTerms.includes(searchQuery);
+      });
+    }
+
+    // Filter by targetGroup (Kinder/Männer/Frauen)
+    if (targetGroup && targetGroup !== 'alle') {
+      result = result.filter((article: any) => {
+        return article.targetGroup?.toLowerCase() === targetGroup;
+      });
+    }
+
+    // Filter by tags (AND logic - all tags must be present)
+    if (tags.length > 0) {
+      result = result.filter((article: any) => {
+        if (!article.tags || !Array.isArray(article.tags)) return false;
+        const articleTags = article.tags.map((t: string) => t.toLowerCase());
+        return tags.every((tag) => articleTags.includes(tag.toLowerCase()));
       });
     }
 
@@ -190,7 +234,7 @@ function FeaturedProducts({ articles, error, isLoading, productsRef }: FeaturedP
     }
 
     return result;
-  }, [articles, normalizedCategory, searchQuery, minPrice, maxPrice]);
+  }, [articles, normalizedCategory, targetGroup, tags, searchQuery, minPrice, maxPrice]);
 
   const categoryLabelMap: Record<string, string> = {
     shoes: 'Schuhe',
@@ -207,6 +251,11 @@ function FeaturedProducts({ articles, error, isLoading, productsRef }: FeaturedP
   const activeCategoryLabel =
     normalizedCategory && normalizedCategory !== 'all'
       ? categoryLabelMap[normalizedCategory] ?? normalizedCategory
+      : null;
+
+  const targetGroupLabel =
+    targetGroup && targetGroup !== 'alle'
+      ? targetGroup.charAt(0).toUpperCase() + targetGroup.slice(1)
       : null;
 
   useEffect(() => {
@@ -245,6 +294,16 @@ function FeaturedProducts({ articles, error, isLoading, productsRef }: FeaturedP
         <p className="page__hint">
           Unsere neuesten Highlights für maximale Performance
         </p>
+        {targetGroupLabel && (
+          <p className="page__hint page__hint--filter">
+            Zielgruppe: {targetGroupLabel}
+          </p>
+        )}
+        {tags.length > 0 && (
+          <p className="page__hint page__hint--filter">
+            Tags: {tags.join(', ')}
+          </p>
+        )}
         {searchQuery && (
           <p className="page__hint page__hint--filter">
             Suchergebnisse für: "{searchQuery}"

@@ -122,6 +122,96 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
 };
 
 // ============================================================================
+// GET /api/products/search - Advanced Search with Filters
+// ============================================================================
+
+/**
+ * Search products with multiple filters
+ * Query params:
+ * - q: Search query (searches in name, description, searchTerms)
+ * - category: Filter by category (shoes, apparel, equipment)
+ * - targetGroup: Filter by target group (kinder, männer, frauen, unisex)
+ * - tags: Filter by tags (comma-separated, e.g. "bestseller,bio")
+ */
+export const searchProducts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { q, category, targetGroup, tags } = req.query;
+
+    logger.info('Product search requested', {
+      action: 'searchProducts',
+      query: q,
+      category,
+      targetGroup,
+      tags
+    });
+
+    // Get all products
+    let products = await database.getAllProducts();
+
+    // Filter by search query (name, description, searchTerms)
+    if (q && typeof q === 'string') {
+      const searchLower = q.toLowerCase().trim();
+      products = products.filter(product => {
+        const nameMatch = product.name.toLowerCase().includes(searchLower);
+        const descMatch = product.description.toLowerCase().includes(searchLower);
+        const termsMatch = product.searchTerms?.some(term =>
+          term.toLowerCase().includes(searchLower)
+        ) ?? false;
+
+        return nameMatch || descMatch || termsMatch;
+      });
+    }
+
+    // Filter by category
+    if (category && typeof category === 'string') {
+      products = products.filter(product =>
+        product.category?.toLowerCase() === category.toLowerCase()
+      );
+    }
+
+    // Filter by targetGroup
+    if (targetGroup && typeof targetGroup === 'string') {
+      products = products.filter(product =>
+        product.targetGroup?.toLowerCase() === targetGroup.toLowerCase()
+      );
+    }
+
+    // Filter by tags (comma-separated, AND logic)
+    if (tags && typeof tags === 'string') {
+      const tagList = tags.split(',').map(t => t.trim().toLowerCase());
+      products = products.filter(product => {
+        if (!product.tags || product.tags.length === 0) return false;
+        const productTags = product.tags.map(t => t.toLowerCase());
+        // Check if ALL requested tags are present (AND logic)
+        return tagList.every(tag => productTags.includes(tag));
+      });
+    }
+
+    // Convert relative imageUrls to absolute CloudFront URLs
+    const productsWithAbsoluteUrls = products.map(product => ({
+      ...product,
+      imageUrl: convertImageUrl(product.imageUrl)
+    }));
+
+    logger.info('Product search completed', {
+      resultCount: productsWithAbsoluteUrls.length
+    });
+
+    res.json({
+      items: productsWithAbsoluteUrls,
+      count: productsWithAbsoluteUrls.length,
+      filters: { q, category, targetGroup, tags }
+    });
+  } catch (error) {
+    logger.error('Failed to search products', {
+      action: 'searchProducts',
+      query: req.query
+    }, error as Error);
+    res.status(500).json({ error: 'Failed to search products' });
+  }
+};
+
+// ============================================================================
 // GET /api/admin/products/low-stock
 // ============================================================================
 

@@ -11,7 +11,10 @@
       "rating": 4.8,
       "reviewCount": 342,
       "createdAt": "2025-01-15T10:00:00Z",
-      "updatedAt": "2025-01-15T10:00:00Z"
+      "updatedAt": "2025-01-15T10:00:00Z",
+      "targetGroup": "männer",
+      "tags": ["running", "atmungsaktiv", "performance"],
+      "searchTerms": ["laufschuh", "sneaker", "sportschuh", "running"]
     },
     {
       "id": "prod-002",
@@ -24,7 +27,10 @@
       "rating": 4.6,
       "reviewCount": 189,
       "createdAt": "2025-01-15T10:00:00Z",
-      "updatedAt": "2025-01-15T10:00:00Z"
+      "updatedAt": "2025-01-15T10:00:00Z",
+      "targetGroup": "unisex",
+      "tags": ["training", "fitness", "equipment"],
+      "searchTerms": ["trainingsset", "fitness", "gym", "equipment"]
     },
     {
       "id": "prod-003",
@@ -37,7 +43,10 @@
       "rating": 4.9,
       "reviewCount": 267,
       "createdAt": "2025-01-15T10:00:00Z",
-      "updatedAt": "2025-01-15T10:00:00Z"
+      "updatedAt": "2025-01-15T10:00:00Z",
+      "targetGroup": "frauen",
+      "tags": ["wasserdicht", "leicht", "outdoor"],
+      "searchTerms": ["jacke", "sportjacke", "laufjacke", "windbreaker"]
     },
     {
       "id": "8130aa99-281d-4974-ae8f-4c370f13cf35",
@@ -50,7 +59,10 @@
       "rating": 4.7,
       "reviewCount": 521,
       "createdAt": "2025-10-25T13:02:56.392Z",
-      "updatedAt": "2025-10-25T13:02:56.392Z"
+      "updatedAt": "2025-10-25T13:02:56.392Z",
+      "targetGroup": "männer",
+      "tags": ["bestseller", "running", "boost"],
+      "searchTerms": ["boost", "laufschuh", "energy", "performance"]
     },
     {
       "id": "a175d30c-3da8-4719-866f-c11eafdbbc7f",
@@ -62,7 +74,10 @@
       "rating": 4.5,
       "reviewCount": 10,
       "createdAt": "2025-10-25T21:06:11.347Z",
-      "updatedAt": "2025-10-25T21:06:11.347Z"
+      "updatedAt": "2025-10-25T21:06:11.347Z",
+      "targetGroup": "männer",
+      "tags": ["basketball", "retro", "legend"],
+      "searchTerms": ["jordan", "basketball", "sneaker", "retro"]
     },
     {
       "id": "air-legacy-002",
@@ -75,7 +90,10 @@
       "rating": 4.7,
       "reviewCount": 287,
       "createdAt": "2025-10-25T22:02:00.000Z",
-      "updatedAt": "2025-10-25T22:02:00.000Z"
+      "updatedAt": "2025-10-25T22:02:00.000Z",
+      "targetGroup": "kinder",
+      "tags": ["lifestyle", "reflektierend", "urban"],
+      "searchTerms": ["sneaker", "urban", "streetwear", "kinder"]
     },
     {
       "id": "air-legacy-003",
@@ -88,7 +106,10 @@
       "rating": 4.8,
       "reviewCount": 198,
       "createdAt": "2025-10-25T22:04:00.000Z",
-      "updatedAt": "2025-10-25T22:04:00.000Z"
+      "updatedAt": "2025-10-25T22:04:00.000Z",
+      "targetGroup": "männer",
+      "tags": ["basketball", "atmungsaktiv", "performance"],
+      "searchTerms": ["trikot", "jersey", "basketball", "shirt"]
     },
     {
       "id": "air-legacy-004",
@@ -101,7 +122,10 @@
       "rating": 4.6,
       "reviewCount": 254,
       "createdAt": "2025-10-25T22:06:00.000Z",
-      "updatedAt": "2025-10-25T22:06:00.000Z"
+      "updatedAt": "2025-10-25T22:06:00.000Z",
+      "targetGroup": "kinder",
+      "tags": ["running", "leicht", "carbon"],
+      "searchTerms": ["laufschuh", "sprint", "kinder", "leicht"]
     },
     {
       "id": "air-legacy-005",
@@ -114,7 +138,10 @@
       "rating": 4.5,
       "reviewCount": 176,
       "createdAt": "2025-10-25T22:08:00.000Z",
-      "updatedAt": "2025-10-25T22:08:00.000Z"
+      "updatedAt": "2025-10-25T22:08:00.000Z",
+      "targetGroup": "kinder",
+      "tags": ["lifestyle", "streetwear", "neon"],
+      "searchTerms": ["sneaker", "neon", "streetwear", "kinder"]
     },
     {
       "id": "air-legacy-006",
@@ -127,7 +154,10 @@
       "rating": 4.9,
       "reviewCount": 387,
       "createdAt": "2025-10-25T22:10:00.000Z",
-      "updatedAt": "2025-10-25T22:10:00.000Z"
+      "updatedAt": "2025-10-25T22:10:00.000Z",
+      "targetGroup": "männer",
+      "tags": ["basketball", "performance", "carbon"],
+      "searchTerms": ["basketballschuh", "zoom", "performance", "court"]
     },
     {
       "id": "air-legacy-007",
@@ -140,7 +170,10 @@
       "rating": 4.8,
       "reviewCount": 543,
       "createdAt": "2025-10-25T22:12:00.000Z",
-      "updatedAt": "2025-10-25T22:12:00.000Z"
+      "updatedAt": "2025-10-25T22:12:00.000Z",
+      "targetGroup": "männer",
+      "tags": ["bestseller", "warm", "lifestyle"],
+      "searchTerms": ["hoodie", "kapuzenpullover", "fleece", "warm"]
     },
     {
       "id": "air-legacy-008",
@@ -153,7 +186,10 @@
       "rating": 4.6,
       "reviewCount": 289,
       "createdAt": "2025-10-25T22:14:00.000Z",
-      "updatedAt": "2025-10-25T22:14:00.000Z"
+      "updatedAt": "2025-10-25T22:14:00.000Z",
+      "targetGroup": "männer",
+      "tags": ["training", "atmungsaktiv", "leicht", "sale"],
+      "searchTerms": ["shorts", "trainingshose", "fitness", "sport"]
     },
     {
       "id": "air-legacy-009",
@@ -166,7 +202,10 @@
       "rating": 4.7,
       "reviewCount": 412,
       "createdAt": "2025-10-25T22:16:00.000Z",
-      "updatedAt": "2025-10-25T22:16:00.000Z"
+      "updatedAt": "2025-10-25T22:16:00.000Z",
+      "targetGroup": "männer",
+      "tags": ["wasserdicht", "retro", "outdoor"],
+      "searchTerms": ["jacke", "windbreaker", "laufjacke", "wasserdicht"]
     },
     {
       "id": "air-legacy-010",
@@ -179,7 +218,10 @@
       "rating": 4.8,
       "reviewCount": 628,
       "createdAt": "2025-10-25T22:18:00.000Z",
-      "updatedAt": "2025-10-25T22:18:00.000Z"
+      "updatedAt": "2025-10-25T22:18:00.000Z",
+      "targetGroup": "frauen",
+      "tags": ["running", "cushion", "performance"],
+      "searchTerms": ["laufschuh", "dämpfung", "react", "running"]
     },
     {
       "id": "air-legacy-011",
@@ -192,7 +234,10 @@
       "rating": 4.7,
       "reviewCount": 492,
       "createdAt": "2025-10-25T22:20:00.000Z",
-      "updatedAt": "2025-10-25T22:20:00.000Z"
+      "updatedAt": "2025-10-25T22:20:00.000Z",
+      "targetGroup": "frauen",
+      "tags": ["lifestyle", "air", "urban"],
+      "searchTerms": ["air max", "sneaker", "lifestyle", "urban"]
     },
     {
       "id": "air-legacy-012",
@@ -205,7 +250,10 @@
       "rating": 4.5,
       "reviewCount": 721,
       "createdAt": "2025-10-25T22:22:00.000Z",
-      "updatedAt": "2025-10-25T22:22:00.000Z"
+      "updatedAt": "2025-10-25T22:22:00.000Z",
+      "targetGroup": "frauen",
+      "tags": ["basic", "baumwolle", "lifestyle", "sale"],
+      "searchTerms": ["shirt", "t-shirt", "basic", "baumwolle"]
     },
     {
       "id": "air-legacy-013",
@@ -218,7 +266,10 @@
       "rating": 4.6,
       "reviewCount": 334,
       "createdAt": "2025-10-25T22:24:00.000Z",
-      "updatedAt": "2025-10-25T22:24:00.000Z"
+      "updatedAt": "2025-10-25T22:24:00.000Z",
+      "targetGroup": "unisex",
+      "tags": ["wasserdicht", "laptop", "urban"],
+      "searchTerms": ["rucksack", "backpack", "tasche", "laptop"]
     },
     {
       "id": "air-legacy-014",
@@ -231,7 +282,10 @@
       "rating": 5,
       "reviewCount": 892,
       "createdAt": "2025-10-25T22:26:00.000Z",
-      "updatedAt": "2025-10-25T22:26:00.000Z"
+      "updatedAt": "2025-10-25T22:26:00.000Z",
+      "targetGroup": "männer",
+      "tags": ["bestseller", "marathon", "carbon"],
+      "searchTerms": ["marathon", "laufschuh", "carbon", "performance"]
     },
     {
       "id": "air-legacy-015",
@@ -244,7 +298,10 @@
       "rating": 4.7,
       "reviewCount": 267,
       "createdAt": "2025-10-25T22:28:00.000Z",
-      "updatedAt": "2025-10-25T22:28:00.000Z"
+      "updatedAt": "2025-10-25T22:28:00.000Z",
+      "targetGroup": "kinder",
+      "tags": ["basketball", "cushion", "performance"],
+      "searchTerms": ["basketball", "kyrie", "court", "kinder"]
     },
     {
       "id": "air-legacy-016",
@@ -257,7 +314,10 @@
       "rating": 4.6,
       "reviewCount": 198,
       "createdAt": "2025-10-25T22:30:00.000Z",
-      "updatedAt": "2025-10-25T22:30:00.000Z"
+      "updatedAt": "2025-10-25T22:30:00.000Z",
+      "targetGroup": "männer",
+      "tags": ["warm", "training", "outdoor"],
+      "searchTerms": ["hose", "trainingshose", "warm", "winter"]
     },
     {
       "id": "air-legacy-017",
@@ -270,7 +330,10 @@
       "rating": 4.8,
       "reviewCount": 445,
       "createdAt": "2025-10-25T22:32:00.000Z",
-      "updatedAt": "2025-10-25T22:32:00.000Z"
+      "updatedAt": "2025-10-25T22:32:00.000Z",
+      "targetGroup": "frauen",
+      "tags": ["training", "crossfit", "performance"],
+      "searchTerms": ["trainingsschuh", "crossfit", "metcon", "fitness"]
     },
     {
       "id": "air-legacy-018",
@@ -283,7 +346,10 @@
       "rating": 4.4,
       "reviewCount": 567,
       "createdAt": "2025-10-25T22:34:00.000Z",
-      "updatedAt": "2025-10-25T22:34:00.000Z"
+      "updatedAt": "2025-10-25T22:34:00.000Z",
+      "targetGroup": "unisex",
+      "tags": ["lifestyle", "urban", "basic", "sale"],
+      "searchTerms": ["cap", "kappe", "mütze", "accessoire"]
     },
     {
       "id": "air-legacy-019",
@@ -296,7 +362,10 @@
       "rating": 4.5,
       "reviewCount": 834,
       "createdAt": "2025-10-25T22:36:00.000Z",
-      "updatedAt": "2025-10-25T22:36:00.000Z"
+      "updatedAt": "2025-10-25T22:36:00.000Z",
+      "targetGroup": "unisex",
+      "tags": ["basic", "training", "komfort", "sale"],
+      "searchTerms": ["socken", "socks", "sport", "training"]
     },
     {
       "id": "air-legacy-020",
@@ -309,7 +378,10 @@
       "rating": 4.6,
       "reviewCount": 376,
       "createdAt": "2025-10-25T22:38:00.000Z",
-      "updatedAt": "2025-10-25T22:38:00.000Z"
+      "updatedAt": "2025-10-25T22:38:00.000Z",
+      "targetGroup": "kinder",
+      "tags": ["training", "atmungsaktiv", "fußball"],
+      "searchTerms": ["trikot", "jersey", "fußball", "kinder"]
     },
     {
       "id": "air-legacy-021",
@@ -322,7 +394,10 @@
       "rating": 4.4,
       "reviewCount": 912,
       "createdAt": "2025-10-25T22:40:00.000Z",
-      "updatedAt": "2025-10-25T22:40:00.000Z"
+      "updatedAt": "2025-10-25T22:40:00.000Z",
+      "targetGroup": "frauen",
+      "tags": ["running", "budget", "allrounder", "sale"],
+      "searchTerms": ["laufschuh", "jogging", "einsteiger", "günstig"]
     },
     {
       "id": "air-legacy-022",
@@ -335,7 +410,10 @@
       "rating": 4.5,
       "reviewCount": 445,
       "createdAt": "2025-10-25T22:42:00.000Z",
-      "updatedAt": "2025-10-25T22:42:00.000Z"
+      "updatedAt": "2025-10-25T22:42:00.000Z",
+      "targetGroup": "unisex",
+      "tags": ["fitness", "gym", "robust"],
+      "searchTerms": ["tasche", "sporttasche", "gym", "duffel"]
     },
     {
       "id": "air-legacy-023",
@@ -348,7 +426,10 @@
       "rating": 4.7,
       "reviewCount": 234,
       "createdAt": "2025-10-25T22:44:00.000Z",
-      "updatedAt": "2025-10-25T22:44:00.000Z"
+      "updatedAt": "2025-10-25T22:44:00.000Z",
+      "targetGroup": "frauen",
+      "tags": ["training", "support", "atmungsaktiv"],
+      "searchTerms": ["sport-bh", "bra", "fitness", "training"]
     },
     {
       "id": "air-legacy-024",
@@ -361,7 +442,10 @@
       "rating": 4.8,
       "reviewCount": 356,
       "createdAt": "2025-10-25T22:46:00.000Z",
-      "updatedAt": "2025-10-25T22:46:00.000Z"
+      "updatedAt": "2025-10-25T22:46:00.000Z",
+      "targetGroup": "frauen",
+      "tags": ["trail", "wasserdicht", "outdoor"],
+      "searchTerms": ["trailschuh", "laufschuh", "outdoor", "wasserdicht"]
     },
     {
       "id": "air-legacy-025",
@@ -374,7 +458,10 @@
       "rating": 4.7,
       "reviewCount": 521,
       "createdAt": "2025-10-25T22:48:00.000Z",
-      "updatedAt": "2025-10-25T22:48:00.000Z"
+      "updatedAt": "2025-10-25T22:48:00.000Z",
+      "targetGroup": "männer",
+      "tags": ["lifestyle", "retro", "jordan"],
+      "searchTerms": ["pullover", "sweatshirt", "jordan", "lifestyle"]
     },
     {
       "id": "air-legacy-026",
@@ -387,7 +474,10 @@
       "rating": 4.6,
       "reviewCount": 412,
       "createdAt": "2025-10-25T22:50:00.000Z",
-      "updatedAt": "2025-10-25T22:50:00.000Z"
+      "updatedAt": "2025-10-25T22:50:00.000Z",
+      "targetGroup": "unisex",
+      "tags": ["fitness", "training", "mobility", "sale"],
+      "searchTerms": ["widerstandsband", "fitness", "training", "equipment"]
     },
     {
       "id": "air-legacy-027",
@@ -400,7 +490,10 @@
       "rating": 4.8,
       "reviewCount": 689,
       "createdAt": "2025-10-25T22:52:00.000Z",
-      "updatedAt": "2025-10-25T22:52:00.000Z"
+      "updatedAt": "2025-10-25T22:52:00.000Z",
+      "targetGroup": "frauen",
+      "tags": ["bestseller", "retro", "lifestyle"],
+      "searchTerms": ["sneaker", "vintage", "retro", "lifestyle"]
     }
   ]
 }
