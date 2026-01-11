@@ -202,6 +202,13 @@ export default function Navigation() {
   const inlineTags = availableTags.slice(0, 6);
   const dropdownTags = availableTags.slice(6);
 
+  // Debug logging
+  useEffect(() => {
+    console.log('Available tags:', availableTags.length);
+    console.log('Inline tags:', inlineTags.length);
+    console.log('Dropdown tags:', dropdownTags.length);
+  }, [availableTags, inlineTags, dropdownTags]);
+
   return (
     <>
       <nav className="navigation">
@@ -351,12 +358,21 @@ export default function Navigation() {
                   <div className="tag-dropdown-container">
                     <button
                       className="filter-tag-expand"
-                      onClick={() => {
-                        console.log('Tag dropdown clicked, current state:', tagDropdownOpen);
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('🔥 Tag dropdown clicked! Current state:', tagDropdownOpen);
+                        console.log('🔥 Dropdown tags count:', dropdownTags.length);
                         setTagDropdownOpen(!tagDropdownOpen);
                       }}
+                      type="button"
+                      style={{
+                        background: '#ff6b00',
+                        color: '#000',
+                        fontWeight: 'bold'
+                      }}
                     >
-                      + {dropdownTags.length} mehr
+                      + {dropdownTags.length} mehr CLICK ME
                     </button>
 
                     {tagDropdownOpen && (
