@@ -19,7 +19,7 @@ interface Product {
 export default function Navigation() {
   const router = useRouter();
   const { user, signOut } = useAuth();
-  const { cartItemCount } = useCart();
+  const { cart, cartItemCount } = useCart();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -288,12 +288,52 @@ export default function Navigation() {
           </button>
         </div>
         <div className="sidebar-content">
-          {cartItemCount > 0 ? (
+          {cartItemCount > 0 && cart ? (
             <>
-              <p>{cartItemCount} Artikel im Warenkorb</p>
-              <Link href="/cart" onClick={() => setCartOpen(false)} className="sidebar-cart-link">
-                Zum Warenkorb
-              </Link>
+              {/* Mini-Cart Product List (max 5 items) */}
+              <div className="mini-cart-items">
+                {cart.items.slice(0, 5).map((item) => (
+                  <div key={item.productId} className="mini-cart-item">
+                    <div className="mini-cart-item-image">
+                      <img src={item.imageUrl} alt={item.name} />
+                    </div>
+                    <div className="mini-cart-item-info">
+                      <p className="mini-cart-item-name">{item.name}</p>
+                      <p className="mini-cart-item-details">
+                        {item.quantity}x €{item.price.toFixed(2)}
+                      </p>
+                    </div>
+                    <div className="mini-cart-item-total">
+                      €{(item.quantity * item.price).toFixed(2)}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Show "X more items" if cart has more than 5 */}
+                {cart.items.length > 5 && (
+                  <p className="mini-cart-more">
+                    + {cart.items.length - 5} weitere Artikel
+                  </p>
+                )}
+              </div>
+
+              {/* Subtotal */}
+              <div className="mini-cart-subtotal">
+                <span>Zwischensumme:</span>
+                <span className="mini-cart-subtotal-amount">
+                  €{cart.items.reduce((sum, item) => sum + (item.quantity * item.price), 0).toFixed(2)}
+                </span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="mini-cart-actions">
+                <Link href="/cart" onClick={() => setCartOpen(false)} className="mini-cart-btn mini-cart-btn--secondary">
+                  Zum Warenkorb
+                </Link>
+                <Link href="/checkout" onClick={() => setCartOpen(false)} className="mini-cart-btn mini-cart-btn--primary">
+                  Zur Kasse
+                </Link>
+              </div>
             </>
           ) : (
             <p className="empty-cart">Dein Warenkorb ist leer</p>
@@ -635,23 +675,138 @@ export default function Navigation() {
           font-style: italic;
         }
 
-        .sidebar-cart-link {
+        /* ✅ MINI-CART DROPDOWN STYLES */
+        .mini-cart-items {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+          max-height: 400px;
+          overflow-y: auto;
+        }
+
+        .mini-cart-item {
+          display: grid;
+          grid-template-columns: 60px 1fr auto;
+          gap: 0.75rem;
+          align-items: center;
+          padding: 0.75rem;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid #333;
+          transition: all 0.3s ease;
+        }
+
+        .mini-cart-item:hover {
+          background: rgba(255, 255, 255, 0.05);
+          border-color: var(--accent-orange);
+        }
+
+        .mini-cart-item-image {
+          width: 60px;
+          height: 60px;
+          position: relative;
+          background: #1a1a1a;
+          overflow: hidden;
+        }
+
+        .mini-cart-item-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .mini-cart-item-info {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .mini-cart-item-name {
+          margin: 0;
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #fff;
+          line-height: 1.3;
+        }
+
+        .mini-cart-item-details {
+          margin: 0;
+          font-size: 0.75rem;
+          color: #999;
+        }
+
+        .mini-cart-item-total {
+          font-size: 0.875rem;
+          font-weight: 700;
+          color: var(--accent-orange);
+        }
+
+        .mini-cart-more {
+          margin: 0;
+          padding: 0.5rem;
+          text-align: center;
+          color: #999;
+          font-size: 0.875rem;
+          font-style: italic;
+        }
+
+        .mini-cart-subtotal {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 0;
+          border-top: 2px solid #333;
+          border-bottom: 2px solid #333;
+          margin-bottom: 1rem;
+          font-size: 1.125rem;
+          font-weight: 700;
+        }
+
+        .mini-cart-subtotal-amount {
+          color: var(--accent-green);
+          font-size: 1.25rem;
+        }
+
+        .mini-cart-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .mini-cart-btn {
           display: block;
           width: 100%;
           padding: 1rem;
-          background: var(--accent-orange);
-          color: white;
           text-align: center;
           text-decoration: none;
           font-weight: 900;
           letter-spacing: 1px;
+          text-transform: uppercase;
+          font-size: 0.875rem;
           transition: all 0.3s ease;
+          border: 2px solid transparent;
         }
 
-        .sidebar-cart-link:hover {
+        .mini-cart-btn--primary {
+          background: var(--accent-orange);
+          color: #000;
+        }
+
+        .mini-cart-btn--primary:hover {
           background: #ff8533;
           transform: translateY(-2px);
           box-shadow: 0 5px 15px rgba(255, 107, 0, 0.4);
+        }
+
+        .mini-cart-btn--secondary {
+          background: transparent;
+          color: var(--accent-green);
+          border-color: var(--accent-green);
+        }
+
+        .mini-cart-btn--secondary:hover {
+          background: var(--accent-green);
+          color: #000;
         }
 
         .sidebar-overlay {

@@ -97,6 +97,9 @@ export default function TagFilter({ availableTags }: TagFilterProps) {
           width: 100%;
           background: rgba(0, 0, 0, 0.4);
           border-bottom: 1px solid #222;
+          position: sticky;
+          top: 124px; /* Below navbar (64px) + CategoryTabs (~60px) */
+          z-index: 85; /* Below CategoryTabs (90) */
         }
 
         .tag-filter {

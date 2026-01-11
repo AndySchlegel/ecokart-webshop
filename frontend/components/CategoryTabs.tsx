@@ -50,8 +50,8 @@ export default function CategoryTabs() {
           backdrop-filter: blur(10px);
           border-bottom: 2px solid #222;
           position: sticky;
-          top: 0;
-          z-index: 100;
+          top: 64px; /* Below navbar */
+          z-index: 90; /* Below navbar (100) */
         }
 
         .category-tabs {

@@ -60,6 +60,11 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [error, setError] = useState<string | null>(null);
   const [fromAnchor, setFromAnchor] = useState<string | null>(null);
 
+  // ✅ SALE: Calculate discount percentage
+  const discountPercentage = product?.originalPrice
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+    : null;
+
   // Get search params on client side only
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -178,6 +183,12 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           {/* Product Image */}
           <div className="product-image-section">
             <div className="product-image-wrapper">
+              {/* ✅ SALE BADGE */}
+              {product.originalPrice && discountPercentage && (
+                <div className="product-sale-badge">
+                  -{discountPercentage}%
+                </div>
+              )}
               <Image
                 src={product.imageUrl}
                 alt={product.name}
@@ -206,7 +217,14 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             )}
 
             {/* Price */}
-            <div className="product-price">€{product.price.toFixed(2)}</div>
+            {product.originalPrice ? (
+              <div className="product-price-container">
+                <div className="product-price--original">€{product.originalPrice.toFixed(2)}</div>
+                <div className="product-price--sale">€{product.price.toFixed(2)}</div>
+              </div>
+            ) : (
+              <div className="product-price">€{product.price.toFixed(2)}</div>
+            )}
 
             {/* ✅ INVENTORY: Stock Display */}
             {product.stock !== undefined && (
@@ -387,6 +405,23 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           box-shadow: 0 0 40px rgba(255, 107, 0, 0.3);
         }
 
+        /* ✅ SALE BADGE */
+        .product-sale-badge {
+          position: absolute;
+          top: 2rem;
+          right: 2rem;
+          background: var(--accent-orange);
+          color: #000;
+          font-weight: 800;
+          font-size: 1.5rem;
+          padding: 1rem 1.5rem;
+          border-radius: 8px;
+          z-index: 10;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          box-shadow: 0 6px 20px rgba(255, 107, 0, 0.5);
+        }
+
         .product-info-section {
           display: flex;
           flex-direction: column;
@@ -445,6 +480,27 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           font-size: 2.5rem;
           font-weight: 900;
           color: var(--accent-orange);
+          letter-spacing: -0.02em;
+        }
+
+        /* ✅ SALE PRICE DISPLAY */
+        .product-price-container {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .product-price--original {
+          font-size: 1.5rem;
+          color: #666;
+          text-decoration: line-through;
+          font-weight: 500;
+        }
+
+        .product-price--sale {
+          font-size: 2.5rem;
+          font-weight: 900;
+          color: #dc2626;
           letter-spacing: -0.02em;
         }
 
