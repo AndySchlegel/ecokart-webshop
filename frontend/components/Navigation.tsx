@@ -203,12 +203,6 @@ export default function Navigation() {
   const inlineTags = availableTags.slice(0, 6);
   const dropdownTags = availableTags.slice(6);
 
-  // Debug logging
-  useEffect(() => {
-    console.log('Available tags:', availableTags.length);
-    console.log('Inline tags:', inlineTags.length);
-    console.log('Dropdown tags:', dropdownTags.length);
-  }, [availableTags, inlineTags, dropdownTags]);
 
   return (
     <>
@@ -362,18 +356,11 @@ export default function Navigation() {
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      console.log('🔥 Tag dropdown clicked! Current state:', tagDropdownOpen);
-                      console.log('🔥 Dropdown tags count:', dropdownTags.length);
                       setTagDropdownOpen(!tagDropdownOpen);
                     }}
                     type="button"
-                    style={{
-                      background: '#ff6b00',
-                      color: '#000',
-                      fontWeight: 'bold'
-                    }}
                   >
-                    + {dropdownTags.length} mehr CLICK ME
+                    + {dropdownTags.length} mehr
                   </button>
                 )}
 
@@ -422,27 +409,27 @@ export default function Navigation() {
             top: `${tagButtonRef.current.getBoundingClientRect().bottom + 8}px`,
             left: `${tagButtonRef.current.getBoundingClientRect().left}px`,
             background: '#1a1a1a',
-            border: '3px solid #ff6b00',
-            padding: '1rem',
-            minWidth: '250px',
+            border: '2px solid var(--accent-orange)',
+            padding: '0.5rem',
+            minWidth: '200px',
             maxHeight: '400px',
             overflowY: 'auto',
-            zIndex: 99999,
-            boxShadow: '0 10px 40px rgba(255, 107, 0, 0.8)',
-            borderRadius: '8px'
+            zIndex: 2100,
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
+            borderRadius: '4px'
           }}
         >
           {dropdownTags.map((tag) => (
             <button
               key={tag}
-              className={`tag-dropdown-item ${activeTags.includes(tag) ? 'active' : ''}`}
               onClick={() => {
                 handleTagToggle(tag);
+                setTagDropdownOpen(false);
               }}
               style={{
                 display: 'block',
                 width: '100%',
-                background: activeTags.includes(tag) ? '#ff6b00' : 'transparent',
+                background: activeTags.includes(tag) ? 'var(--accent-orange)' : 'transparent',
                 border: 'none',
                 color: activeTags.includes(tag) ? '#000' : 'white',
                 padding: '0.75rem 1rem',
@@ -452,7 +439,20 @@ export default function Navigation() {
                 textTransform: 'capitalize',
                 borderRadius: '4px',
                 marginBottom: '0.25rem',
-                fontWeight: activeTags.includes(tag) ? 'bold' : 'normal'
+                fontWeight: activeTags.includes(tag) ? '700' : 'normal',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                if (!activeTags.includes(tag)) {
+                  e.currentTarget.style.background = 'rgba(255, 107, 0, 0.1)';
+                  e.currentTarget.style.color = 'var(--accent-orange)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!activeTags.includes(tag)) {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = 'white';
+                }
               }}
             >
               {tag}
@@ -807,6 +807,7 @@ export default function Navigation() {
           display: flex;
           gap: 0.5rem;
           align-items: center;
+          flex-wrap: wrap;
         }
 
         .filter-tag {
