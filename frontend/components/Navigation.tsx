@@ -795,6 +795,9 @@ export default function Navigation() {
           cursor: pointer;
           transition: all 0.3s ease;
           white-space: nowrap;
+          position: relative;
+          z-index: 10;
+          pointer-events: auto;
         }
 
         .filter-tag-expand:hover {
@@ -805,6 +808,7 @@ export default function Navigation() {
         /* Tag Dropdown */
         .tag-dropdown-container {
           position: relative;
+          z-index: 100;
         }
 
         .tag-dropdown {
@@ -817,10 +821,11 @@ export default function Navigation() {
           min-width: 200px;
           max-height: 400px;
           overflow-y: auto;
-          z-index: 2000;
+          z-index: 2100;
           display: flex;
           flex-direction: column;
           gap: 0.25rem;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         }
 
         .tag-dropdown-item {
