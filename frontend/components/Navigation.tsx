@@ -250,22 +250,14 @@ export default function Navigation() {
           </div>
         )}
 
-      {/* Left Sidebar - Categories */}
+      {/* Left Sidebar - Price Filter Only */}
       <div className={`sidebar sidebar-left ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <h2>KATEGORIEN</h2>
+          <h2>FILTER</h2>
           <button onClick={() => setSidebarOpen(false)} className="sidebar-close">
             ✕
           </button>
         </div>
-        <nav className="sidebar-nav">
-          <button type="button" onClick={() => handleCategoryClick(null)}>Alle Produkte</button>
-          <button type="button" onClick={() => handleCategoryClick('shoes')}>Schuhe</button>
-          <button type="button" onClick={() => handleCategoryClick('apparel')}>Bekleidung</button>
-          <button type="button" onClick={() => handleCategoryClick('accessories')}>Accessoires</button>
-        </nav>
-
-        <div className="sidebar-divider"></div>
 
         <div className="sidebar-section">
           <h3 className="sidebar-section-title">PREIS</h3>

@@ -24,7 +24,8 @@ export default function CategoryTabs() {
     }
 
     // Preserve other params (category, search, etc.)
-    router.push(`/?${params.toString()}#featured-products`);
+    // No auto-scroll - tabs are sticky and always visible
+    router.push(`/?${params.toString()}`);
   };
 
   return (

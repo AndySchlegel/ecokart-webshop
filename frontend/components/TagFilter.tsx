@@ -33,13 +33,15 @@ export default function TagFilter({ availableTags }: TagFilterProps) {
       params.delete('tags');
     }
 
-    router.push(`/?${params.toString()}#featured-products`);
+    // No auto-scroll - filter bar is sticky and always visible
+    router.push(`/?${params.toString()}`);
   };
 
   const handleClearAll = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('tags');
-    router.push(`/?${params.toString()}#featured-products`);
+    // No auto-scroll - filter bar is sticky and always visible
+    router.push(`/?${params.toString()}`);
   };
 
   // Don't render if no tags available

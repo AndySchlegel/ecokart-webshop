@@ -15,6 +15,7 @@ export interface Product {
   targetGroup?: 'kinder' | 'männer' | 'frauen' | 'unisex'; // Zielgruppe
   tags?: string[]; // ["bestseller", "bio", "vegan", "winter"]
   searchTerms?: string[]; // ["sneaker", "turnschuh", "laufschuh"]
+  originalPrice?: number; // Originalpreis für Sale-Produkte (price = Salepreis)
 }
 
 export interface ProductCreateInput {
@@ -30,6 +31,7 @@ export interface ProductCreateInput {
   targetGroup?: 'kinder' | 'männer' | 'frauen' | 'unisex';
   tags?: string[];
   searchTerms?: string[];
+  originalPrice?: number;
 }
 
 export interface ProductUpdateInput {
@@ -45,4 +47,5 @@ export interface ProductUpdateInput {
   targetGroup?: 'kinder' | 'männer' | 'frauen' | 'unisex';
   tags?: string[];
   searchTerms?: string[];
+  originalPrice?: number;
 }

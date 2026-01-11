@@ -396,6 +396,23 @@ body {
   transform: scale(1.1) rotate(2deg);
 }
 
+/* ✅ SALE BADGE */
+.card__sale-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--accent-orange);
+  color: #000;
+  font-weight: 800;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  z-index: 10;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.4);
+}
+
 .card__content {
   display: flex;
   flex-direction: column;
@@ -483,6 +500,28 @@ body {
   letter-spacing: -0.02em;
   text-align: left;
   display: block;
+}
+
+/* ✅ SALE PRICE CONTAINER */
+.card__price-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: flex-start;
+}
+
+.card__price--original {
+  font-size: 1rem;
+  color: #666;
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+.card__price--sale {
+  font-weight: 800;
+  color: #dc2626;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
 }
 
 .card__cta {

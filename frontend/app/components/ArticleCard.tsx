@@ -69,10 +69,21 @@ export function ArticleCard({ article }: ArticleCardProps) {
   const isOutOfStock = availableStock !== null && availableStock <= 0;
   const isLowStock = availableStock !== null && availableStock > 0 && availableStock <= 5;
 
+  // ✅ SALE: Calculate discount percentage
+  const discountPercentage = article.originalPrice
+    ? Math.round(((article.originalPrice - article.price) / article.originalPrice) * 100)
+    : null;
+
   return (
     <article className="card" id={`product-${article.id}`}>
       <Link href={detailHrefWithAnchor} className="card__link">
         <div className="card__image">
+          {/* ✅ SALE BADGE */}
+          {article.originalPrice && discountPercentage && (
+            <div className="card__sale-badge">
+              -{discountPercentage}%
+            </div>
+          )}
           <Image
             alt={`Produktbild von ${article.name}`}
             src={article.imageUrl}
@@ -121,9 +132,21 @@ export function ArticleCard({ article }: ArticleCardProps) {
         )}
 
         <div className="card__footer">
-          <span className="card__price">
-            €{article.price.toFixed(2)}
-          </span>
+          {/* ✅ SALE PRICE DISPLAY */}
+          {article.originalPrice ? (
+            <div className="card__price-container">
+              <span className="card__price--original">
+                €{article.originalPrice.toFixed(2)}
+              </span>
+              <span className="card__price--sale">
+                €{article.price.toFixed(2)}
+              </span>
+            </div>
+          ) : (
+            <span className="card__price">
+              €{article.price.toFixed(2)}
+            </span>
+          )}
           <button
             className="card__cta"
             type="button"

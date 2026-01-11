@@ -9,4 +9,5 @@ export type Article = {
   reserved?: number; // ✅ NEU: Reserved in carts
   rating?: number; // 0-5 stars
   reviewCount?: number; // number of reviews
+  originalPrice?: number; // ✅ Phase 3: Originalpreis für Sale-Produkte
 };

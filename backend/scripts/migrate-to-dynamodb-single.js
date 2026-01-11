@@ -62,6 +62,7 @@ async function migrateProducts() {
             targetGroup: product.targetGroup || 'unisex',
             tags: product.tags || [],
             searchTerms: product.searchTerms || [],
+            ...(product.originalPrice && { originalPrice: product.originalPrice }), // Optional field
           }
         }));
 
