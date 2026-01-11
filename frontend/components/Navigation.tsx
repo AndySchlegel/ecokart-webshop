@@ -38,6 +38,7 @@ export default function Navigation() {
 
   // Tag dropdown state (nicht horizontal expansion, sondern echtes Dropdown)
   const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
+  const tagButtonRef = useRef<HTMLButtonElement>(null);
 
   // Products for tag extraction
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -353,58 +354,27 @@ export default function Navigation() {
                   </button>
                 ))}
 
-                {/* Dropdown für restliche Tags */}
+                {/* Dropdown Button für restliche Tags */}
                 {dropdownTags.length > 0 && (
-                  <div className="tag-dropdown-container">
-                    <button
-                      className="filter-tag-expand"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('🔥 Tag dropdown clicked! Current state:', tagDropdownOpen);
-                        console.log('🔥 Dropdown tags count:', dropdownTags.length);
-                        setTagDropdownOpen(!tagDropdownOpen);
-                      }}
-                      type="button"
-                      style={{
-                        background: '#ff6b00',
-                        color: '#000',
-                        fontWeight: 'bold'
-                      }}
-                    >
-                      + {dropdownTags.length} mehr CLICK ME
-                    </button>
-
-                    {tagDropdownOpen && (
-                      <div
-                        className="tag-dropdown"
-                        style={{
-                          position: 'absolute',
-                          top: '100%',
-                          left: '0',
-                          marginTop: '0.5rem',
-                          background: '#1a1a1a',
-                          border: '3px solid #ff6b00',
-                          padding: '1rem',
-                          minWidth: '250px',
-                          maxHeight: '400px',
-                          overflowY: 'auto',
-                          zIndex: 9999,
-                          boxShadow: '0 10px 40px rgba(255, 107, 0, 0.5)'
-                        }}
-                      >
-                        {dropdownTags.map((tag) => (
-                          <button
-                            key={tag}
-                            className={`tag-dropdown-item ${activeTags.includes(tag) ? 'active' : ''}`}
-                            onClick={() => handleTagToggle(tag)}
-                          >
-                            {tag}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  <button
+                    ref={tagButtonRef}
+                    className="filter-tag-expand"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log('🔥 Tag dropdown clicked! Current state:', tagDropdownOpen);
+                      console.log('🔥 Dropdown tags count:', dropdownTags.length);
+                      setTagDropdownOpen(!tagDropdownOpen);
+                    }}
+                    type="button"
+                    style={{
+                      background: '#ff6b00',
+                      color: '#000',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    + {dropdownTags.length} mehr CLICK ME
+                  </button>
                 )}
 
                 {/* Price Dropdown */}
@@ -443,6 +413,53 @@ export default function Navigation() {
           )}
         </div>
       </nav>
+
+      {/* Tag Dropdown - FIXED Position, außerhalb overflow */}
+      {tagDropdownOpen && dropdownTags.length > 0 && tagButtonRef.current && (
+        <div
+          style={{
+            position: 'fixed',
+            top: `${tagButtonRef.current.getBoundingClientRect().bottom + 8}px`,
+            left: `${tagButtonRef.current.getBoundingClientRect().left}px`,
+            background: '#1a1a1a',
+            border: '3px solid #ff6b00',
+            padding: '1rem',
+            minWidth: '250px',
+            maxHeight: '400px',
+            overflowY: 'auto',
+            zIndex: 99999,
+            boxShadow: '0 10px 40px rgba(255, 107, 0, 0.8)',
+            borderRadius: '8px'
+          }}
+        >
+          {dropdownTags.map((tag) => (
+            <button
+              key={tag}
+              className={`tag-dropdown-item ${activeTags.includes(tag) ? 'active' : ''}`}
+              onClick={() => {
+                handleTagToggle(tag);
+              }}
+              style={{
+                display: 'block',
+                width: '100%',
+                background: activeTags.includes(tag) ? '#ff6b00' : 'transparent',
+                border: 'none',
+                color: activeTags.includes(tag) ? '#000' : 'white',
+                padding: '0.75rem 1rem',
+                textAlign: 'left',
+                cursor: 'pointer',
+                fontSize: '0.875rem',
+                textTransform: 'capitalize',
+                borderRadius: '4px',
+                marginBottom: '0.25rem',
+                fontWeight: activeTags.includes(tag) ? 'bold' : 'normal'
+              }}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Cart Sidebar (right) */}
       <div className={`sidebar sidebar-right ${cartOpen ? 'open' : ''}`}>
