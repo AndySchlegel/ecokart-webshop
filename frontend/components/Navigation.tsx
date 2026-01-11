@@ -36,8 +36,8 @@ export default function Navigation() {
   // Price dropdown state
   const [priceDropdownOpen, setPriceDropdownOpen] = useState(false);
 
-  // Tag expansion state
-  const [tagsExpanded, setTagsExpanded] = useState(false);
+  // Tag dropdown state (nicht horizontal expansion, sondern echtes Dropdown)
+  const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
 
   // Products for tag extraction
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -198,20 +198,22 @@ export default function Navigation() {
     setShowSuggestions(false);
   };
 
-  // Display tags (first 6 or all if expanded)
-  const displayedTags = tagsExpanded ? availableTags : availableTags.slice(0, 6);
+  // Display first 6 tags inline, rest in dropdown
+  const inlineTags = availableTags.slice(0, 6);
+  const dropdownTags = availableTags.slice(6);
 
   return (
     <>
       <nav className="navigation">
-        {/* ROW 1: Logo + Search + Icons */}
+        {/* ROW 1: Logo + Icons (rechts gruppiert) */}
         <div className="nav-top">
           <Link href="/" className="nav-logo">
             AIR LEGACY
           </Link>
 
-          {/* Search */}
-          <div className="nav-search" ref={searchRef}>
+          <div className="nav-right-icons">
+            {/* Search */}
+            <div className="nav-search" ref={searchRef}>
             <button
               className="nav-icon-btn"
               onClick={() => setSearchOpen(!searchOpen)}
@@ -302,6 +304,7 @@ export default function Navigation() {
               <span className="cart-badge">{cartItemCount}</span>
             )}
           </button>
+          </div>
         </div>
 
         {/* ROW 2: Filter Bar (CategoryTabs + TagFilter + Price) */}
@@ -323,7 +326,8 @@ export default function Navigation() {
           {availableTags.length > 0 && (
             <div className="filter-tags-container">
               <div className="filter-tags">
-                {displayedTags.map((tag) => (
+                {/* Erste 6 Tags inline */}
+                {inlineTags.map((tag) => (
                   <button
                     key={tag}
                     className={`filter-tag ${activeTags.includes(tag) ? 'active' : ''}`}
@@ -333,13 +337,30 @@ export default function Navigation() {
                   </button>
                 ))}
 
-                {availableTags.length > 6 && (
-                  <button
-                    className="filter-tag-expand"
-                    onClick={() => setTagsExpanded(!tagsExpanded)}
-                  >
-                    {tagsExpanded ? '← Weniger' : `+ ${availableTags.length - 6} mehr`}
-                  </button>
+                {/* Dropdown für restliche Tags */}
+                {dropdownTags.length > 0 && (
+                  <div className="tag-dropdown-container">
+                    <button
+                      className="filter-tag-expand"
+                      onClick={() => setTagDropdownOpen(!tagDropdownOpen)}
+                    >
+                      + {dropdownTags.length} mehr
+                    </button>
+
+                    {tagDropdownOpen && (
+                      <div className="tag-dropdown">
+                        {dropdownTags.map((tag) => (
+                          <button
+                            key={tag}
+                            className={`tag-dropdown-item ${activeTags.includes(tag) ? 'active' : ''}`}
+                            onClick={() => handleTagToggle(tag)}
+                          >
+                            {tag}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )}
 
                 {/* Price Dropdown */}
@@ -470,16 +491,23 @@ export default function Navigation() {
           font-size: 1.5rem;
           font-weight: 900;
           letter-spacing: 2px;
-          color: var(--accent-orange);
           text-decoration: none;
           text-transform: uppercase;
           white-space: nowrap;
+          background: linear-gradient(90deg, var(--accent-orange), var(--accent-green));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .nav-right-icons {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
         }
 
         .nav-search {
           position: relative;
-          flex: 1;
-          max-width: 600px;
         }
 
         .nav-icon-btn {
@@ -760,6 +788,51 @@ export default function Navigation() {
         .filter-tag-expand:hover {
           border-color: var(--accent-green);
           color: var(--accent-green);
+        }
+
+        /* Tag Dropdown */
+        .tag-dropdown-container {
+          position: relative;
+        }
+
+        .tag-dropdown {
+          position: absolute;
+          top: calc(100% + 0.5rem);
+          left: 0;
+          background: #1a1a1a;
+          border: 2px solid var(--accent-orange);
+          padding: 0.5rem;
+          min-width: 200px;
+          max-height: 400px;
+          overflow-y: auto;
+          z-index: 2000;
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .tag-dropdown-item {
+          background: transparent;
+          border: none;
+          color: white;
+          padding: 0.75rem 1rem;
+          text-align: left;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-size: 0.875rem;
+          text-transform: capitalize;
+          border-radius: 4px;
+        }
+
+        .tag-dropdown-item:hover {
+          background: rgba(255, 107, 0, 0.1);
+          color: var(--accent-orange);
+        }
+
+        .tag-dropdown-item.active {
+          background: var(--accent-orange);
+          color: #000;
+          font-weight: 700;
         }
 
         /* Price Dropdown */
