@@ -207,7 +207,16 @@ export default function Navigation() {
       <nav className="navigation">
         {/* ROW 1: Logo + Icons (rechts gruppiert) */}
         <div className="nav-top">
-          <Link href="/" className="nav-logo">
+          <Link
+            href="/"
+            className="nav-logo"
+            style={{
+              background: 'linear-gradient(90deg, #ff6b00, #00ff87)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}
+          >
             AIR LEGACY
           </Link>
 
@@ -342,7 +351,10 @@ export default function Navigation() {
                   <div className="tag-dropdown-container">
                     <button
                       className="filter-tag-expand"
-                      onClick={() => setTagDropdownOpen(!tagDropdownOpen)}
+                      onClick={() => {
+                        console.log('Tag dropdown clicked, current state:', tagDropdownOpen);
+                        setTagDropdownOpen(!tagDropdownOpen);
+                      }}
                     >
                       + {dropdownTags.length} mehr
                     </button>
