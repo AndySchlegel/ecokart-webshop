@@ -5,8 +5,6 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
 import Navigation from '../components/Navigation';
-import CategoryTabs from '../components/CategoryTabs';
-import TagFilter from '../components/TagFilter';
 import { ArticleList } from '@/components/ArticleList';
 import { Article } from '@/components/types';
 import { API_BASE_URL } from '@/lib/config';
@@ -57,7 +55,9 @@ export default function HomePage() {
 
   return (
     <>
-      <Navigation />
+      <Suspense fallback={<div className="nav-loading-placeholder" style={{ height: '180px' }} />}>
+        <Navigation />
+      </Suspense>
 
       {/* Hero Section */}
       <section className="hero" id="hero">
@@ -115,8 +115,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Category Tabs Navigation + Tag Filter + Products */}
-      {/* IMPORTANT: All wrapped in Suspense because they use useSearchParams() */}
+      {/* Products - Filters now in Navigation */}
       <Suspense
         fallback={
           <main className="page" id="featured-products" ref={productsRef}>
@@ -132,8 +131,6 @@ export default function HomePage() {
           </main>
         }
       >
-        <CategoryTabs />
-        <TagFilterWrapper articles={articles} />
         <FeaturedProducts
           articles={articles}
           error={error}
@@ -151,21 +148,6 @@ type FeaturedProductsProps = {
   isLoading: boolean;
   productsRef: React.RefObject<HTMLElement>;
 };
-
-// Helper component to extract and display tags
-function TagFilterWrapper({ articles }: { articles: Article[] }) {
-  const availableTags = useMemo(() => {
-    const tagSet = new Set<string>();
-    articles.forEach((article: any) => {
-      if (article.tags && Array.isArray(article.tags)) {
-        article.tags.forEach((tag: string) => tagSet.add(tag));
-      }
-    });
-    return Array.from(tagSet).sort();
-  }, [articles]);
-
-  return <TagFilter availableTags={availableTags} />;
-}
 
 function FeaturedProducts({ articles, error, isLoading, productsRef }: FeaturedProductsProps) {
   const searchParams = useSearchParams();
