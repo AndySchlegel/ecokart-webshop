@@ -376,7 +376,23 @@ export default function Navigation() {
                     </button>
 
                     {tagDropdownOpen && (
-                      <div className="tag-dropdown">
+                      <div
+                        className="tag-dropdown"
+                        style={{
+                          position: 'absolute',
+                          top: '100%',
+                          left: '0',
+                          marginTop: '0.5rem',
+                          background: '#1a1a1a',
+                          border: '3px solid #ff6b00',
+                          padding: '1rem',
+                          minWidth: '250px',
+                          maxHeight: '400px',
+                          overflowY: 'auto',
+                          zIndex: 9999,
+                          boxShadow: '0 10px 40px rgba(255, 107, 0, 0.5)'
+                        }}
+                      >
                         {dropdownTags.map((tag) => (
                           <button
                             key={tag}
@@ -719,6 +735,7 @@ export default function Navigation() {
           background: rgba(0, 0, 0, 0.8);
           border-top: 1px solid #222;
           overflow-x: auto;
+          overflow-y: visible;
           scrollbar-width: none;
         }
 
@@ -761,6 +778,7 @@ export default function Navigation() {
         .filter-tags-container {
           flex: 1;
           overflow-x: auto;
+          overflow-y: visible;
           scrollbar-width: none;
         }
 
