@@ -23,3 +23,4 @@ Das erzeugte Verzeichnis `out/` kann direkt in den S3-Bucket für die Demo kopie
 
 - `.env.local` auf Basis von `.env.example` anlegen.
 - `NEXT_PUBLIC_API_URL` auf die Lambda Function URL zeigen lassen (aktuell `https://6lz2eswgrqw427gckz4txe4ghq0vgjem.lambda-url.eu-central-1.on.aws/`).
+# Force rebuild So. 11 Jan. 2026 15:18:17 CET
