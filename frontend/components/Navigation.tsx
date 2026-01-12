@@ -379,10 +379,10 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* Filter Button */}
+          {/* Filter Button - Toggle on/off */}
           <button
             className={`filter-menu-btn ${activeFilterCount > 0 ? 'active' : ''}`}
-            onClick={() => setFilterMenuOpen(!filterMenuOpen)}
+            onClick={() => setFilterMenuOpen(prev => !prev)}
           >
             <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.5rem' }}>
               <line x1="4" y1="6" x2="16" y2="6" />
@@ -468,7 +468,7 @@ export default function Navigation() {
                   className={`filter-price-btn filter-price-btn--sale ${activeTags.includes('Sale') ? 'active' : ''}`}
                   onClick={() => handleTagToggle('Sale')}
                 >
-                  🏷️ Sale
+                  Sale
                 </button>
               </div>
             </div>
@@ -598,9 +598,14 @@ export default function Navigation() {
           position: absolute;
           left: 50%;
           transform: translateX(-50%);
-          width: 500px;
-          max-width: calc(100vw - 400px);
+          width: 450px;
+          max-width: calc(100vw - 500px);
           z-index: 1500;
+          pointer-events: none;
+        }
+
+        .search-dropdown-center {
+          pointer-events: auto;
         }
 
         .nav-icon-btn {
