@@ -162,13 +162,22 @@ function FeaturedProducts({ articles, error, isLoading, productsRef }: FeaturedP
   const filteredArticles = useMemo(() => {
     let result = articles;
 
-    // Filter by search query first (including searchTerms)
+    // Filter by search query first (including searchTerms, tags, targetGroup, category)
     if (searchQuery) {
       result = result.filter((article: any) => {
         const name = article.name.toLowerCase();
         const description = article.description?.toLowerCase() ?? '';
         const searchTerms = article.searchTerms?.join(' ').toLowerCase() ?? '';
-        return name.includes(searchQuery) || description.includes(searchQuery) || searchTerms.includes(searchQuery);
+        const tags = article.tags?.join(' ').toLowerCase() ?? '';
+        const targetGroup = article.targetGroup?.toLowerCase() ?? '';
+        const category = article.category?.toLowerCase() ?? '';
+
+        return name.includes(searchQuery) ||
+               description.includes(searchQuery) ||
+               searchTerms.includes(searchQuery) ||
+               tags.includes(searchQuery) ||
+               targetGroup.includes(searchQuery) ||
+               category.includes(searchQuery);
       });
     }
 

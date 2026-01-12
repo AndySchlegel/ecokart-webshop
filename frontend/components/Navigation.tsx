@@ -147,7 +147,18 @@ export default function Navigation() {
           const filtered = products
             .filter((product: Product) => {
               const name = product.name.toLowerCase();
-              return name.includes(query);
+              const description = (product as any).description?.toLowerCase() ?? '';
+              const tags = (product as any).tags?.join(' ').toLowerCase() ?? '';
+              const searchTerms = (product as any).searchTerms?.join(' ').toLowerCase() ?? '';
+              const targetGroup = (product as any).targetGroup?.toLowerCase() ?? '';
+              const category = product.category?.toLowerCase() ?? '';
+
+              return name.includes(query) ||
+                     description.includes(query) ||
+                     tags.includes(query) ||
+                     searchTerms.includes(query) ||
+                     targetGroup.includes(query) ||
+                     category.includes(query);
             })
             .slice(0, 5);
 
@@ -593,12 +604,14 @@ export default function Navigation() {
         .search-dropdown {
           position: absolute;
           top: 100%;
-          left: 0;
           right: 0;
           background: #1a1a1a;
           border: 2px solid var(--accent-orange);
           margin-top: 0.5rem;
+          min-width: 400px;
+          max-width: 500px;
           z-index: 2000;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
 
         .search-form {
