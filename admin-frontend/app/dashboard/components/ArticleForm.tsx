@@ -26,6 +26,7 @@ const LOCAL_IMAGES = [
 type ArticleFormValues = {
   name: string;
   price: string;
+  originalPrice: string;
   description: string;
   imageUrl: string;
   imageSource: 'url' | 'local';
@@ -34,17 +35,24 @@ type ArticleFormValues = {
   rating: string;
   reviewCount: string;
   stock: string;
+  targetGroup: string;
+  tags: string;
+  searchTerms: string;
 };
 
 type ArticleFormSubmitValues = {
   name: string;
   price: string;
+  originalPrice: string;
   description: string;
   imageUrl: string;
   category: string;
   rating: string;
   reviewCount: string;
   stock: string;
+  targetGroup: string;
+  tags: string;
+  searchTerms: string;
 };
 
 type ArticleFormProps = {
@@ -53,12 +61,16 @@ type ArticleFormProps = {
     id: string;
     name: string;
     price: number;
+    originalPrice?: number;
     description: string;
     imageUrl: string;
     category: string;
     rating: number;
     reviewCount: number;
     stock?: number;
+    targetGroup?: string;
+    tags?: string[];
+    searchTerms?: string[];
   } | null;
   onCancelEdit?: () => void;
 };
@@ -68,6 +80,7 @@ export function ArticleForm({ onSubmit, editingArticle, onCancelEdit }: ArticleF
   const [values, setValues] = useState<ArticleFormValues>({
     name: editingArticle?.name ?? '',
     price: editingArticle?.price.toString() ?? '',
+    originalPrice: editingArticle?.originalPrice?.toString() ?? '',
     description: editingArticle?.description ?? '',
     imageUrl: isLocalImage ? '' : (editingArticle?.imageUrl ?? ''),
     imageSource: isLocalImage ? 'local' : 'url',
@@ -75,7 +88,10 @@ export function ArticleForm({ onSubmit, editingArticle, onCancelEdit }: ArticleF
     category: editingArticle?.category ?? 'shoes',
     rating: editingArticle?.rating.toString() ?? '4.5',
     reviewCount: editingArticle?.reviewCount.toString() ?? '0',
-    stock: editingArticle?.stock?.toString() ?? '0'
+    stock: editingArticle?.stock?.toString() ?? '0',
+    targetGroup: editingArticle?.targetGroup ?? 'alle',
+    tags: editingArticle?.tags?.join(', ') ?? '',
+    searchTerms: editingArticle?.searchTerms?.join(', ') ?? ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,6 +105,7 @@ export function ArticleForm({ onSubmit, editingArticle, onCancelEdit }: ArticleF
       setValues({
         name: editingArticle.name,
         price: editingArticle.price.toString(),
+        originalPrice: editingArticle.originalPrice?.toString() ?? '',
         description: editingArticle.description,
         imageUrl: isLocal ? '' : editingArticle.imageUrl,
         imageSource: isLocal ? 'local' : 'url',
@@ -96,13 +113,17 @@ export function ArticleForm({ onSubmit, editingArticle, onCancelEdit }: ArticleF
         category: editingArticle.category,
         rating: editingArticle.rating.toString(),
         reviewCount: editingArticle.reviewCount.toString(),
-        stock: editingArticle.stock?.toString() ?? '0'
+        stock: editingArticle.stock?.toString() ?? '0',
+        targetGroup: editingArticle.targetGroup ?? 'alle',
+        tags: editingArticle.tags?.join(', ') ?? '',
+        searchTerms: editingArticle.searchTerms?.join(', ') ?? ''
       });
     } else {
       // Reset form when not editing
       setValues({
         name: '',
         price: '',
+        originalPrice: '',
         description: '',
         imageUrl: '',
         imageSource: 'url',
@@ -110,7 +131,10 @@ export function ArticleForm({ onSubmit, editingArticle, onCancelEdit }: ArticleF
         category: 'shoes',
         rating: '4.5',
         reviewCount: '0',
-        stock: '0'
+        stock: '0',
+        targetGroup: 'alle',
+        tags: '',
+        searchTerms: ''
       });
     }
   }, [editingArticle]);
@@ -132,12 +156,16 @@ export function ArticleForm({ onSubmit, editingArticle, onCancelEdit }: ArticleF
       await onSubmit({
         name: values.name,
         price: values.price,
+        originalPrice: values.originalPrice,
         description: values.description,
         imageUrl: finalImageUrl,
         category: values.category,
         rating: values.rating,
         reviewCount: values.reviewCount,
-        stock: values.stock
+        stock: values.stock,
+        targetGroup: values.targetGroup,
+        tags: values.tags,
+        searchTerms: values.searchTerms
       }, editingArticle?.id);
 
       if (!editingArticle) {
@@ -145,6 +173,7 @@ export function ArticleForm({ onSubmit, editingArticle, onCancelEdit }: ArticleF
         setValues({
           name: '',
           price: '',
+          originalPrice: '',
           description: '',
           imageUrl: '',
           imageSource: 'url',
@@ -152,7 +181,10 @@ export function ArticleForm({ onSubmit, editingArticle, onCancelEdit }: ArticleF
           category: 'shoes',
           rating: '4.5',
           reviewCount: '0',
-          stock: '0'
+          stock: '0',
+          targetGroup: 'alle',
+          tags: '',
+          searchTerms: ''
         });
       }
       setSuccess(true);
@@ -268,6 +300,56 @@ export function ArticleForm({ onSubmit, editingArticle, onCancelEdit }: ArticleF
               required
               placeholder="50"
             />
+          </label>
+
+          <label>
+            <span>Original-Preis (€) - Optional für Sale</span>
+            <input
+              value={values.originalPrice}
+              onChange={(event) => updateField('originalPrice', event.target.value)}
+              type="number"
+              step="0.01"
+              min="0"
+              placeholder="149.99 (leer lassen wenn kein Sale)"
+            />
+          </label>
+
+          <label>
+            <span>Zielgruppe</span>
+            <select
+              value={values.targetGroup}
+              onChange={(event) => updateField('targetGroup', event.target.value)}
+              required
+            >
+              <option value="alle">Alle</option>
+              <option value="kinder">Kinder</option>
+              <option value="männer">Männer</option>
+              <option value="frauen">Frauen</option>
+            </select>
+          </label>
+
+          <label className="form-grid--full">
+            <span>Tags (komma-separiert)</span>
+            <input
+              value={values.tags}
+              onChange={(event) => updateField('tags', event.target.value)}
+              placeholder="Air, Performance, Running, Boost (mit Kommas trennen)"
+            />
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-gray)', marginTop: '0.5rem' }}>
+              Beispiele: Air, Allrounder, Atmungsaktiv, Basic, Basketball, etc.
+            </p>
+          </label>
+
+          <label className="form-grid--full">
+            <span>Suchbegriffe (komma-separiert)</span>
+            <input
+              value={values.searchTerms}
+              onChange={(event) => updateField('searchTerms', event.target.value)}
+              placeholder="laufschuhe, sneaker, sportschuhe, turnschuhe (mit Kommas trennen)"
+            />
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-gray)', marginTop: '0.5rem' }}>
+              Synonyme und alternative Bezeichnungen für bessere Suchergebnisse
+            </p>
           </label>
 
           <label className="form-grid--full">

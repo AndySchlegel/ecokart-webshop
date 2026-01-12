@@ -35,7 +35,7 @@ export default function DashboardPage() {
     void loadArticles();
   }, []);
 
-  async function handleAddArticle(values: { name: string; price: string; description: string; imageUrl: string; category: string; rating: string; reviewCount: string; stock: string }, articleId?: string) {
+  async function handleAddArticle(values: { name: string; price: string; originalPrice: string; description: string; imageUrl: string; category: string; rating: string; reviewCount: string; stock: string; targetGroup: string; tags: string; searchTerms: string }, articleId?: string) {
     const localRoot = '/Users/his4irness23/GitHub/Repositories/Ecokart-Webshop/pics/';
     let imageUrl = values.imageUrl.trim();
     if (imageUrl.startsWith(localRoot)) {
@@ -48,7 +48,18 @@ export default function DashboardPage() {
       }
     }
 
-    const payload = {
+    // Parse tags and searchTerms from comma-separated strings to arrays
+    const tagsArray = values.tags
+      .split(',')
+      .map(t => t.trim())
+      .filter(t => t.length > 0);
+
+    const searchTermsArray = values.searchTerms
+      .split(',')
+      .map(t => t.trim())
+      .filter(t => t.length > 0);
+
+    const payload: any = {
       name: values.name,
       price: Number.parseFloat(values.price),
       description: values.description,
@@ -56,8 +67,16 @@ export default function DashboardPage() {
       category: values.category,
       rating: Number.parseFloat(values.rating),
       reviewCount: Number.parseInt(values.reviewCount, 10),
-      stock: Number.parseInt(values.stock, 10)
+      stock: Number.parseInt(values.stock, 10),
+      targetGroup: values.targetGroup,
+      tags: tagsArray,
+      searchTerms: searchTermsArray
     };
+
+    // Add originalPrice only if provided (optional for Sale products)
+    if (values.originalPrice && values.originalPrice.trim() !== '') {
+      payload.originalPrice = Number.parseFloat(values.originalPrice);
+    }
     if (Number.isNaN(payload.price)) {
       throw new Error('Bitte einen gültigen Preis hinterlegen.');
     }
