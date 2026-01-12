@@ -46,12 +46,16 @@ export default function Navigation() {
   const activeMinPrice = searchParams.get('minPrice') ? parseFloat(searchParams.get('minPrice')!) : null;
   const activeMaxPrice = searchParams.get('maxPrice') ? parseFloat(searchParams.get('maxPrice')!) : null;
 
-  // Extract unique tags from all products
+  // Extract unique tags from all products (exclude "Sale" - it goes to Price section)
   const availableTags = useMemo(() => {
     const tagSet = new Set<string>();
     allProducts.forEach((product) => {
       if (product.tags && Array.isArray(product.tags)) {
-        product.tags.forEach((tag: string) => tagSet.add(tag));
+        product.tags.forEach((tag: string) => {
+          if (tag.toLowerCase() !== 'sale') {
+            tagSet.add(tag);
+          }
+        });
       }
     });
     return Array.from(tagSet).sort();
@@ -225,11 +229,30 @@ export default function Navigation() {
     (activeTargetGroup !== 'alle' ? 1 : 0) +
     (activeMinPrice !== null || activeMaxPrice !== null ? 1 : 0);
 
+  // Prevent body scroll when filter menu is open (Mobile Fix)
+  useEffect(() => {
+    if (filterMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [filterMenuOpen]);
+
 
   return (
     <>
       <nav className="navigation">
-        {/* ROW 1: Logo + Icons (rechts gruppiert) */}
+        {/* ROW 1: Logo + Search (mittig) + Icons (rechts) */}
         <div className="nav-top">
           <Link
             href="/"
@@ -244,22 +267,10 @@ export default function Navigation() {
             AIR LEGACY
           </Link>
 
-          <div className="nav-right-icons">
-            {/* Search */}
-            <div className="nav-search" ref={searchRef}>
-            <button
-              className="nav-icon-btn"
-              onClick={() => setSearchOpen(!searchOpen)}
-              aria-label="Search"
-            >
-              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.35-4.35" />
-              </svg>
-            </button>
-
+          {/* Search (center) */}
+          <div className="nav-search-center" ref={searchRef}>
             {searchOpen && (
-              <div className="search-dropdown">
+              <div className="search-dropdown-center">
                 <form onSubmit={handleSearch} className="search-form">
                   <input
                     type="text"
@@ -295,7 +306,20 @@ export default function Navigation() {
                 )}
               </div>
             )}
-            </div>
+          </div>
+
+          <div className="nav-right-icons">
+            {/* Search Icon */}
+            <button
+              className="nav-icon-btn"
+              onClick={() => setSearchOpen(!searchOpen)}
+              aria-label="Search"
+            >
+              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+            </button>
 
             {/* User Icon */}
             {user ? (
@@ -439,6 +463,13 @@ export default function Navigation() {
                 >
                   Über €200
                 </button>
+                {/* Sale Tag - special styling */}
+                <button
+                  className={`filter-price-btn filter-price-btn--sale ${activeTags.includes('Sale') ? 'active' : ''}`}
+                  onClick={() => handleTagToggle('Sale')}
+                >
+                  🏷️ Sale
+                </button>
               </div>
             </div>
 
@@ -533,13 +564,14 @@ export default function Navigation() {
           border-bottom: 2px solid var(--accent-orange);
         }
 
-        /* ROW 1: Top Bar */
+        /* ROW 1: Top Bar - Logo + Search (center) + Icons (right) */
         .nav-top {
           display: flex;
           align-items: center;
           justify-content: space-between;
           padding: 1rem 5vw;
           gap: 2rem;
+          position: relative;
         }
 
         .nav-logo {
@@ -561,8 +593,14 @@ export default function Navigation() {
           gap: 1.5rem;
         }
 
-        .nav-search {
-          position: relative;
+        /* Search Center Container */
+        .nav-search-center {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 500px;
+          max-width: calc(100vw - 400px);
+          z-index: 1500;
         }
 
         .nav-icon-btn {
@@ -600,18 +638,18 @@ export default function Navigation() {
           justify-content: center;
         }
 
-        /* Search Dropdown */
-        .search-dropdown {
+        /* Search Dropdown Center */
+        .search-dropdown-center {
           position: absolute;
           top: 100%;
+          left: 0;
           right: 0;
           background: #1a1a1a;
           border: 2px solid var(--accent-orange);
           margin-top: 0.5rem;
-          min-width: 400px;
-          max-width: 500px;
           z-index: 2000;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+          border-radius: 4px;
         }
 
         .search-form {
@@ -832,11 +870,14 @@ export default function Navigation() {
           top: 124px;
           left: 0;
           right: 0;
+          bottom: 0;
           background: #1a1a1a;
           border-bottom: 2px solid var(--accent-orange);
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
           z-index: 2000;
           animation: slideDown 0.3s ease;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
         }
 
         @keyframes slideDown {
@@ -939,6 +980,26 @@ export default function Navigation() {
           background: var(--accent-green);
           border-color: var(--accent-green);
           color: #000;
+          font-weight: 700;
+        }
+
+        /* Sale Button - Special Red Styling */
+        .filter-price-btn--sale {
+          border-color: #dc2626;
+          color: #dc2626;
+          font-weight: 600;
+        }
+
+        .filter-price-btn--sale:hover {
+          background: rgba(220, 38, 38, 0.1);
+          border-color: #dc2626;
+          color: #dc2626;
+        }
+
+        .filter-price-btn--sale.active {
+          background: #dc2626;
+          border-color: #dc2626;
+          color: #fff;
           font-weight: 700;
         }
 
@@ -1226,6 +1287,20 @@ export default function Navigation() {
             font-size: 1.25rem;
           }
 
+          /* Hide center search on mobile, keep icon */
+          .nav-search-center {
+            display: none;
+          }
+
+          /* Show search dropdown below icons on mobile */
+          .search-dropdown-center {
+            position: fixed;
+            top: 60px;
+            left: 1rem;
+            right: 1rem;
+            width: auto;
+          }
+
           .nav-filter-bar {
             padding: 0.5rem 1rem;
             flex-direction: column;
@@ -1237,6 +1312,23 @@ export default function Navigation() {
           .filter-tags-container {
             width: 100%;
             overflow-x: auto;
+          }
+
+          .filter-mega-menu {
+            top: 110px;
+          }
+
+          .filter-mega-content {
+            padding: 1.5rem 1rem;
+          }
+
+          .filter-tag-grid {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.5rem;
+          }
+
+          .filter-price-options {
+            grid-template-columns: 1fr;
           }
 
           .sidebar {
