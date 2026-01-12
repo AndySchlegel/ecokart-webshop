@@ -210,16 +210,28 @@ export default function Navigation() {
     setShowSuggestions(false);
   };
 
-  // Close filter menu when clicking outside
+  // Close filter menu when clicking outside (but not on filter button)
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (filterMenuRef.current && !filterMenuRef.current.contains(event.target as Node)) {
+      const target = event.target as HTMLElement;
+
+      // Check if click is on filter button or its children
+      const filterButton = document.querySelector('.filter-menu-btn');
+      if (filterButton && (filterButton === target || filterButton.contains(target))) {
+        return; // Don't close if clicking on filter button
+      }
+
+      // Close if clicking outside the menu
+      if (filterMenuRef.current && !filterMenuRef.current.contains(target)) {
         setFilterMenuOpen(false);
       }
     };
 
     if (filterMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      // Use setTimeout to avoid immediate closing on button click
+      setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+      }, 0);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [filterMenuOpen]);
@@ -596,10 +608,10 @@ export default function Navigation() {
         /* Search Center Container */
         .nav-search-center {
           position: absolute;
-          left: 50%;
+          left: 45%;
           transform: translateX(-50%);
-          width: 450px;
-          max-width: calc(100vw - 500px);
+          width: 400px;
+          max-width: 400px;
           z-index: 1500;
           pointer-events: none;
         }
