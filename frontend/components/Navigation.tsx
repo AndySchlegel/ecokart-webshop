@@ -33,12 +33,9 @@ export default function Navigation() {
   // Cart dropdown state
   const [cartOpen, setCartOpen] = useState(false);
 
-  // Price dropdown state
-  const [priceDropdownOpen, setPriceDropdownOpen] = useState(false);
-
-  // Tag dropdown state (nicht horizontal expansion, sondern echtes Dropdown)
-  const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
-  const tagButtonRef = useRef<HTMLButtonElement>(null);
+  // Mega Filter Menu state
+  const [filterMenuOpen, setFilterMenuOpen] = useState(false);
+  const filterMenuRef = useRef<HTMLDivElement>(null);
 
   // Products for tag extraction
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -123,7 +120,6 @@ export default function Navigation() {
       params.delete('maxPrice');
     }
 
-    setPriceDropdownOpen(false);
     router.push(`/?${params.toString()}`);
   };
 
@@ -199,9 +195,24 @@ export default function Navigation() {
     setShowSuggestions(false);
   };
 
-  // Display first 6 tags inline, rest in dropdown
-  const inlineTags = availableTags.slice(0, 6);
-  const dropdownTags = availableTags.slice(6);
+  // Close filter menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (filterMenuRef.current && !filterMenuRef.current.contains(event.target as Node)) {
+        setFilterMenuOpen(false);
+      }
+    };
+
+    if (filterMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [filterMenuOpen]);
+
+  // Count active filters
+  const activeFilterCount = activeTags.length +
+    (activeTargetGroup !== 'alle' ? 1 : 0) +
+    (activeMinPrice !== null || activeMaxPrice !== null ? 1 : 0);
 
 
   return (
@@ -318,7 +329,7 @@ export default function Navigation() {
           </div>
         </div>
 
-        {/* ROW 2: Filter Bar (CategoryTabs + TagFilter + Price) */}
+        {/* ROW 2: Filter Bar (CategoryTabs + Filter Button) */}
         <div className="nav-filter-bar">
           {/* CategoryTabs */}
           <div className="filter-category-tabs">
@@ -333,131 +344,103 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* TagFilter + Price Dropdown */}
-          {availableTags.length > 0 && (
-            <div className="filter-tags-container">
-              <div className="filter-tags">
-                {/* Erste 6 Tags inline */}
-                {inlineTags.map((tag) => (
-                  <button
-                    key={tag}
-                    className={`filter-tag ${activeTags.includes(tag) ? 'active' : ''}`}
-                    onClick={() => handleTagToggle(tag)}
-                  >
-                    {tag}
-                  </button>
-                ))}
+          {/* Filter Button */}
+          <button
+            className={`filter-menu-btn ${activeFilterCount > 0 ? 'active' : ''}`}
+            onClick={() => setFilterMenuOpen(!filterMenuOpen)}
+          >
+            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.5rem' }}>
+              <line x1="4" y1="6" x2="16" y2="6" />
+              <line x1="4" y1="12" x2="16" y2="12" />
+              <line x1="4" y1="18" x2="16" y2="18" />
+              <circle cx="8" cy="6" r="2" fill="currentColor" />
+              <circle cx="12" cy="12" r="2" fill="currentColor" />
+              <circle cx="10" cy="18" r="2" fill="currentColor" />
+            </svg>
+            Filter
+            {activeFilterCount > 0 && (
+              <span className="filter-badge">{activeFilterCount}</span>
+            )}
+          </button>
 
-                {/* Dropdown Button für restliche Tags */}
-                {dropdownTags.length > 0 && (
-                  <button
-                    ref={tagButtonRef}
-                    className="filter-tag-expand"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setTagDropdownOpen(!tagDropdownOpen);
-                    }}
-                    type="button"
-                  >
-                    + {dropdownTags.length} mehr
-                  </button>
-                )}
-
-                {/* Price Dropdown */}
-                <div className="price-dropdown-container">
-                  <button
-                    className={`filter-tag filter-tag-price ${activeMinPrice !== null || activeMaxPrice !== null ? 'active' : ''}`}
-                    onClick={() => setPriceDropdownOpen(!priceDropdownOpen)}
-                  >
-                    Preis {activeMinPrice !== null || activeMaxPrice !== null ? '✓' : '▼'}
-                  </button>
-
-                  {priceDropdownOpen && (
-                    <div className="price-dropdown">
-                      <button onClick={() => handlePriceFilter(null, 50)}>Unter €50</button>
-                      <button onClick={() => handlePriceFilter(50, 100)}>€50 - €100</button>
-                      <button onClick={() => handlePriceFilter(100, 150)}>€100 - €150</button>
-                      <button onClick={() => handlePriceFilter(150, 200)}>€150 - €200</button>
-                      <button onClick={() => handlePriceFilter(200, null)}>Über €200</button>
-                      {(activeMinPrice !== null || activeMaxPrice !== null) && (
-                        <button onClick={() => handlePriceFilter(null, null)} className="price-clear">
-                          Filter löschen
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Clear All Filters */}
-                {(activeTags.length > 0 || activeTargetGroup !== 'alle' || activeMinPrice !== null || activeMaxPrice !== null) && (
-                  <button className="filter-clear-all" onClick={handleClearFilters}>
-                    Alle Filter löschen
-                  </button>
-                )}
-              </div>
-            </div>
+          {/* Clear All Filters (compact) */}
+          {activeFilterCount > 0 && (
+            <button className="filter-clear-all" onClick={handleClearFilters}>
+              Alle löschen
+            </button>
           )}
         </div>
       </nav>
 
-      {/* Tag Dropdown - FIXED Position, außerhalb overflow */}
-      {tagDropdownOpen && dropdownTags.length > 0 && tagButtonRef.current && (
-        <div
-          style={{
-            position: 'fixed',
-            top: `${tagButtonRef.current.getBoundingClientRect().bottom + 8}px`,
-            left: `${tagButtonRef.current.getBoundingClientRect().left}px`,
-            background: '#1a1a1a',
-            border: '2px solid var(--accent-orange)',
-            padding: '0.5rem',
-            minWidth: '200px',
-            maxHeight: '400px',
-            overflowY: 'auto',
-            zIndex: 2100,
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
-            borderRadius: '4px'
-          }}
-        >
-          {dropdownTags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => {
-                handleTagToggle(tag);
-                setTagDropdownOpen(false);
-              }}
-              style={{
-                display: 'block',
-                width: '100%',
-                background: activeTags.includes(tag) ? 'var(--accent-orange)' : 'transparent',
-                border: 'none',
-                color: activeTags.includes(tag) ? '#000' : 'white',
-                padding: '0.75rem 1rem',
-                textAlign: 'left',
-                cursor: 'pointer',
-                fontSize: '0.875rem',
-                textTransform: 'capitalize',
-                borderRadius: '4px',
-                marginBottom: '0.25rem',
-                fontWeight: activeTags.includes(tag) ? '700' : 'normal',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                if (!activeTags.includes(tag)) {
-                  e.currentTarget.style.background = 'rgba(255, 107, 0, 0.1)';
-                  e.currentTarget.style.color = 'var(--accent-orange)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!activeTags.includes(tag)) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'white';
-                }
-              }}
-            >
-              {tag}
-            </button>
-          ))}
+      {/* Mega Filter Menu */}
+      {filterMenuOpen && (
+        <div className="filter-mega-menu" ref={filterMenuRef}>
+          <div className="filter-mega-content">
+            {/* Tags Section */}
+            {availableTags.length > 0 && (
+              <div className="filter-section">
+                <h3 className="filter-section-title">Tags</h3>
+                <div className="filter-tag-grid">
+                  {availableTags.map((tag) => (
+                    <button
+                      key={tag}
+                      className={`filter-tag-item ${activeTags.includes(tag) ? 'active' : ''}`}
+                      onClick={() => handleTagToggle(tag)}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Price Section */}
+            <div className="filter-section">
+              <h3 className="filter-section-title">Preis</h3>
+              <div className="filter-price-options">
+                <button
+                  className={`filter-price-btn ${activeMinPrice === null && activeMaxPrice === 50 ? 'active' : ''}`}
+                  onClick={() => handlePriceFilter(null, 50)}
+                >
+                  Unter €50
+                </button>
+                <button
+                  className={`filter-price-btn ${activeMinPrice === 50 && activeMaxPrice === 100 ? 'active' : ''}`}
+                  onClick={() => handlePriceFilter(50, 100)}
+                >
+                  €50 - €100
+                </button>
+                <button
+                  className={`filter-price-btn ${activeMinPrice === 100 && activeMaxPrice === 150 ? 'active' : ''}`}
+                  onClick={() => handlePriceFilter(100, 150)}
+                >
+                  €100 - €150
+                </button>
+                <button
+                  className={`filter-price-btn ${activeMinPrice === 150 && activeMaxPrice === 200 ? 'active' : ''}`}
+                  onClick={() => handlePriceFilter(150, 200)}
+                >
+                  €150 - €200
+                </button>
+                <button
+                  className={`filter-price-btn ${activeMinPrice === 200 && activeMaxPrice === null ? 'active' : ''}`}
+                  onClick={() => handlePriceFilter(200, null)}
+                >
+                  Über €200
+                </button>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="filter-actions">
+              <button className="filter-action-clear" onClick={() => { handleClearFilters(); setFilterMenuOpen(false); }}>
+                Alle Filter löschen
+              </button>
+              <button className="filter-action-apply" onClick={() => setFilterMenuOpen(false)}>
+                Filter anwenden
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -747,17 +730,10 @@ export default function Navigation() {
         .nav-filter-bar {
           display: flex;
           align-items: center;
-          gap: 2rem;
+          gap: 1rem;
           padding: 0.75rem 5vw;
           background: rgba(0, 0, 0, 0.8);
           border-top: 1px solid #222;
-          overflow-x: auto;
-          overflow-y: visible;
-          scrollbar-width: none;
-        }
-
-        .nav-filter-bar::-webkit-scrollbar {
-          display: none;
         }
 
         .filter-category-tabs {
@@ -792,175 +768,218 @@ export default function Navigation() {
           background: rgba(255, 107, 0, 0.1);
         }
 
-        .filter-tags-container {
-          flex: 1;
-          overflow-x: auto;
-          overflow-y: visible;
-          scrollbar-width: none;
-        }
-
-        .filter-tags-container::-webkit-scrollbar {
-          display: none;
-        }
-
-        .filter-tags {
+        /* Filter Menu Button */
+        .filter-menu-btn {
           display: flex;
-          gap: 0.5rem;
           align-items: center;
-          flex-wrap: wrap;
-        }
-
-        .filter-tag {
           background: rgba(255, 255, 255, 0.05);
           border: 1px solid #333;
           color: #ccc;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
+          padding: 0.75rem 1.25rem;
+          border-radius: 4px;
           font-size: 0.875rem;
-          font-weight: 500;
+          font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
-          text-transform: capitalize;
+          position: relative;
           white-space: nowrap;
         }
 
-        .filter-tag:hover {
+        .filter-menu-btn:hover {
           background: rgba(255, 255, 255, 0.1);
           border-color: var(--accent-green);
           color: var(--accent-green);
         }
 
-        .filter-tag.active {
+        .filter-menu-btn.active {
+          background: var(--accent-orange);
+          border-color: var(--accent-orange);
+          color: #000;
+        }
+
+        .filter-badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background: var(--accent-green);
+          color: #000;
+          font-size: 0.75rem;
+          font-weight: 900;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* Mega Filter Menu */
+        .filter-mega-menu {
+          position: fixed;
+          top: 124px;
+          left: 0;
+          right: 0;
+          background: #1a1a1a;
+          border-bottom: 2px solid var(--accent-orange);
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+          z-index: 2000;
+          animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .filter-mega-content {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 2rem 5vw;
+        }
+
+        .filter-section {
+          margin-bottom: 2rem;
+        }
+
+        .filter-section:last-of-type {
+          margin-bottom: 0;
+        }
+
+        .filter-section-title {
+          margin: 0 0 1rem 0;
+          font-size: 0.875rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: var(--accent-orange);
+        }
+
+        /* Tag Grid */
+        .filter-tag-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+          gap: 0.75rem;
+        }
+
+        .filter-tag-item {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid #333;
+          color: #ccc;
+          padding: 0.75rem 1rem;
+          border-radius: 4px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-transform: capitalize;
+          text-align: center;
+        }
+
+        .filter-tag-item:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: var(--accent-green);
+          color: var(--accent-green);
+          transform: translateY(-2px);
+        }
+
+        .filter-tag-item.active {
           background: var(--accent-orange);
           border-color: var(--accent-orange);
           color: #000;
           font-weight: 700;
         }
 
-        .filter-tag-expand {
-          background: transparent;
-          border: 1px dashed #444;
-          color: #999;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          font-size: 0.875rem;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          white-space: nowrap;
-          position: relative;
-          z-index: 10;
-          pointer-events: auto;
+        /* Price Options */
+        .filter-price-options {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+          gap: 0.75rem;
         }
 
-        .filter-tag-expand:hover {
+        .filter-price-btn {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid #333;
+          color: #ccc;
+          padding: 0.75rem 1rem;
+          border-radius: 4px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-align: center;
+        }
+
+        .filter-price-btn:hover {
+          background: rgba(255, 255, 255, 0.1);
           border-color: var(--accent-green);
           color: var(--accent-green);
+          transform: translateY(-2px);
         }
 
-        /* Tag Dropdown */
-        .tag-dropdown-container {
-          position: relative;
-          z-index: 100;
-        }
-
-        .tag-dropdown {
-          position: absolute;
-          top: calc(100% + 0.5rem);
-          left: 0;
-          background: #1a1a1a;
-          border: 2px solid var(--accent-orange);
-          padding: 0.5rem;
-          min-width: 200px;
-          max-height: 400px;
-          overflow-y: auto;
-          z-index: 2100;
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-        }
-
-        .tag-dropdown-item {
-          background: transparent;
-          border: none;
-          color: white;
-          padding: 0.75rem 1rem;
-          text-align: left;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          font-size: 0.875rem;
-          text-transform: capitalize;
-          border-radius: 4px;
-        }
-
-        .tag-dropdown-item:hover {
-          background: rgba(255, 107, 0, 0.1);
-          color: var(--accent-orange);
-        }
-
-        .tag-dropdown-item.active {
-          background: var(--accent-orange);
+        .filter-price-btn.active {
+          background: var(--accent-green);
+          border-color: var(--accent-green);
           color: #000;
           font-weight: 700;
         }
 
-        /* Price Dropdown */
-        .price-dropdown-container {
-          position: relative;
-        }
-
-        .filter-tag-price {
+        /* Filter Actions */
+        .filter-actions {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          gap: 1rem;
+          justify-content: flex-end;
+          padding-top: 1.5rem;
+          border-top: 1px solid #333;
+          margin-top: 2rem;
         }
 
-        .price-dropdown {
-          position: absolute;
-          top: calc(100% + 0.5rem);
-          right: 0;
-          background: #1a1a1a;
-          border: 2px solid var(--accent-orange);
-          padding: 0.5rem;
-          min-width: 180px;
-          z-index: 2000;
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
-
-        .price-dropdown button {
+        .filter-action-clear {
           background: transparent;
-          border: none;
-          color: white;
-          padding: 0.75rem 1rem;
-          text-align: left;
+          border: 1px solid #dc2626;
+          color: #dc2626;
+          padding: 0.75rem 1.5rem;
+          border-radius: 4px;
+          font-size: 0.875rem;
+          font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
+        }
+
+        .filter-action-clear:hover {
+          background: #dc2626;
+          color: #fff;
+        }
+
+        .filter-action-apply {
+          background: var(--accent-orange);
+          border: 1px solid var(--accent-orange);
+          color: #000;
+          padding: 0.75rem 2rem;
+          border-radius: 4px;
           font-size: 0.875rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s ease;
         }
 
-        .price-dropdown button:hover {
-          background: rgba(255, 107, 0, 0.1);
-          color: var(--accent-orange);
-        }
-
-        .price-dropdown button.price-clear {
-          border-top: 1px solid #333;
-          margin-top: 0.25rem;
-          color: #dc2626;
-        }
-
-        .price-dropdown button.price-clear:hover {
-          background: rgba(220, 38, 38, 0.1);
+        .filter-action-apply:hover {
+          background: #ff8533;
+          border-color: #ff8533;
+          transform: translateY(-2px);
         }
 
         .filter-clear-all {
           background: transparent;
           border: 1px solid #dc2626;
           color: #dc2626;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
+          padding: 0.75rem 1rem;
+          border-radius: 4px;
           font-size: 0.875rem;
           font-weight: 600;
           cursor: pointer;

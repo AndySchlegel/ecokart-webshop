@@ -656,16 +656,61 @@ git ls-files -z | xargs -0 du -h | sort -hr | head -20
 
 **Status:** Alle Sprint 1 Tasks abgeschlossen! 🎉
 
-### **Sprint 2: Feature Enhancements (3-4 Tage)** ⏳ OPTIONAL
-4. ⏳ Task 2.1: Produkt-Tagging & Suche (4-6h) - OPTIONAL
-5. ⏳ Task 2.2: User Profile & Bestellhistorie (6-8h) - OPTIONAL
-6. ⏳ Task 2.3: Favoriten/Wishlist (4-6h) - OPTIONAL
+### **Sprint 2: Navbar Redesign & Filter UX (11. Jan 2026)** 🟡 IN PROGRESS
+4. ✅ Task 2.1: Produkt-Tagging (Backend + Frontend) **[DONE]**
+   - Backend: targetGroup, tags, searchTerms Felder
+   - Frontend: CategoryTabs (Alle/Kinder/Männer/Frauen)
+   - Frontend: TagFilter Component (39 Tags)
+   - Database re-seeded mit neuen Feldern
+   - Commits: Sprint 2 - Tag System
+
+5. ✅ Task 2.6: Sale Visualization **[DONE]**
+   - originalPrice Feld im Backend
+   - Durchgestrichener Preis + Markanter Sale-Preis
+   - Sale Badge auf Product Cards + Detail Pages
+   - Discount Percentage Calculation
+   - Commits: 832df21, 08320e7
+
+6. ✅ Task 2.7: Mini-Cart Dropdown **[DONE]**
+   - Product Preview (max 5 items) mit Thumbnails
+   - Subtotal Calculation
+   - "Zum Warenkorb" + "Zur Kasse" Buttons
+   - Commits: 08320e7
+
+7. 🟡 Task 2.8: Navbar Complete Redesign **[PARTIALLY DONE]**
+   - ✅ Burger-Menü komplett entfernt
+   - ✅ Alle Filter in Navbar integriert
+   - ✅ 2-Row Layout (Logo/Icons + Filter-Bar)
+   - ✅ Logo Orange-Grün Gradient (Inline-Styles)
+   - ✅ Icons rechts gruppiert (Suche + User + Cart)
+   - ✅ Tag-Dropdown funktioniert (position: fixed Lösung)
+   - ❌ **OFFEN:** Preis-Dropdown funktioniert nicht (gleiches overflow Problem)
+   - ❌ **OFFEN:** Tag-Dropdown UX/Design muss optimiert werden
+   - Commits: 85da46a, 7a8cb37, 1e1885b, 2634f6b, 6f8e686, 81843bf, 70ab827
+
+**Status:** Grundlegende Funktionalität erreicht, aber UX-Polish fehlt noch
+
+**OFFENE THEMEN für nächste Session:**
+1. **Preis-Dropdown:** Funktioniert nicht - wahrscheinlich gleiches overflow Problem wie Tag-Dropdown hatte
+   - **Lösung:** position: fixed Technik anwenden wie beim Tag-Dropdown
+2. **Tag-Dropdown Design:** "+ 33 mehr" Button passt nicht zum Layout
+   - **Problem:** Zu viele Tags (39 total), Button wirkt überladen
+   - **Optionen:**
+     - A) Icon-Based: "⋯ Mehr Filter" oder "︙" Icon
+     - B) Kompakter: "Mehr" ohne Zahl
+     - C) Sidebar: Separate Filter-Sidebar wie bei großen E-Commerce Sites
+     - D) Sticky Filter-Bar: Filter bleibt beim Scrollen sichtbar mit Collapse-Option
+3. **Filter-Bar Overflow:** flex-wrap wurde hinzugefügt, aber könnte bei vielen aktiven Filtern noch Probleme geben
+
+### **Sprint 3: Feature Enhancements (3-4 Tage)** ⏳ OPTIONAL
+8. ⏳ Task 2.2: User Profile & Bestellhistorie (6-8h) - OPTIONAL
+9. ⏳ Task 2.3: Favoriten/Wishlist (4-6h) - OPTIONAL
 
 **Status:** Optional - Portfolio ist auch ohne diese Features showcase-ready
 
-### **Sprint 3: Polish (1-2 Tage)** ⏳ NEXT
-7. ⏳ Task 3.1: Repository Cleanup (3-4h) - EMPFOHLEN
-8. ⏳ Task 4.1: README Final Review (2-3h) - EMPFOHLEN
+### **Sprint 4: Polish (1-2 Tage)** ⏳ NEXT
+10. ⏳ Task 3.1: Repository Cleanup (3-4h) - EMPFOHLEN
+11. ⏳ Task 4.1: README Final Review (2-3h) - EMPFOHLEN
 
 **Status:** Nächste sinnvolle Schritte für finales Polish
 
