@@ -658,12 +658,10 @@ export default function Navigation() {
 
         /* Search Dropdown Center */
         .search-dropdown-center {
-          position: fixed;
-          top: 80px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 400px;
-          max-width: 90vw;
+          position: absolute;
+          top: calc(100% + 0.5rem);
+          left: 0;
+          right: 0;
           background: #1a1a1a;
           border: 2px solid var(--accent-orange);
           z-index: 3000;
