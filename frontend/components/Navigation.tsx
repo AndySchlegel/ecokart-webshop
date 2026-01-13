@@ -608,7 +608,7 @@ export default function Navigation() {
         /* Search Center Container */
         .nav-search-center {
           position: absolute;
-          left: 45%;
+          left: 50%;
           transform: translateX(-50%);
           width: 400px;
           max-width: 400px;
@@ -800,8 +800,10 @@ export default function Navigation() {
           align-items: center;
           gap: 1rem;
           padding: 0.75rem 5vw;
-          background: rgba(0, 0, 0, 0.8);
-          border-top: 1px solid #222;
+          background: rgba(26, 26, 26, 0.95);
+          border-top: 2px solid #333;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+          position: relative;
         }
 
         .filter-category-tabs {

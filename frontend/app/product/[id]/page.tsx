@@ -7,7 +7,6 @@ import Navigation from '../../../components/Navigation';
 import { useCart } from '../../../contexts/CartContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import { Article } from '../../components/types';
-import { API_BASE_URL } from '../../../lib/config';
 import { QuantitySelector } from '../../../components/QuantitySelector';
 
 // Sneaker sizes (US sizes)
@@ -56,7 +55,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [addedQuantity, setAddedQuantity] = useState(1); // Track last added quantity for success message
+  const [addedQuantity, setAddedQuantity] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [fromAnchor, setFromAnchor] = useState<string | null>(null);
 
@@ -68,27 +67,58 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   // Get search params on client side only
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      setFromAnchor(params.get('from'));
+      const searchParams = new URLSearchParams(window.location.search);
+      setFromAnchor(searchParams.get('from'));
     }
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function loadProduct() {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/products/${params.id}`);
-        if (!response.ok) {
-          throw new Error('Produkt nicht gefunden');
+        // ✅ FIX: Use environment variable with fallback
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.aws.his4irness23.de';
+        const url = `${apiUrl}/api/products/${params.id}`;
+
+        console.log('Fetching product from:', url);
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // ✅ FIX: Disable caching for debugging
+          cache: 'no-store',
+        });
+
+        if (!cancelled) {
+          if (!response.ok) {
+            if (response.status === 404) {
+              throw new Error('Produkt nicht gefunden');
+            }
+            throw new Error(`API Error: ${response.status} ${response.statusText}`);
+          }
+          const data = await response.json();
+          setProduct(data);
+          setError(null);
         }
-        const data = await response.json();
-        setProduct(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Fehler beim Laden');
+        if (!cancelled) {
+          console.error('Product fetch error:', err);
+          setError(err instanceof Error ? err.message : 'Fehler beim Laden des Produkts');
+        }
       } finally {
-        setIsLoading(false);
+        if (!cancelled) {
+          setIsLoading(false);
+        }
       }
     }
+
     loadProduct();
+
+    return () => {
+      cancelled = true;
+    };
   }, [params.id]);
 
   const handleAddToCart = async () => {
@@ -106,10 +136,10 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     setIsAdding(true);
     try {
       await addToCart(product!.id, quantity);
-      setAddedQuantity(quantity); // Save quantity for success message
+      setAddedQuantity(quantity);
       setShowSuccess(true);
-      setQuantity(1); // Reset quantity after successful add
-      setTimeout(() => setShowSuccess(false), 3000); // Show success for 3 seconds
+      setQuantity(1);
+      setTimeout(() => setShowSuccess(false), 3000);
     } catch (error: any) {
       alert(error.message || 'Fehler beim Hinzufügen zum Warenkorb');
     } finally {
