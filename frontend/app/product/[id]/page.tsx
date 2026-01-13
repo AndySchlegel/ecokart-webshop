@@ -73,6 +73,11 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   }, []);
 
   useEffect(() => {
+    // ✅ CRITICAL FIX: Only run in browser (not SSR)
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     let cancelled = false;
 
     async function loadProduct() {
@@ -87,8 +92,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           headers: {
             'Content-Type': 'application/json',
           },
-          // ✅ FIX: Disable caching for debugging
-          cache: 'no-store',
         });
 
         if (!cancelled) {
