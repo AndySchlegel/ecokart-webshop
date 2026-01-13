@@ -584,6 +584,7 @@ export default function Navigation() {
           padding: 1rem 5vw;
           gap: 2rem;
           position: relative;
+          z-index: 100;
         }
 
         .nav-logo {
@@ -657,14 +658,15 @@ export default function Navigation() {
 
         /* Search Dropdown Center */
         .search-dropdown-center {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          right: 0;
+          position: fixed;
+          top: 80px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 400px;
+          max-width: 90vw;
           background: #1a1a1a;
           border: 2px solid var(--accent-orange);
-          margin-top: 0.5rem;
-          z-index: 2000;
+          z-index: 3000;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
           border-radius: 4px;
         }
