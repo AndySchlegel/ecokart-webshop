@@ -10,3 +10,4 @@ export { ProductsService, productsService } from './products.service';
 export { UsersService, usersService } from './users.service';
 export { CartsService, cartsService } from './carts.service';
 export { OrdersService, ordersService } from './orders.service';
+export { WishlistsService, wishlistsService } from './wishlists.service';

@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { QuickSelectModal } from '../../components/QuickSelectModal';
+import FavoriteButton from '../../components/wishlist/FavoriteButton';
 
 import { Article } from './types';
 
@@ -76,6 +77,9 @@ export function ArticleCard({ article }: ArticleCardProps) {
 
   return (
     <article className="card" id={`product-${article.id}`}>
+      {/* Favorite Button (Heart Icon) */}
+      <FavoriteButton productId={article.id} />
+
       <Link href={detailHrefWithAnchor} className="card__link">
         <div className="card__image">
           {/* ✅ SALE BADGE */}

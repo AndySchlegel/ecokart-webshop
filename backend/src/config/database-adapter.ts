@@ -18,7 +18,8 @@ import {
   productsService,
   usersService,
   cartsService,
-  ordersService
+  ordersService,
+  wishlistsService
 } from '../services/dynamodb';
 
 class DatabaseAdapter {
@@ -248,6 +249,44 @@ class DatabaseAdapter {
       }
     } else {
       return jsonExtendedDatabase.updateOrder(id, updates);
+    }
+  }
+
+  // ========== WISHLISTS ==========
+
+  async addToWishlist(userId: string, productId: string): Promise<void> {
+    if (this.useDynamoDB) {
+      await wishlistsService.addToWishlist(userId, productId);
+    } else {
+      // JSON mode: Store wishlists in memory or file (simplified for local dev)
+      // For now, just log - can be extended later if needed
+      logger.warn('Wishlist in JSON mode not fully implemented', { userId, productId });
+    }
+  }
+
+  async removeFromWishlist(userId: string, productId: string): Promise<void> {
+    if (this.useDynamoDB) {
+      await wishlistsService.removeFromWishlist(userId, productId);
+    } else {
+      logger.warn('Wishlist in JSON mode not fully implemented', { userId, productId });
+    }
+  }
+
+  async getWishlistByUserId(userId: string): Promise<string[]> {
+    if (this.useDynamoDB) {
+      return await wishlistsService.getWishlistByUserId(userId);
+    } else {
+      logger.warn('Wishlist in JSON mode not fully implemented', { userId });
+      return [];
+    }
+  }
+
+  async isInWishlist(userId: string, productId: string): Promise<boolean> {
+    if (this.useDynamoDB) {
+      return await wishlistsService.isInWishlist(userId, productId);
+    } else {
+      logger.warn('Wishlist in JSON mode not fully implemented', { userId, productId });
+      return false;
     }
   }
 }

@@ -204,3 +204,62 @@ resource "aws_dynamodb_table" "orders" {
     }
   )
 }
+
+# ----------------------------------------------------------------------------
+# Wishlists Table
+# ----------------------------------------------------------------------------
+# Partition Key: userId (String)
+# Sort Key: productId (String)
+# GSI: ProductWishlistIndex (productId + addedAt)
+# Zweck: User Wishlists speichern, Favoriten pro User, Analytics möglich
+
+resource "aws_dynamodb_table" "wishlists" {
+  name           = "${var.project_name}-wishlists"
+  billing_mode   = var.billing_mode
+  hash_key       = "userId"
+  range_key      = "productId"
+
+  read_capacity  = var.billing_mode == "PROVISIONED" ? var.read_capacity : null
+  write_capacity = var.billing_mode == "PROVISIONED" ? var.write_capacity : null
+
+  attribute {
+    name = "userId"
+    type = "S"
+  }
+
+  attribute {
+    name = "productId"
+    type = "S"
+  }
+
+  attribute {
+    name = "addedAt"
+    type = "S"
+  }
+
+  # Global Secondary Index für Analytics (welche Produkte am meisten gewünscht)
+  global_secondary_index {
+    name               = "ProductWishlistIndex"
+    hash_key           = "productId"
+    range_key          = "addedAt"
+    projection_type    = "ALL"
+    read_capacity      = var.billing_mode == "PROVISIONED" ? var.read_capacity : null
+    write_capacity     = var.billing_mode == "PROVISIONED" ? var.write_capacity : null
+  }
+
+  point_in_time_recovery {
+    enabled = var.enable_point_in_time_recovery
+  }
+
+  server_side_encryption {
+    enabled = true
+  }
+
+  tags = merge(
+    var.tags,
+    {
+      Name = "${var.project_name}-wishlists"
+      TableType = "Wishlists"
+    }
+  )
+}

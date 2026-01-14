@@ -128,6 +128,7 @@ export const TableNames = {
   USERS: 'ecokart-users',        // User-Accounts (Login-Daten)
   CARTS: 'ecokart-carts',        // Warenkörbe (User-Shopping-Carts)
   ORDERS: 'ecokart-orders',      // Bestellungen (Order-History)
+  WISHLISTS: 'ecokart-wishlists', // Favoriten/Wishlist (User-Wunschlisten)
 };
 
 // ============================================================================

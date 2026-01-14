@@ -26,6 +26,11 @@ output "orders_table_name" {
   value       = aws_dynamodb_table.orders.name
 }
 
+output "wishlists_table_name" {
+  description = "Name der Wishlists Table"
+  value       = aws_dynamodb_table.wishlists.name
+}
+
 output "table_names" {
   description = "Liste aller Table Names"
   value = [
@@ -33,6 +38,7 @@ output "table_names" {
     aws_dynamodb_table.users.name,
     aws_dynamodb_table.carts.name,
     aws_dynamodb_table.orders.name,
+    aws_dynamodb_table.wishlists.name,
   ]
 }
 
@@ -60,6 +66,11 @@ output "orders_table_arn" {
   value       = aws_dynamodb_table.orders.arn
 }
 
+output "wishlists_table_arn" {
+  description = "ARN der Wishlists Table"
+  value       = aws_dynamodb_table.wishlists.arn
+}
+
 output "table_arns" {
   description = "Liste aller Table ARNs"
   value = [
@@ -67,6 +78,7 @@ output "table_arns" {
     aws_dynamodb_table.users.arn,
     aws_dynamodb_table.carts.arn,
     aws_dynamodb_table.orders.arn,
+    aws_dynamodb_table.wishlists.arn,
   ]
 }
 
@@ -87,4 +99,9 @@ output "users_gsi_name" {
 output "orders_gsi_name" {
   description = "Name des UserOrders Index (Orders)"
   value       = "UserOrdersIndex"
+}
+
+output "wishlists_gsi_name" {
+  description = "Name des ProductWishlist Index (Wishlists)"
+  value       = "ProductWishlistIndex"
 }

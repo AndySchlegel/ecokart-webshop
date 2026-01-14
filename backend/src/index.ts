@@ -32,6 +32,7 @@ import cartRoutes from './routes/cartRoutes';
 import orderRoutes from './routes/orderRoutes';
 import checkoutRoutes from './routes/checkoutRoutes';
 import adminRoutes from './routes/adminRoutes';
+import wishlistRoutes from './routes/wishlistRoutes';
 import * as webhookController from './controllers/webhookController';
 import { logger } from './utils/logger';
 
@@ -145,6 +146,11 @@ app.use('/api/orders', orderRoutes);
 // ➡️ Stripe Checkout Session erstellen, Payment verarbeiten
 // Siehe: ./routes/checkoutRoutes.ts für Details
 app.use('/api/checkout', checkoutRoutes);
+
+// ❤️ Wishlist-Routen (Favoriten)
+// ➡️ Produkte zur Wishlist hinzufügen, entfernen, anzeigen
+// Siehe: ./routes/wishlistRoutes.ts für Details
+app.use('/api/wishlist', wishlistRoutes);
 
 // 📊 Admin-Routen (Dashboard & Analytics)
 // ➡️ Admin Statistics, Analytics, Management Endpoints
