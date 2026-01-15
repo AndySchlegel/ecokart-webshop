@@ -358,7 +358,7 @@ export default function ProductDetailClient({ params }: { params: { id: string }
                   ? 'Ausverkauft'
                   : 'In den Warenkorb'}
               </button>
-              <FavoriteButton productId={product.id} />
+              <FavoriteButton productId={product.id} variant="inline" />
             </div>
 
             {/* Product Details */}

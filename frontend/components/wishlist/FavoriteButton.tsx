@@ -7,9 +7,10 @@ import { useRouter } from 'next/navigation';
 
 interface FavoriteButtonProps {
   productId: string;
+  variant?: 'overlay' | 'inline'; // overlay = absolute positioned, inline = relative
 }
 
-export default function FavoriteButton({ productId }: FavoriteButtonProps) {
+export default function FavoriteButton({ productId, variant = 'overlay' }: FavoriteButtonProps) {
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { user } = useAuth();
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function FavoriteButton({ productId }: FavoriteButtonProps) {
   return (
     <button
       onClick={handleClick}
-      className={`favorite-btn ${isFavorite ? 'active' : ''} ${isAnimating ? 'animating' : ''}`}
+      className={`favorite-btn favorite-btn--${variant} ${isFavorite ? 'active' : ''} ${isAnimating ? 'animating' : ''}`}
       aria-label={isFavorite ? 'Aus Favoriten entfernen' : 'Zu Favoriten hinzufügen'}
       title={isFavorite ? 'Aus Favoriten entfernen' : 'Zu Favoriten hinzufügen'}
     >
@@ -63,9 +64,6 @@ export default function FavoriteButton({ productId }: FavoriteButtonProps) {
 
       <style jsx>{`
         .favorite-btn {
-          position: absolute;
-          top: 1rem;
-          right: 1rem;
           background: rgba(0, 0, 0, 0.8);
           border: 2px solid #333;
           border-radius: 50%;
@@ -76,8 +74,21 @@ export default function FavoriteButton({ productId }: FavoriteButtonProps) {
           justify-content: center;
           cursor: pointer;
           transition: all 0.3s ease;
-          z-index: 10;
           color: #999;
+        }
+
+        .favorite-btn--overlay {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          z-index: 10;
+        }
+
+        .favorite-btn--inline {
+          position: relative;
+          flex-shrink: 0;
+          width: 56px;
+          height: 56px;
         }
 
         .favorite-btn:hover {
