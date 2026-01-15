@@ -8,6 +8,7 @@ import { useCart } from '../../../contexts/CartContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import { Article } from '../../components/types';
 import { QuantitySelector } from '../../../components/QuantitySelector';
+import FavoriteButton from '../../../components/wishlist/FavoriteButton';
 
 // Sneaker sizes (US sizes)
 const SHOE_SIZES = ['7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12', '13'];
@@ -341,21 +342,24 @@ export default function ProductDetailClient({ params }: { params: { id: string }
               </div>
             )}
 
-            {/* Add to Cart Button */}
-            <button
-              className="add-to-cart-button"
-              onClick={handleAddToCart}
-              disabled={isAdding || (product.stock !== undefined && product.stock - (product.reserved || 0) <= 0)}
-              style={(product.stock !== undefined && product.stock - (product.reserved || 0) <= 0) ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
-            >
-              {isAdding
-                ? 'Wird hinzugefügt...'
-                : showSuccess
-                ? `✓ ${addedQuantity}x zum Warenkorb hinzugefügt!`
-                : (product.stock !== undefined && product.stock - (product.reserved || 0) <= 0)
-                ? 'Ausverkauft'
-                : 'In den Warenkorb'}
-            </button>
+            {/* Action Buttons */}
+            <div className="product-actions">
+              <button
+                className="add-to-cart-button"
+                onClick={handleAddToCart}
+                disabled={isAdding || (product.stock !== undefined && product.stock - (product.reserved || 0) <= 0)}
+                style={(product.stock !== undefined && product.stock - (product.reserved || 0) <= 0) ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
+              >
+                {isAdding
+                  ? 'Wird hinzugefügt...'
+                  : showSuccess
+                  ? `✓ ${addedQuantity}x zum Warenkorb hinzugefügt!`
+                  : (product.stock !== undefined && product.stock - (product.reserved || 0) <= 0)
+                  ? 'Ausverkauft'
+                  : 'In den Warenkorb'}
+              </button>
+              <FavoriteButton productId={product.id} />
+            </div>
 
             {/* Product Details */}
             <div className="product-details">
@@ -619,8 +623,15 @@ export default function ProductDetailClient({ params }: { params: { id: string }
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
         }
 
+        .product-actions {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+
         .add-to-cart-button {
-          width: 100%;
+          flex: 1;
           padding: 1.5rem;
           background: var(--accent-orange);
           border: none;
@@ -631,7 +642,20 @@ export default function ProductDetailClient({ params }: { params: { id: string }
           letter-spacing: 2px;
           cursor: pointer;
           transition: all 0.3s ease;
-          margin-top: 1rem;
+        }
+
+        .product-actions .favorite-btn {
+          position: relative;
+          top: auto;
+          right: auto;
+          flex-shrink: 0;
+          width: 64px;
+          height: 64px;
+        }
+
+        .product-actions .favorite-btn svg {
+          width: 28px;
+          height: 28px;
         }
 
         .add-to-cart-button:hover:not(:disabled) {

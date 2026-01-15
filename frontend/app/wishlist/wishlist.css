@@ -6,6 +6,39 @@
   padding: 8rem 2rem 4rem;
 }
 
+/* Back to Shop Button */
+.back-to-shop {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent-orange);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  margin: 0 auto 2rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--accent-orange);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  max-width: fit-content;
+}
+
+.back-to-shop:hover {
+  background: var(--accent-orange);
+  color: white;
+  transform: translateX(-4px);
+}
+
+.back-to-shop svg {
+  transition: transform 0.3s ease;
+}
+
+.back-to-shop:hover svg {
+  transform: translateX(-4px);
+}
+
 /* Header */
 .wishlist-header {
   max-width: 1400px;

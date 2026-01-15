@@ -36,7 +36,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    const { items, shippingAddress, total }: CreateOrderInput = req.body;
+    const { items, shippingAddress, totalAmount }: CreateOrderInput = req.body;
 
     if (!items || items.length === 0) {
       res.status(400).json({ error: 'Order must contain at least one item' });
@@ -48,7 +48,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    if (!total || total <= 0) {
+    if (!totalAmount || totalAmount <= 0) {
       res.status(400).json({ error: 'Valid total is required' });
       return;
     }
@@ -57,7 +57,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
       id: uuidv4(),
       userId,
       items,
-      total,
+      totalAmount,
       shippingAddress,
       status: 'pending',
       createdAt: new Date().toISOString(),
@@ -83,7 +83,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
       action: 'createOrder',
       userId: req.user?.userId,
       itemCount: req.body.items?.length,
-      total: req.body.total
+      totalAmount: req.body.totalAmount
     }, error as Error);
     res.status(500).json({ error: 'Failed to create order' });
   }
@@ -106,7 +106,7 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
 
     // Alle Orders des Users aus DynamoDB laden
     const orders = await database.getOrdersByUserId(userId);
-    res.json(orders);
+    res.json({ orders });  // Fixed: Wrap in object for consistent API response
 
   } catch (error) {
     logger.error('Failed to get orders', { action: 'getOrders', userId: req.user?.userId }, error as Error);

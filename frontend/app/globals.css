@@ -400,7 +400,7 @@ body {
 .card__sale-badge {
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  left: 1rem;  /* Changed from right to left to avoid overlap with favorite button */
   background: var(--accent-orange);
   color: #000;
   font-weight: 800;

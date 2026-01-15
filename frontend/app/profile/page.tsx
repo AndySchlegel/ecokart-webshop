@@ -207,6 +207,12 @@ export default function ProfilePage() {
 
   return (
     <div className="profile-container">
+      <Link href="/" className="back-to-shop">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Zurück zum Shop
+      </Link>
       <div className="profile-header">
         <h1 className="profile-title">MEIN PROFIL</h1>
         <p className="profile-subtitle">Verwalte deine Informationen und Bestellungen</p>

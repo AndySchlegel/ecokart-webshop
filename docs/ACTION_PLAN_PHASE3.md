@@ -702,17 +702,274 @@ git ls-files -z | xargs -0 du -h | sort -hr | head -20
      - D) Sticky Filter-Bar: Filter bleibt beim Scrollen sichtbar mit Collapse-Option
 3. **Filter-Bar Overflow:** flex-wrap wurde hinzugefügt, aber könnte bei vielen aktiven Filtern noch Probleme geben
 
-### **Sprint 3: Feature Enhancements (3-4 Tage)** ⏳ OPTIONAL
-8. ⏳ Task 2.2: User Profile & Bestellhistorie (6-8h) - OPTIONAL
-9. ⏳ Task 2.3: Favoriten/Wishlist (4-6h) - OPTIONAL
+### **Sprint 3: User Profile, Orders & Wishlist (14-15. Jan 2026)** ✅ COMPLETED
+8. ✅ Task 2.2: User Profile & Bestellhistorie (6-8h) **[DONE]**
+   - Backend: userController.ts + wishlistController.ts
+   - Backend: User Routes (/api/users/profile)
+   - Backend: Wishlist Routes (/api/wishlist)
+   - Frontend: WishlistContext (state management)
+   - Frontend: /profile Page (User Dashboard)
+   - Frontend: /orders Page (Order History)
+   - Frontend: /wishlist Page (Favorites)
+   - Frontend: User Dropdown Menu (Navigation)
+   - Frontend: FavoriteButton Component
+   - Commits: Multiple commits on 14-15. Jan
 
-**Status:** Optional - Portfolio ist auch ohne diese Features showcase-ready
+9. ✅ Task 2.3: Favoriten/Wishlist (4-6h) **[DONE - Teil von Task 2.2]**
+   - DynamoDB: Wishlists Table (userId + productId)
+   - Backend: Wishlist CRUD operations
+   - Frontend: Heart Icon auf Product Cards
+   - Frontend: Wishlist Page mit Product Grid
 
-### **Sprint 4: Polish (1-2 Tage)** ⏳ NEXT
+**Status:** Backend + Frontend komplett implementiert und deployed! 🎉
+
+### **Sprint 4: Post-Launch Bug Fixes & UX Improvements (15. Jan 2026)** 🔴 CRITICAL - DISCOVERED LIVE
+
+**User Feedback vom 15. Januar 2026 - 6 identifizierte Issues:**
+
+#### **Issue 4.1: User Dropdown - Größe & Toggle-Funktionalität** 🔴 HIGH PRIORITY
+**Screen:** Screenshot #1 (User Dropdown klein)
+**Problem:**
+- User Dropdown ist zu klein, schwer lesbar
+- Icons zeigen jetzt korrekt (viewBox fix deployed)
+- Toggle funktioniert nicht richtig: Sollte beim ersten Klick öffnen, beim zweiten Klick schließen
+
+**Expected Behavior:**
+- Dropdown größer (mehr Padding, größere Font-Size)
+- Click-Toggle:
+  - Klick 1: Dropdown öffnet sich
+  - Klick 2: Dropdown schließt sich
+  - Click-Outside: Dropdown schließt sich (bereits implementiert)
+
+**Files to Fix:**
+- `frontend/components/Navigation.tsx` (Line ~315-377)
+- `frontend/components/navigation.css` (User Dropdown Styles)
+
+**Solution Approach:**
+```typescript
+// Toggle State richtig implementieren:
+const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+<button onClick={() => setUserMenuOpen(!userMenuOpen)}>
+  {/* Toggle on every click */}
+</button>
+```
+
+---
+
+#### **Issue 4.2: User Profil - Fehlende Bestellungen & Navigation** 🔴 CRITICAL
+**Screen:** Screenshot #2 (Profil zeigt 0 Bestellungen)
+**Problem:**
+- User hat GERADE eine Bestellung abgeschlossen
+- Profil zeigt: "0 BESTELLUNGEN" + "€0.00 GESAMT" + "€0.00 DURCHSCHNITT"
+- **Root Cause:** Kein Sync zwischen Orders Table und Profile Statistics
+- Fehlt: "Zurück zum Shop" Button
+
+**Expected Behavior:**
+- Nach erfolgreicher Bestellung: Profil-Stats aktualisieren
+- Bestellungen Count sollte >0 sein
+- Total Spent sollte Bestellsumme zeigen
+- "Zurück zum Shop" Link/Button prominent platziert
+
+**Files to Check:**
+- `frontend/app/profile/page.tsx` (Profile Statistics Calculation)
+- Backend: GET /api/users/profile endpoint
+- Backend: GET /api/orders endpoint (verify returns orders)
+
+**Debug Steps:**
+1. Check if order was created in DynamoDB Orders table
+2. Verify /api/orders returns the order
+3. Check if profile fetches orders for statistics
+4. Add real-time refresh after order creation
+
+**Solution Approach:**
+```typescript
+// profile/page.tsx
+useEffect(() => {
+  const fetchOrders = async () => {
+    const response = await fetch('/api/orders', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await response.json();
+    setOrders(data.orders || []);
+    // Calculate stats from orders
+  };
+  fetchOrders();
+}, [user]);
+```
+
+---
+
+#### **Issue 4.3: Bestellungen Page - Order nicht sichtbar** 🔴 CRITICAL
+**Screen:** Screenshot #3 (Empty State trotz Bestellung)
+**Problem:**
+- Bestellungen Page zeigt Empty State: "Noch keine Bestellungen"
+- User hat GERADE eine Bestellung abgeschlossen
+- **Root Cause:** Order wird nicht in DynamoDB persistiert ODER fetch schlägt fehl
+
+**Expected Behavior:**
+- Nach Checkout: Order sichtbar in /orders
+- Order Card mit Status, Datum, Produkten, Preis
+
+**Files to Check:**
+- `backend/src/controllers/orderController.ts` (createOrder function)
+- `backend/src/services/dynamodb/orders.service.ts` (saveOrder)
+- `frontend/app/orders/page.tsx` (fetch orders)
+- `frontend/app/checkout/page.tsx` (order creation)
+
+**Debug Steps:**
+1. Check DynamoDB Orders table - ist Order dort?
+2. Check API logs - wurde createOrder aufgerufen?
+3. Check frontend console - 404 oder andere Errors?
+4. Verify JWT token valid beim /api/orders fetch
+
+**Hypothesis:**
+- Wahrscheinlich: Order wird nicht korrekt in DynamoDB gespeichert
+- Oder: userId Mismatch zwischen createOrder und getOrders
+
+---
+
+#### **Issue 4.4: Product Card - Favoriten & Sale Badge Overlap** 🟡 MEDIUM PRIORITY
+**Screen:** Screenshot #4 (Heart + Sale Badge überschneiden sich)
+**Problem:**
+- Heart-Icon (Favoriten) top-right
+- Sale Badge "-30%" top-right
+- Beide überschneiden sich, nicht lesbar
+
+**Expected Behavior:**
+- Beide Elemente sichtbar ohne Overlap
+- Clear visual hierarchy
+
+**Files to Fix:**
+- `frontend/components/ArticleCard.tsx` (Position Adjustments)
+- `frontend/components/articlecard.css` (z-index, positioning)
+- `frontend/components/wishlist/FavoriteButton.tsx` (Position)
+
+**Solution Options:**
+- **Option A:** Heart links, Sale Badge rechts
+- **Option B:** Heart top-right, Sale Badge top-left
+- **Option C:** Heart kleiner + inset, Sale Badge prominent
+- **Option D:** Heart bottom-right (wie Instagram), Sale top-right
+
+**Recommendation:** Option B (Heart rechts, Sale links) - beste Symmetrie
+
+```css
+.favorite-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+
+.sale-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;  /* Moved to left */
+  z-index: 1;
+}
+```
+
+---
+
+#### **Issue 4.5: Favoriten Page - Navigation & Darstellung** 🟡 MEDIUM PRIORITY
+**Screen:** Screenshot #5 (Favoriten Page)
+**Problem:**
+- Fehlt "Zurück zum Shop" Button/Link
+- Favoriten-Funktion FUNKTIONIERT (2 Produkte sichtbar)
+- Darstellung nicht 100% konsistent mit Shop Home Page:
+  - Card-Größe scheint kleiner/abgeschnitten
+  - Grid-Layout unterschiedlich
+  - Styling nicht identisch mit Home Page Grid
+
+**Expected Behavior:**
+- Prominent "← Zurück zum Shop" Link (wie auf Produktdetails)
+- Product Cards identisch zu Home Page
+- Gleicher Grid-Layout (3 cols → 2 → 1 responsive)
+- Konsistente Card-Größe, Image-Ratio, Button-Styles
+
+**Files to Fix:**
+- `frontend/app/wishlist/page.tsx` (Add Back Button + Fix Grid)
+- `frontend/app/wishlist/wishlist.css` (Match Home Page Grid)
+- `frontend/components/wishlist/WishlistGrid.tsx` (Consistency)
+
+**Solution Approach:**
+```tsx
+// wishlist/page.tsx
+<div className="wishlist-header">
+  <Link href="/" className="back-to-shop">
+    ← Zurück zum Shop
+  </Link>
+  <h1>MEINE FAVORITEN</h1>
+</div>
+
+// Reuse Home Page Grid CSS:
+<div className="grid">  {/* Same class as home page */}
+  {wishlistProducts.map(product => (
+    <ArticleCard product={product} />  {/* Reuse same component */}
+  ))}
+</div>
+```
+
+---
+
+#### **Issue 4.6: Produktdetailseite - Fehlender Favoriten Button** 🟡 MEDIUM PRIORITY
+**Screen:** Screenshot #6 (Product Detail ohne Heart)
+**Problem:**
+- Produktdetailseite hat KEINEN Favoriten/Heart Button
+- User kann Produkt nicht als Favorit markieren von Detailseite
+- Nur von Grid/Card View möglich
+
+**Expected Behavior:**
+- Prominent Heart Button auf Produktdetailseite
+- Position: Neben "IN DEN WARENKORB" Button ODER
+- Position: Top-right bei Produktbild
+
+**Files to Fix:**
+- `frontend/app/products/[id]/page.tsx` (Add FavoriteButton)
+- `frontend/app/products/[id]/products.css` (Position + Styling)
+
+**Solution Approach:**
+```tsx
+// products/[id]/page.tsx
+import { FavoriteButton } from '@/components/wishlist/FavoriteButton';
+
+<div className="product-actions">
+  <button onClick={handleAddToCart} className="btn-add-to-cart">
+    IN DEN WARENKORB
+  </button>
+  <FavoriteButton productId={product.id} size="large" />
+</div>
+
+// Alternative: Above product image
+<div className="product-image-container">
+  <img src={product.imageUrl} alt={product.name} />
+  <FavoriteButton productId={product.id} className="product-favorite" />
+</div>
+```
+
+---
+
+### **Sprint 4 Summary - Bug Fix Priority Matrix:**
+
+| Issue | Screen | Priority | Effort | Impact | Status |
+|-------|--------|----------|--------|--------|--------|
+| 4.2 - Profil Statistiken | 2 | 🔴 CRITICAL | 2-3h | ⭐⭐⭐⭐⭐ | ⏳ TODO |
+| 4.3 - Orders nicht sichtbar | 3 | 🔴 CRITICAL | 2-4h | ⭐⭐⭐⭐⭐ | ⏳ TODO |
+| 4.1 - Dropdown Toggle/Größe | 1 | 🟡 HIGH | 1-2h | ⭐⭐⭐⭐ | ⏳ TODO |
+| 4.4 - Favorit/Sale Overlap | 4 | 🟡 MEDIUM | 1h | ⭐⭐⭐ | ⏳ TODO |
+| 4.5 - Favoriten Navigation | 5 | 🟡 MEDIUM | 1-2h | ⭐⭐⭐ | ⏳ TODO |
+| 4.6 - Detail Favorit Button | 6 | 🟡 MEDIUM | 1h | ⭐⭐⭐ | ⏳ TODO |
+
+**Total Estimated Effort:** 8-13 Stunden
+**Critical Path:** Issues 4.2 + 4.3 müssen ZUERST gelöst werden (Orders System)
+
+---
+
+### **Sprint 5: Repository Cleanup & Final Polish (1-2 Tage)** ⏳ NEXT
 10. ⏳ Task 3.1: Repository Cleanup (3-4h) - EMPFOHLEN
 11. ⏳ Task 4.1: README Final Review (2-3h) - EMPFOHLEN
 
-**Status:** Nächste sinnvolle Schritte für finales Polish
+**Status:** Nach Bug Fixes durchführen
 
 ---
 

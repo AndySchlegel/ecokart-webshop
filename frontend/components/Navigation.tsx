@@ -33,6 +33,10 @@ export default function Navigation() {
   // Cart dropdown state
   const [cartOpen, setCartOpen] = useState(false);
 
+  // User dropdown state
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
   // Mega Filter Menu state
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
   const filterMenuRef = useRef<HTMLDivElement>(null);
@@ -76,6 +80,23 @@ export default function Navigation() {
     }
     loadProducts();
   }, []);
+
+  // Click outside handler for user dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    if (userMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [userMenuOpen]);
 
   // Handle target group (Kinder/Männer/Frauen) filter
   const handleTargetGroupClick = (group: string) => {
@@ -335,46 +356,53 @@ export default function Navigation() {
 
             {/* User Icon */}
             {user ? (
-              <div className="nav-user-menu">
-                <button className="nav-icon-btn" aria-label="User Menu">
+              <div className="nav-user-menu" ref={userMenuRef}>
+                <button
+                  className="nav-icon-btn"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  aria-label="User Menu"
+                  aria-expanded={userMenuOpen}
+                >
                   <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                     <circle cx="12" cy="7" r="4" />
                   </svg>
                 </button>
-                <div className="user-dropdown">
+                {userMenuOpen && (
+                  <div className="user-dropdown">
                   <p className="user-email">{user.email}</p>
-                  <Link href="/profile" className="user-dropdown-link">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <Link href="/profile" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                       <circle cx="12" cy="7" r="4" />
                     </svg>
                     Profil
                   </Link>
-                  <Link href="/orders" className="user-dropdown-link">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <Link href="/orders" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="9" cy="21" r="1" />
                       <circle cx="20" cy="21" r="1" />
                       <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                     </svg>
                     Bestellungen
                   </Link>
-                  <Link href="/wishlist" className="user-dropdown-link">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <Link href="/wishlist" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
                     Favoriten
                   </Link>
                   <hr className="user-dropdown-divider" />
-                  <button onClick={() => signOut()} className="user-signout">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <button onClick={() => { signOut(); setUserMenuOpen(false); }} className="user-signout">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                       <polyline points="16 17 21 12 16 7" />
                       <line x1="21" y1="12" x2="9" y2="12" />
                     </svg>
                     Abmelden
                   </button>
-                </div>
+                  </div>
+                )}
               </div>
             ) : (
               <Link href="/login" className="nav-icon-btn" aria-label="Login">
@@ -782,43 +810,39 @@ export default function Navigation() {
           position: relative;
         }
 
-        .nav-user-menu:hover .user-dropdown {
-          display: block;
-        }
-
         .user-dropdown {
-          display: none;
           position: absolute;
           top: 100%;
           right: 0;
           background: #1a1a1a;
           border: 2px solid var(--accent-orange);
-          padding: 1rem;
+          padding: 1.5rem;
           margin-top: 0.5rem;
-          min-width: 240px;
+          min-width: 280px;
           z-index: 2000;
           border-radius: 4px;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
 
         .user-email {
-          margin: 0 0 1rem 0;
-          padding-bottom: 1rem;
+          margin: 0 0 1.25rem 0;
+          padding-bottom: 1.25rem;
           border-bottom: 1px solid #333;
           color: white;
-          font-size: 0.875rem;
+          font-size: 1rem;
+          font-weight: 600;
           word-break: break-all;
         }
 
         .user-dropdown-link {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 1rem;
           width: 100%;
-          padding: 0.75rem;
+          padding: 1rem;
           text-decoration: none;
           color: #ccc;
-          font-size: 0.95rem;
+          font-size: 1.05rem;
           font-weight: 600;
           border-radius: 4px;
           transition: all 0.3s ease;
@@ -833,29 +857,31 @@ export default function Navigation() {
         .user-dropdown-link svg {
           flex-shrink: 0;
           color: var(--accent-green);
+          width: 20px;
+          height: 20px;
         }
 
         .user-dropdown-divider {
           border: none;
           border-top: 1px solid #333;
-          margin: 0.75rem 0;
+          margin: 1rem 0;
         }
 
         .user-signout {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.75rem;
+          gap: 1rem;
           width: 100%;
           background: transparent;
           border: 1px solid #dc2626;
           color: #dc2626;
-          padding: 0.75rem;
+          padding: 1rem;
           font-weight: 700;
           cursor: pointer;
           transition: all 0.3s ease;
           border-radius: 4px;
-          font-size: 0.95rem;
+          font-size: 1.05rem;
         }
 
         .user-signout:hover {

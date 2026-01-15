@@ -43,6 +43,12 @@ export default function WishlistPage() {
   if (loading) {
     return (
       <div className="wishlist-container">
+        <Link href="/" className="back-to-shop">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          Zurück zum Shop
+        </Link>
         <div className="wishlist-header">
           <h1 className="wishlist-title">MEINE FAVORITEN</h1>
           <p className="wishlist-subtitle">Lade deine Favoriten...</p>
@@ -64,6 +70,12 @@ export default function WishlistPage() {
   if (wishlistItems.length === 0) {
     return (
       <div className="wishlist-container">
+        <Link href="/" className="back-to-shop">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          Zurück zum Shop
+        </Link>
         <div className="wishlist-header">
           <h1 className="wishlist-title">MEINE FAVORITEN</h1>
         </div>
@@ -84,6 +96,12 @@ export default function WishlistPage() {
   // Wishlist grid
   return (
     <div className="wishlist-container">
+      <Link href="/" className="back-to-shop">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Zurück zum Shop
+      </Link>
       <div className="wishlist-header">
         <h1 className="wishlist-title">MEINE FAVORITEN</h1>
         <p className="wishlist-subtitle">{wishlistItems.length} {wishlistItems.length === 1 ? 'Produkt' : 'Produkte'}</p>

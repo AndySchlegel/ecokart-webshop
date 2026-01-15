@@ -18,7 +18,7 @@ export interface Order {
   id: string;
   userId: string;
   items: OrderItem[];
-  total: number;
+  totalAmount: number;  // Changed from 'total' to match frontend expectations
   shippingAddress: ShippingAddress;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   createdAt: string;
@@ -27,6 +27,6 @@ export interface Order {
 
 export interface CreateOrderInput {
   items: OrderItem[];
-  total: number;
+  totalAmount: number;  // Changed from 'total' to match frontend expectations
   shippingAddress: ShippingAddress;
 }

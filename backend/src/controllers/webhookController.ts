@@ -218,7 +218,7 @@ async function handleCheckoutSessionCompleted(
     id: orderId,
     userId,
     items: cart.items,
-    total: (session.amount_total || 0) / 100, // Cents → Euros
+    totalAmount: (session.amount_total || 0) / 100, // Cents → Euros
     status: 'pending',
     shippingAddress: normalizedShippingAddress,
     createdAt: now,
@@ -228,7 +228,7 @@ async function handleCheckoutSessionCompleted(
   logger.info('Order created from webhook', {
     orderId: order.id,
     userId,
-    amount: order.total,
+    amount: order.totalAmount,
     itemCount: order.items.length,
     sessionId: session.id,
   });
