@@ -33,6 +33,7 @@ import orderRoutes from './routes/orderRoutes';
 import checkoutRoutes from './routes/checkoutRoutes';
 import adminRoutes from './routes/adminRoutes';
 import wishlistRoutes from './routes/wishlistRoutes';
+import userRoutes from './routes/userRoutes';
 import * as webhookController from './controllers/webhookController';
 import { logger } from './utils/logger';
 
@@ -151,6 +152,11 @@ app.use('/api/checkout', checkoutRoutes);
 // ➡️ Produkte zur Wishlist hinzufügen, entfernen, anzeigen
 // Siehe: ./routes/wishlistRoutes.ts für Details
 app.use('/api/wishlist', wishlistRoutes);
+
+// 👤 User-Routen (Profile Management)
+// ➡️ User Profile abrufen, Name bearbeiten
+// Siehe: ./routes/userRoutes.ts für Details
+app.use('/api/users', userRoutes);
 
 // 📊 Admin-Routen (Dashboard & Analytics)
 // ➡️ Admin Statistics, Analytics, Management Endpoints

@@ -176,7 +176,11 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
 
       // Optimistic update
-      setWishlistIds(prev => new Set([...prev, productId]));
+      setWishlistIds(prev => {
+        const newSet = new Set(prev);
+        newSet.add(productId);
+        return newSet;
+      });
 
       const token = await getAuthToken();
       if (!token) {
