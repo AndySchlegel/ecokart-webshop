@@ -296,6 +296,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
+  flex-shrink: 0;
+  min-width: fit-content;
 }
 
 .btn-add-to-cart:hover:not(:disabled) {

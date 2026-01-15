@@ -816,20 +816,20 @@ export default function Navigation() {
           right: 0;
           background: #1a1a1a;
           border: 2px solid var(--accent-orange);
-          padding: 1.5rem;
+          padding: 0.75rem;
           margin-top: 0.5rem;
-          min-width: 280px;
+          min-width: 220px;
           z-index: 2000;
           border-radius: 4px;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
 
         .user-email {
-          margin: 0 0 1.25rem 0;
-          padding-bottom: 1.25rem;
+          margin: 0 0 0.75rem 0;
+          padding-bottom: 0.75rem;
           border-bottom: 1px solid #333;
           color: white;
-          font-size: 1rem;
+          font-size: 0.875rem;
           font-weight: 600;
           word-break: break-all;
         }
@@ -837,16 +837,16 @@ export default function Navigation() {
         .user-dropdown-link {
           display: flex;
           align-items: center;
-          gap: 1rem;
+          gap: 0.625rem;
           width: 100%;
-          padding: 1rem;
+          padding: 0.625rem 0.75rem;
           text-decoration: none;
           color: #ccc;
-          font-size: 1.05rem;
+          font-size: 0.9rem;
           font-weight: 600;
           border-radius: 4px;
           transition: all 0.3s ease;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.25rem;
         }
 
         .user-dropdown-link:hover {
@@ -857,31 +857,31 @@ export default function Navigation() {
         .user-dropdown-link svg {
           flex-shrink: 0;
           color: var(--accent-green);
-          width: 20px;
-          height: 20px;
+          width: 16px;
+          height: 16px;
         }
 
         .user-dropdown-divider {
           border: none;
           border-top: 1px solid #333;
-          margin: 1rem 0;
+          margin: 0.5rem 0;
         }
 
         .user-signout {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 1rem;
+          gap: 0.625rem;
           width: 100%;
           background: transparent;
           border: 1px solid #dc2626;
           color: #dc2626;
-          padding: 1rem;
+          padding: 0.625rem 0.75rem;
           font-weight: 700;
           cursor: pointer;
           transition: all 0.3s ease;
           border-radius: 4px;
-          font-size: 1.05rem;
+          font-size: 0.9rem;
         }
 
         .user-signout:hover {

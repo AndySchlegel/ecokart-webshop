@@ -105,7 +105,14 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Alle Orders des Users aus DynamoDB laden
-    const orders = await database.getOrdersByUserId(userId);
+    const rawOrders = await database.getOrdersByUserId(userId);
+
+    // Map old 'total' field to 'totalAmount' for backward compatibility
+    const orders = rawOrders.map((order: any) => ({
+      ...order,
+      totalAmount: order.totalAmount ?? order.total ?? 0
+    }));
+
     res.json({ orders });  // Fixed: Wrap in object for consistent API response
 
   } catch (error) {
@@ -131,19 +138,25 @@ export const getOrderById = async (req: Request, res: Response): Promise<void> =
     }
 
     const { id } = req.params;
-    const order = await database.getOrderById(id);
+    const rawOrder = await database.getOrderById(id);
 
-    if (!order) {
+    if (!rawOrder) {
       res.status(404).json({ error: 'Order not found' });
       return;
     }
 
     // ⚠️ SICHERHEIT: User darf nur eigene Orders sehen!
     // Wenn order.userId nicht mit eingeloggtem User übereinstimmt → 403 Forbidden
-    if (order.userId !== userId) {
+    if (rawOrder.userId !== userId) {
       res.status(403).json({ error: 'Access denied' });
       return;
     }
+
+    // Map old 'total' field to 'totalAmount' for backward compatibility
+    const order = {
+      ...rawOrder,
+      totalAmount: (rawOrder as any).totalAmount ?? (rawOrder as any).total ?? 0
+    };
 
     res.json(order);
 
