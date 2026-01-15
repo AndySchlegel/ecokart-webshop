@@ -113,7 +113,7 @@ export async function sendOrderConfirmationEmail(
           imageUrl, // Product image for email (absolute URL)
         };
       }),
-      totalAmount: order.total.toFixed(2),
+      totalAmount: order.totalAmount.toFixed(2),
       shippingAddress: order.shippingAddress,
       orderTrackingUrl: `${frontendUrl}/orders/${order.id}`,
     };

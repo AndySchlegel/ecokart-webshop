@@ -52,11 +52,11 @@ export async function getAdminStats(): Promise<AdminStats> {
 
     // Calculate metrics for today
     const orderCountToday = ordersToday.length;
-    const revenueToday = ordersToday.reduce((sum, o) => sum + o.total, 0);
+    const revenueToday = ordersToday.reduce((sum, o) => sum + o.totalAmount, 0);
 
     // Calculate metrics for yesterday (for trend)
     const orderCountYesterday = ordersYesterday.length;
-    const revenueYesterday = ordersYesterday.reduce((sum, o) => sum + o.total, 0);
+    const revenueYesterday = ordersYesterday.reduce((sum, o) => sum + o.totalAmount, 0);
 
     // Calculate trends
     const ordersTrend = calculateTrend(orderCountToday, orderCountYesterday);
@@ -116,7 +116,7 @@ export async function getRevenue7d(): Promise<RevenueDataPoint[]> {
     // Group orders by date and calculate revenue
     const revenueByDate = dates.map(date => {
       const ordersOnDate = allOrders.filter(o => o.createdAt.startsWith(date));
-      const revenue = ordersOnDate.reduce((sum, o) => sum + o.total, 0);
+      const revenue = ordersOnDate.reduce((sum, o) => sum + o.totalAmount, 0);
 
       return {
         date,
@@ -152,7 +152,7 @@ export async function getRevenue30d(): Promise<RevenueDataPoint[]> {
     // Group orders by date and calculate revenue
     const revenueByDate = dates.map(date => {
       const ordersOnDate = allOrders.filter(o => o.createdAt.startsWith(date));
-      const revenue = ordersOnDate.reduce((sum, o) => sum + o.total, 0);
+      const revenue = ordersOnDate.reduce((sum, o) => sum + o.totalAmount, 0);
 
       return {
         date,
