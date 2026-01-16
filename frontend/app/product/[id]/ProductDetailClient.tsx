@@ -223,6 +223,8 @@ export default function ProductDetailClient({ params }: { params: { id: string }
                   -{discountPercentage}%
                 </div>
               )}
+              {/* Favorite Button - top left overlay */}
+              <FavoriteButton productId={product.id} variant="overlay" />
               <Image
                 src={product.imageUrl}
                 alt={product.name}
@@ -342,24 +344,21 @@ export default function ProductDetailClient({ params }: { params: { id: string }
               </div>
             )}
 
-            {/* Action Buttons */}
-            <div className="product-actions">
-              <button
-                className="add-to-cart-button"
-                onClick={handleAddToCart}
-                disabled={isAdding || (product.stock !== undefined && product.stock - (product.reserved || 0) <= 0)}
-                style={(product.stock !== undefined && product.stock - (product.reserved || 0) <= 0) ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
-              >
-                {isAdding
-                  ? 'Wird hinzugefügt...'
-                  : showSuccess
-                  ? `✓ ${addedQuantity}x zum Warenkorb hinzugefügt!`
-                  : (product.stock !== undefined && product.stock - (product.reserved || 0) <= 0)
-                  ? 'Ausverkauft'
-                  : 'In den Warenkorb'}
-              </button>
-              <FavoriteButton productId={product.id} variant="inline" />
-            </div>
+            {/* Add to Cart Button */}
+            <button
+              className="add-to-cart-button"
+              onClick={handleAddToCart}
+              disabled={isAdding || (product.stock !== undefined && product.stock - (product.reserved || 0) <= 0)}
+              style={(product.stock !== undefined && product.stock - (product.reserved || 0) <= 0) ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
+            >
+              {isAdding
+                ? 'Wird hinzugefügt...'
+                : showSuccess
+                ? `✓ ${addedQuantity}x zum Warenkorb hinzugefügt!`
+                : (product.stock !== undefined && product.stock - (product.reserved || 0) <= 0)
+                ? 'Ausverkauft'
+                : 'In den Warenkorb'}
+            </button>
 
             {/* Product Details */}
             <div className="product-details">
@@ -623,15 +622,8 @@ export default function ProductDetailClient({ params }: { params: { id: string }
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
         }
 
-        .product-actions {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          margin-top: 1rem;
-        }
-
         .add-to-cart-button {
-          flex: 1;
+          width: 100%;
           padding: 1.5rem;
           background: var(--accent-orange);
           border: none;
@@ -642,6 +634,7 @@ export default function ProductDetailClient({ params }: { params: { id: string }
           letter-spacing: 2px;
           cursor: pointer;
           transition: all 0.3s ease;
+          margin-top: 1rem;
         }
 
         .add-to-cart-button:hover:not(:disabled) {

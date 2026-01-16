@@ -370,23 +370,21 @@ export default function Navigation() {
                 </button>
                 {userMenuOpen && (
                   <div className="user-dropdown">
-                  <p className="user-email">{user.email}</p>
-                  <Link href="/profile" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                      <circle cx="12" cy="7" r="4" />
-                    </svg>
-                    Profil
-                  </Link>
-                  <hr className="user-dropdown-divider" />
-                  <button onClick={() => { signOut(); setUserMenuOpen(false); }} className="user-signout">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                      <polyline points="16 17 21 12 16 7" />
-                      <line x1="21" y1="12" x2="9" y2="12" />
-                    </svg>
-                    Abmelden
-                  </button>
+                    <Link href="/profile" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                      Profil
+                    </Link>
+                    <button onClick={() => { signOut(); setUserMenuOpen(false); }} className="user-signout">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                      </svg>
+                      Abmelden
+                    </button>
                   </div>
                 )}
               </div>
@@ -801,97 +799,65 @@ export default function Navigation() {
           top: 100%;
           right: 0;
           background: #1a1a1a;
-          border: 2px solid var(--accent-orange);
-          padding: 1.25rem;
+          border: 2px solid #333;
+          padding: 0.5rem;
           margin-top: 0.5rem;
-          width: 240px;
+          min-width: 160px;
           z-index: 2000;
-          border-radius: 8px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-        }
-
-        .user-email {
-          margin: 0 0 1.25rem 0;
-          padding: 0.75rem;
-          background: rgba(255, 255, 255, 0.02);
           border-radius: 4px;
-          color: #999;
-          font-size: 0.8rem;
-          font-weight: 500;
-          text-align: center;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
 
         .user-dropdown-link {
           display: flex;
           align-items: center;
-          justify-content: center;
           gap: 0.75rem;
           width: 100%;
-          padding: 1rem 1.25rem;
+          padding: 0.75rem 1rem;
           text-decoration: none;
-          color: #000;
-          font-size: 1rem;
-          font-weight: 800;
-          border-radius: 6px;
+          color: #ccc;
+          font-size: 0.875rem;
+          font-weight: 500;
+          border-radius: 4px;
           transition: all 0.3s ease;
-          margin-bottom: 0.75rem;
-          background: var(--accent-orange);
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          border: 2px solid var(--accent-orange);
+          background: transparent;
         }
 
         .user-dropdown-link:hover {
-          background: #ff8533;
-          border-color: #ff8533;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(255, 107, 0, 0.4);
+          background: rgba(255, 255, 255, 0.05);
+          color: var(--accent-orange);
         }
 
         .user-dropdown-link svg {
           flex-shrink: 0;
-          color: #000;
-          width: 20px;
-          height: 20px;
-        }
-
-        .user-dropdown-divider {
-          display: none;
+          opacity: 0.7;
         }
 
         .user-signout {
           display: flex;
           align-items: center;
-          justify-content: center;
           gap: 0.75rem;
           width: 100%;
           background: transparent;
-          border: 2px solid #dc2626;
-          color: #dc2626;
-          padding: 0.875rem 1rem;
-          font-weight: 700;
+          border: none;
+          color: #ccc;
+          padding: 0.75rem 1rem;
+          font-weight: 500;
           cursor: pointer;
           transition: all 0.3s ease;
-          border-radius: 6px;
-          font-size: 0.9rem;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
+          border-radius: 4px;
+          font-size: 0.875rem;
+          text-align: left;
         }
 
         .user-signout:hover {
-          background: #dc2626;
-          color: white;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4);
+          background: rgba(220, 38, 38, 0.1);
+          color: #dc2626;
         }
 
         .user-signout svg {
           flex-shrink: 0;
-          width: 18px;
-          height: 18px;
+          opacity: 0.7;
         }
 
         /* ROW 2: Filter Bar */
