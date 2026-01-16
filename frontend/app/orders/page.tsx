@@ -134,11 +134,11 @@ export default function OrdersPage() {
   if (loading) {
     return (
       <div className="orders-container">
-        <Link href="/" className="back-to-shop">
+        <Link href="/profile" className="back-to-shop">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
-          Zurück zum Shop
+          Zurück zum Profil
         </Link>
         <div className="orders-header">
           <h1 className="orders-title">MEINE BESTELLUNGEN</h1>
@@ -159,11 +159,11 @@ export default function OrdersPage() {
   if (orders.length === 0) {
     return (
       <div className="orders-container">
-        <Link href="/" className="back-to-shop">
+        <Link href="/profile" className="back-to-shop">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
-          Zurück zum Shop
+          Zurück zum Profil
         </Link>
         <div className="orders-header">
           <h1 className="orders-title">MEINE BESTELLUNGEN</h1>
