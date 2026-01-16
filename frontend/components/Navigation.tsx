@@ -799,10 +799,10 @@ export default function Navigation() {
           top: 100%;
           right: 0;
           background: #1a1a1a;
-          border: 2px solid #333;
-          padding: 0.5rem;
+          border: 2px solid var(--accent-orange);
+          padding: 0.75rem;
           margin-top: 0.5rem;
-          min-width: 160px;
+          min-width: 180px;
           z-index: 2000;
           border-radius: 4px;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
@@ -813,24 +813,30 @@ export default function Navigation() {
           align-items: center;
           gap: 0.75rem;
           width: 100%;
-          padding: 0.75rem 1rem;
+          padding: 0.875rem 1rem;
           text-decoration: none;
-          color: #ccc;
-          font-size: 0.875rem;
-          font-weight: 500;
+          color: white;
+          font-size: 0.95rem;
+          font-weight: 600;
           border-radius: 4px;
           transition: all 0.3s ease;
-          background: transparent;
+          background: rgba(255, 107, 0, 0.05);
+          border: 1px solid rgba(255, 107, 0, 0.2);
+          margin-bottom: 0.5rem;
         }
 
         .user-dropdown-link:hover {
-          background: rgba(255, 255, 255, 0.05);
+          background: rgba(255, 107, 0, 0.15);
+          border-color: var(--accent-orange);
           color: var(--accent-orange);
+          transform: translateX(2px);
         }
 
         .user-dropdown-link svg {
           flex-shrink: 0;
-          opacity: 0.7;
+          color: var(--accent-orange);
+          width: 18px;
+          height: 18px;
         }
 
         .user-signout {
@@ -839,25 +845,33 @@ export default function Navigation() {
           gap: 0.75rem;
           width: 100%;
           background: transparent;
-          border: none;
+          border: 1px solid #444;
           color: #ccc;
-          padding: 0.75rem 1rem;
-          font-weight: 500;
+          padding: 0.875rem 1rem;
+          font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
           border-radius: 4px;
-          font-size: 0.875rem;
+          font-size: 0.95rem;
           text-align: left;
         }
 
         .user-signout:hover {
-          background: rgba(220, 38, 38, 0.1);
+          background: rgba(220, 38, 38, 0.15);
+          border-color: #dc2626;
           color: #dc2626;
+          transform: translateX(2px);
         }
 
         .user-signout svg {
           flex-shrink: 0;
-          opacity: 0.7;
+          color: #999;
+          width: 18px;
+          height: 18px;
+        }
+
+        .user-signout:hover svg {
+          color: #dc2626;
         }
 
         /* ROW 2: Filter Bar */
