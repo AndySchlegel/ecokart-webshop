@@ -331,6 +331,7 @@ jobs:
             "ecokart-users"
             "ecokart-carts"
             "ecokart-orders"
+            "ecokart-wishlists"
           )
 
           for table in "${TABLES[@]}"; do
@@ -623,7 +624,7 @@ jobs:
           echo "   - ✅ Lambda Functions"
           echo "   - ✅ API Gateways"
           echo "   - ✅ Cognito User Pools"
-          echo "   - ✅ DynamoDB Tables (4)"
+          echo "   - ✅ DynamoDB Tables (5)"
           echo "   - ✅ IAM Roles & Policies"
           echo "   - ✅ CloudWatch Log Groups"
           echo "   - ✅ CloudWatch Metric Alarms"
