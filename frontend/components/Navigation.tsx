@@ -383,20 +383,23 @@ export default function Navigation() {
                     {/* Navigation Links */}
                     <div className="user-dropdown-nav">
                       <Link href="/profile" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                          <circle cx="12" cy="7" r="4"/>
                         </svg>
                         <span>Mein Profil</span>
                       </Link>
                       <Link href="/orders" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                          <line x1="12" y1="22.08" x2="12" y2="12"/>
                         </svg>
                         <span>Bestellungen</span>
                       </Link>
                       <Link href="/wishlist" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                         </svg>
                         <span>Favoriten</span>
                       </Link>
@@ -891,12 +894,12 @@ export default function Navigation() {
         .user-dropdown-link {
           display: flex;
           align-items: center;
-          gap: 1rem;
+          gap: 1.25rem;
           width: 100%;
           padding: 1rem 1.25rem;
           text-decoration: none;
           color: white;
-          font-size: 0.95rem;
+          font-size: 1rem;
           font-weight: 600;
           border-radius: 6px;
           transition: all 0.3s ease;
@@ -915,10 +918,12 @@ export default function Navigation() {
           flex-shrink: 0;
           color: var(--accent-orange);
           transition: all 0.3s ease;
+          opacity: 0.9;
         }
 
         .user-dropdown-link:hover svg {
-          transform: scale(1.15);
+          transform: scale(1.1);
+          opacity: 1;
         }
 
         .user-dropdown-link span {
