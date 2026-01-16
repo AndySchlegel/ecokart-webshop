@@ -894,9 +894,9 @@ export default function Navigation() {
         .user-dropdown-link {
           display: flex;
           align-items: center;
-          gap: 1.25rem;
+          gap: 2rem;
           width: 100%;
-          padding: 1rem 1.25rem;
+          padding: 1rem 1.5rem;
           text-decoration: none;
           color: white;
           font-size: 1rem;
