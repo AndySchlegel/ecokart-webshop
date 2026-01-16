@@ -802,81 +802,89 @@ export default function Navigation() {
           right: 0;
           background: #1a1a1a;
           border: 2px solid var(--accent-orange);
-          padding: 0.75rem;
+          padding: 1rem;
           margin-top: 0.5rem;
-          min-width: 220px;
+          min-width: 200px;
+          max-width: 280px;
           z-index: 2000;
           border-radius: 4px;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
 
         .user-email {
-          margin: 0 0 0.75rem 0;
-          padding-bottom: 0.75rem;
+          margin: 0 0 1rem 0;
+          padding-bottom: 1rem;
           border-bottom: 1px solid #333;
-          color: white;
-          font-size: 0.875rem;
-          font-weight: 600;
-          word-break: break-all;
+          color: #999;
+          font-size: 0.75rem;
+          font-weight: 500;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          max-width: 100%;
         }
 
         .user-dropdown-link {
           display: flex;
           align-items: center;
-          gap: 0.625rem;
+          gap: 0.75rem;
           width: 100%;
-          padding: 0.625rem 0.75rem;
+          padding: 0.875rem 1rem;
           text-decoration: none;
-          color: #ccc;
-          font-size: 0.9rem;
+          color: white;
+          font-size: 0.95rem;
           font-weight: 600;
           border-radius: 4px;
           transition: all 0.3s ease;
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.5rem;
+          background: rgba(255, 255, 255, 0.03);
         }
 
         .user-dropdown-link:hover {
-          background: rgba(255, 255, 255, 0.05);
-          color: var(--accent-green);
+          background: rgba(255, 107, 0, 0.1);
+          color: var(--accent-orange);
         }
 
         .user-dropdown-link svg {
           flex-shrink: 0;
-          color: var(--accent-green);
-          width: 16px;
-          height: 16px;
+          color: var(--accent-orange);
+          width: 18px;
+          height: 18px;
         }
 
         .user-dropdown-divider {
           border: none;
           border-top: 1px solid #333;
-          margin: 0.5rem 0;
+          margin: 0.75rem 0;
         }
 
         .user-signout {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.625rem;
+          gap: 0.75rem;
           width: 100%;
           background: transparent;
-          border: 1px solid #dc2626;
+          border: 2px solid #dc2626;
           color: #dc2626;
-          padding: 0.625rem 0.75rem;
+          padding: 0.875rem 1rem;
           font-weight: 700;
           cursor: pointer;
           transition: all 0.3s ease;
           border-radius: 4px;
-          font-size: 0.9rem;
+          font-size: 0.95rem;
         }
 
         .user-signout:hover {
           background: #dc2626;
           color: white;
+          transform: translateY(-2px);
         }
 
         .user-signout svg {
           flex-shrink: 0;
+          width: 18px;
+          height: 18px;
         }
 
         /* ROW 2: Filter Bar */
