@@ -370,20 +370,50 @@ export default function Navigation() {
                 </button>
                 {userMenuOpen && (
                   <div className="user-dropdown">
-                    <Link href="/profile" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                      </svg>
-                      Profil
-                    </Link>
-                    <button onClick={() => { signOut(); setUserMenuOpen(false); }} className="user-signout">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    {/* User Info Header */}
+                    <div className="user-dropdown-header">
+                      <div className="user-avatar">
+                        {user.email.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="user-info">
+                        <p className="user-email">{user.email}</p>
+                      </div>
+                    </div>
+
+                    {/* Navigation Links */}
+                    <div className="user-dropdown-nav">
+                      <Link href="/profile" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                          <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span>Mein Profil</span>
+                      </Link>
+                      <Link href="/orders" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        </svg>
+                        <span>Bestellungen</span>
+                      </Link>
+                      <Link href="/wishlist" className="user-dropdown-link" onClick={() => setUserMenuOpen(false)}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                        <span>Favoriten</span>
+                      </Link>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="user-dropdown-divider"></div>
+
+                    {/* Logout */}
+                    <button onClick={() => { signOut(); setUserMenuOpen(false); }} className="user-dropdown-logout">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                         <polyline points="16 17 21 12 16 7" />
                         <line x1="21" y1="12" x2="9" y2="12" />
                       </svg>
-                      Abmelden
+                      <span>Abmelden</span>
                     </button>
                   </div>
                 )}
@@ -800,78 +830,142 @@ export default function Navigation() {
           right: 0;
           background: #1a1a1a;
           border: 2px solid var(--accent-orange);
-          padding: 0.75rem;
+          padding: 0;
           margin-top: 0.5rem;
-          min-width: 180px;
+          width: 260px;
           z-index: 2000;
-          border-radius: 4px;
+          border-radius: 8px;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+          overflow: hidden;
+        }
+
+        /* User Info Header */
+        .user-dropdown-header {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1.25rem;
+          background: linear-gradient(135deg, rgba(255, 107, 0, 0.1) 0%, rgba(0, 255, 135, 0.05) 100%);
+          border-bottom: 1px solid rgba(255, 107, 0, 0.2);
+        }
+
+        .user-avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, var(--accent-orange), var(--accent-green));
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          font-weight: 900;
+          color: #000;
+          flex-shrink: 0;
+          box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+        }
+
+        .user-info {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .user-email {
+          margin: 0;
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: white;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        /* Navigation Links */
+        .user-dropdown-nav {
+          padding: 0.75rem;
         }
 
         .user-dropdown-link {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.875rem;
           width: 100%;
           padding: 0.875rem 1rem;
           text-decoration: none;
-          color: white;
+          color: #ccc;
           font-size: 0.95rem;
           font-weight: 600;
-          border-radius: 4px;
+          border-radius: 6px;
           transition: all 0.3s ease;
-          background: rgba(255, 107, 0, 0.05);
-          border: 1px solid rgba(255, 107, 0, 0.2);
+          background: transparent;
           margin-bottom: 0.5rem;
         }
 
+        .user-dropdown-link:last-child {
+          margin-bottom: 0;
+        }
+
         .user-dropdown-link:hover {
-          background: rgba(255, 107, 0, 0.15);
-          border-color: var(--accent-orange);
+          background: rgba(255, 107, 0, 0.1);
           color: var(--accent-orange);
-          transform: translateX(2px);
+          transform: translateX(4px);
         }
 
         .user-dropdown-link svg {
           flex-shrink: 0;
           color: var(--accent-orange);
-          width: 18px;
-          height: 18px;
+          transition: all 0.3s ease;
         }
 
-        .user-signout {
+        .user-dropdown-link:hover svg {
+          transform: scale(1.1);
+        }
+
+        .user-dropdown-link span {
+          flex: 1;
+        }
+
+        /* Divider */
+        .user-dropdown-divider {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.3), transparent);
+          margin: 0.5rem 0;
+        }
+
+        /* Logout Button */
+        .user-dropdown-logout {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.875rem;
           width: 100%;
           background: transparent;
-          border: 1px solid #444;
-          color: #ccc;
-          padding: 0.875rem 1rem;
+          border: none;
+          color: #999;
+          padding: 0.875rem 1.75rem;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
-          border-radius: 4px;
           font-size: 0.95rem;
           text-align: left;
         }
 
-        .user-signout:hover {
-          background: rgba(220, 38, 38, 0.15);
-          border-color: #dc2626;
+        .user-dropdown-logout:hover {
+          background: rgba(220, 38, 38, 0.1);
           color: #dc2626;
-          transform: translateX(2px);
         }
 
-        .user-signout svg {
+        .user-dropdown-logout svg {
           flex-shrink: 0;
           color: #999;
-          width: 18px;
-          height: 18px;
+          transition: all 0.3s ease;
         }
 
-        .user-signout:hover svg {
+        .user-dropdown-logout:hover svg {
           color: #dc2626;
+          transform: translateX(3px);
+        }
+
+        .user-dropdown-logout span {
+          flex: 1;
         }
 
         /* ROW 2: Filter Bar */
