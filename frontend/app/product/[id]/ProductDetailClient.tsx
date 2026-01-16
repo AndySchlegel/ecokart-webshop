@@ -644,20 +644,6 @@ export default function ProductDetailClient({ params }: { params: { id: string }
           transition: all 0.3s ease;
         }
 
-        .product-actions .favorite-btn {
-          position: relative;
-          top: auto;
-          right: auto;
-          flex-shrink: 0;
-          width: 64px;
-          height: 64px;
-        }
-
-        .product-actions .favorite-btn svg {
-          width: 28px;
-          height: 28px;
-        }
-
         .add-to-cart-button:hover:not(:disabled) {
           background: var(--accent-green);
           transform: translateY(-3px);

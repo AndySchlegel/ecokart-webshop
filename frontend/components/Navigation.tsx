@@ -802,60 +802,64 @@ export default function Navigation() {
           right: 0;
           background: #1a1a1a;
           border: 2px solid var(--accent-orange);
-          padding: 1rem;
+          padding: 1.25rem;
           margin-top: 0.5rem;
-          min-width: 200px;
-          max-width: 280px;
+          width: 240px;
           z-index: 2000;
-          border-radius: 4px;
+          border-radius: 8px;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
 
         .user-email {
-          margin: 0 0 1rem 0;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid #333;
+          margin: 0 0 1.25rem 0;
+          padding: 0.75rem;
+          background: rgba(255, 255, 255, 0.02);
+          border-radius: 4px;
           color: #999;
-          font-size: 0.75rem;
+          font-size: 0.8rem;
           font-weight: 500;
+          text-align: center;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          max-width: 100%;
         }
 
         .user-dropdown-link {
           display: flex;
           align-items: center;
+          justify-content: center;
           gap: 0.75rem;
           width: 100%;
-          padding: 0.875rem 1rem;
+          padding: 1rem 1.25rem;
           text-decoration: none;
-          color: white;
-          font-size: 0.95rem;
-          font-weight: 600;
-          border-radius: 4px;
+          color: #000;
+          font-size: 1rem;
+          font-weight: 800;
+          border-radius: 6px;
           transition: all 0.3s ease;
-          margin-bottom: 0.5rem;
-          background: rgba(255, 255, 255, 0.03);
+          margin-bottom: 0.75rem;
+          background: var(--accent-orange);
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          border: 2px solid var(--accent-orange);
         }
 
         .user-dropdown-link:hover {
-          background: rgba(255, 107, 0, 0.1);
-          color: var(--accent-orange);
+          background: #ff8533;
+          border-color: #ff8533;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(255, 107, 0, 0.4);
         }
 
         .user-dropdown-link svg {
           flex-shrink: 0;
-          color: var(--accent-orange);
-          width: 18px;
-          height: 18px;
+          color: #000;
+          width: 20px;
+          height: 20px;
         }
 
         .user-dropdown-divider {
-          border: none;
-          border-top: 1px solid #333;
-          margin: 0.75rem 0;
+          display: none;
         }
 
         .user-signout {
@@ -871,14 +875,17 @@ export default function Navigation() {
           font-weight: 700;
           cursor: pointer;
           transition: all 0.3s ease;
-          border-radius: 4px;
-          font-size: 0.95rem;
+          border-radius: 6px;
+          font-size: 0.9rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
         }
 
         .user-signout:hover {
           background: #dc2626;
           color: white;
           transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4);
         }
 
         .user-signout svg {

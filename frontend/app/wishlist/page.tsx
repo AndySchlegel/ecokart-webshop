@@ -96,11 +96,11 @@ export default function WishlistPage() {
   // Wishlist grid
   return (
     <div className="wishlist-container">
-      <Link href="/" className="back-to-shop">
+      <Link href="/profile" className="back-to-shop">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="15 18 9 12 15 6" />
         </svg>
-        Zurück zum Shop
+        Zurück zum Profil
       </Link>
       <div className="wishlist-header">
         <h1 className="wishlist-title">MEINE FAVORITEN</h1>
