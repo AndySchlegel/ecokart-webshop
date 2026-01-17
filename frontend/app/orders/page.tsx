@@ -81,7 +81,7 @@ export default function OrdersPage() {
     };
 
     fetchOrders();
-  }, [user]);
+  }, [user?.userId]); // Bug Fix: Only depend on userId to prevent endless re-renders
 
   // Format date
   const formatDate = (dateString: string) => {

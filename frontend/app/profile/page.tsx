@@ -107,7 +107,7 @@ export default function ProfilePage() {
     };
 
     fetchData();
-  }, [user]);
+  }, [user?.userId]); // Bug Fix: Only depend on userId to prevent endless re-renders
 
   const handleSaveName = async () => {
     if (!editedName.trim() || editedName === profile?.name) {

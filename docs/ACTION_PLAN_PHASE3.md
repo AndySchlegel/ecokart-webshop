@@ -1205,4 +1205,159 @@ GET https://api.aws.his4irness23.de/api/users/profile 404 (Not Found)
 
 ---
 
+---
+
+## 🚨 POST-DEPLOY CRITICAL BUGS (17. Jan 2026 - NEUE SESSION)
+
+**Status:** 🔴 MULTIPLE CRITICAL ISSUES AFTER DEPLOY
+**Root Cause:** Lambda Function nicht neu deployed (nur Terraform Infrastructure)
+
+### ✅ Was funktioniert:
+- ✅ User Dropdown Spacing PERFEKT (3rem gap via navigation.css)
+- ✅ Nuclear + Deploy Workflows laufen durch
+- ✅ Terraform Apply erfolgreich (CORS PATCH added)
+- ✅ Amplify Frontend Build erfolgreich
+- ✅ Auto-Seeding funktioniert (Produkte in DB)
+
+### ❌ KRITISCHE POST-DEPLOY BUGS:
+
+#### **Bug 6: Lambda Function nicht updated 🔴 BLOCKING**
+**Problem:**
+- Deploy Workflow erstellt Lambda ZIP, aber deployed es NICHT
+- Terraform erkennt Code-Änderung nicht (kein Hash)
+- Alte Lambda läuft noch → `/api/users/profile` existiert nicht (404)
+
+**Impact:**
+- Profile Name Update schlägt fehl (404)
+- Profile Page fehlt GET /api/users/profile (fallback zu AuthContext)
+- Auto-Refresh Loop durch wiederholte 404s
+
+**Fix Required:**
+- Lambda Force Update in Deploy Workflow
+- Oder: Hash-based deployment via Terraform `source_code_hash`
+- Manueller Fix: `aws lambda update-function-code` direkt ausführen
+
+---
+
+#### **Bug 7: Auto-Refresh Loop alle 30 Sekunden 🔥 CRITICAL**
+**Problem:**
+- Profile/Orders/Wishlist Pages refreshen automatisch alle 30 Sek
+- AWS Free Tier Warning erhalten!
+- API Calls explodieren → Kosten!
+
+**Root Cause:**
+- useEffect Dependencies trigger endless re-renders ODER
+- Failed API Calls (404) werden retry-ed ODER
+- AuthContext user object reference changes constantly
+
+**Symptoms:**
+- DevTools zeigen wiederholte 404 Errors
+- "Failed to load resource" alle 30 Sekunden
+- Network Tab zeigt Loop
+
+**Fix Required:**
+- useEffect Dependencies stabilisieren (useMemo für user)
+- Error Handling verbessern (kein auto-retry)
+- Event Listeners aufräumen
+- React.StrictMode doppelte Renders vermeiden
+
+**Files:**
+- `/frontend/app/profile/page.tsx`
+- `/frontend/app/orders/page.tsx`
+- `/frontend/app/wishlist/page.tsx`
+- `/frontend/contexts/AuthContext.tsx`
+
+---
+
+#### **Bug 8: Wishlist AddToCart ohne Größenwahl 🔴 HIGH**
+**Problem:**
+- "+ Warenkorb" Button auf Wishlist Page OHNE Size Selection
+- Bei Schuhen MUSS Größe gewählt werden!
+- Aktuell: `addToCart(productId, 1)` direkt → falsch
+
+**Expected Behavior:**
+- Click auf "+ Warenkorb" → Opens Quick-Add Modal (wie auf Hauptseite)
+- Size Selection + Quantity
+- DANN addToCart
+
+**Fix Required:**
+- Reuse QuickAddModal Component from Product Grid
+- Import in wishlist page.tsx
+- Replace simple button with modal trigger
+- Logik von Hauptseite (ProductGrid) übernehmen
+
+**Files:**
+- `/frontend/app/wishlist/page.tsx`
+- `/frontend/components/QuickAddModal.tsx` (falls existiert)
+
+---
+
+#### **Bug 9: E2E Broken - Keine Bestätigungsmail 🔴 HIGH**
+**Problem:**
+- Checkout funktioniert
+- Bestellung wird erstellt
+- ABER: Keine Order Confirmation Email
+
+**Root Cause (zu untersuchen):**
+- Resend Integration kaputt?
+- Lambda Permissions fehlen (SES)?
+- Email Queue/Trigger defekt?
+- Environment Variable fehlt (RESEND_API_KEY)?
+
+**Fix Required:**
+1. Prüfen ob Email Service Lambda deployed ist
+2. IAM Permissions checken (SES/Resend)
+3. Environment Variables im Lambda checken
+4. Error Logs in CloudWatch anschauen
+5. Test-Email manuell senden
+
+**Files:**
+- Backend Email Service
+- Lambda IAM Role
+- Terraform Email Module
+
+---
+
+#### **Bug 10: Admin Dashboard zeigt "Keine Umsatzdaten" trotz Orders 🟡 MEDIUM**
+**Problem:**
+- Orders existieren (Stats zeigen: 0 Bestellungen Heute, 2 neue Kunden)
+- ABER: Chart zeigt "Keine Umsatzdaten verfügbar"
+- Empty State wird angezeigt obwohl `getAllOrders()` Daten hat
+
+**Root Cause:**
+- Empty State Logik zu strikt: `data.some(item => item.revenue > 0)`
+- Oder: Orders haben keine `totalAmount` (wrong field name?)
+- Oder: getAllOrders() returns empty für Analytics
+
+**Symptoms:**
+- "Umsatz Heute: 0,00 €" → Correct (no paid orders today?)
+- "Bestellungen Heute: 0" → Seems wrong if user just ordered
+- Charts empty aber Top 5 Products shown → data exists!
+
+**Fix Required:**
+- Debug getAllOrders() return value
+- Check Order schema: `totalAmount` vs `total`?
+- Revenue calculation: status filter (only "completed")?
+- Empty State Bedingung anpassen
+
+**Files:**
+- `/backend/src/services/analytics.service.ts`
+- `/admin-frontend/components/dashboard/RevenueChart.tsx`
+- `/backend/src/services/database-adapter.ts` (getAllOrders)
+
+---
+
+### 🎯 Fix Priority (IMMEDIATE):
+
+**Sprint 1 - SHOW STOPPERS:**
+1. 🔥 **Bug 7:** Auto-Refresh Loop (AWS Kosten!)
+2. 🔴 **Bug 6:** Lambda Force Deploy (Backend funktioniert nicht)
+3. 🔴 **Bug 9:** Email Service (E2E broken)
+
+**Sprint 2 - UX Critical:**
+4. 🔴 **Bug 8:** Wishlist Size Selection
+5. 🟡 **Bug 10:** Admin Dashboard Stats
+
+---
+
 **Let's go! 🚀**

@@ -20,7 +20,7 @@ export default function WishlistPage() {
     if (!user) {
       router.push('/login');
     }
-  }, [user, router]);
+  }, [user?.userId, router]); // Bug Fix: Only depend on userId to prevent endless re-renders
 
   const handleRemove = async (productId: string) => {
     try {
