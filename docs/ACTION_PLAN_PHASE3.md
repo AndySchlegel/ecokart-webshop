@@ -1035,4 +1035,174 @@ git push
 
 ---
 
+## 🐛 CRITICAL BUGS - Nach Fresh Deploy (16. Jan 2026)
+
+**Status:** 🔴 BLOCKING - Must fix before next session
+**Detected:** Nach Nuclear Cleanup + Deploy Workflow
+
+### ✅ Was funktioniert:
+- ✅ E2E Tests laufen durch
+- ✅ Stripe Integration funktioniert sauber
+- ✅ Resend Email funktioniert sauber
+- ✅ Wishlist Tabelle wird korrekt deployed (Terraform fix erfolgreich)
+
+### ❌ Kritische Bugs:
+
+#### Bug 1: User Dropdown Spacing kommt nicht an 🔴 HIGH
+**Problem:**
+- 3rem gap Spacing-Änderung deployed, aber nicht sichtbar
+- Amplify Build erfolgreich (Commit 70761ca)
+- Getestet in Chrome + Safari Private → kein Unterschied
+- Styles scheinen geblockt/überschrieben zu werden
+
+**Symptome:**
+- Navigation.tsx hat `gap: 3rem` (verified im Code)
+- Frontend zeigt weiterhin enges Spacing
+- Cache-Issue ausgeschlossen (multiple Browser, Private Mode)
+
+**Next Steps:**
+- styled-jsx Cache-Problem untersuchen
+- Prüfen ob globale CSS-Overrides existieren
+- Eventuell auf CSS Module umstellen
+- Browser DevTools: Computed Styles checken
+
+**Files:**
+- `/frontend/components/Navigation.tsx` (Zeile 897)
+
+---
+
+#### Bug 2: Wishlist "+ Warenkorb" Button ohne Funktion 🔴 HIGH
+**Problem:**
+- Button auf `/wishlist` Page ist sichtbar, aber Click macht nichts
+- Sollte Produkt in den Warenkorb legen (wie ProductDetailClient)
+
+**Expected Behavior:**
+- Click auf "+ Warenkorb" → `addToCart(productId, 1)`
+- Toast Notification bei Erfolg/Fehler
+- Button disabled wenn ausverkauft
+
+**Actual Behavior:**
+- Button ist clickable, aber keine Reaktion
+- Keine Netzwerk-Requests sichtbar
+- Keine Fehler in Console
+
+**Fix:**
+- Implementierung in `/frontend/app/wishlist/page.tsx` prüfen
+- `handleAddToCart` Funktion existiert (Zeile 33-40)
+- Eventuell Event-Handler nicht korrekt gebunden?
+- Button onClick wird aufgerufen? (Zeile 188)
+
+**Files:**
+- `/frontend/app/wishlist/page.tsx` (Zeile 33-40, 186-192)
+
+---
+
+#### Bug 3: Profile Name Update schlägt fehl 🔴 HIGH
+**Problem:**
+- Name ändern auf `/profile` Page wirft Fehler
+- Alert: "Name konnte nicht aktualisiert werden"
+- DevTools zeigen: `PATCH /api/users/profile` → 404 Not Found
+- CORS Preflight geblockt
+
+**Error Messages:**
+```
+Failed to load resource: the server responded with a status of 404
+Access to fetch at 'https://api.aws.his4irness23.de/api/users/profile'
+from origin 'https://shop.aws.his4irness23.de' has been blocked by CORS policy:
+Method PATCH is not allowed by Access-Control-Allow-Methods in preflight response.
+
+ERROR Failed to update name
+GET https://api.aws.his4irness23.de/api/users/profile 404 (Not Found)
+```
+
+**Root Cause:**
+- Endpoint `/api/users/profile` (PATCH) existiert nicht oder
+- API Gateway CORS Config fehlt PATCH Method oder
+- Lambda Route fehlt
+
+**Fix Required:**
+1. Prüfen ob `userController.updateProfile()` existiert
+2. Prüfen ob Route in `userRoutes.ts` registriert ist
+3. API Gateway CORS für PATCH Method aktivieren
+4. Testen ob Cognito Attribute Update funktioniert
+
+**Files:**
+- `/backend/src/controllers/userController.ts`
+- `/backend/src/routes/userRoutes.ts`
+- Terraform API Gateway CORS Config
+
+---
+
+#### Bug 4: Admin Dashboard Chart defekt 🟡 MEDIUM
+**Problem:**
+- "Umsatz (letzte 7 Tage)" Chart zeigt nur leere Achsen
+- Kein Datenpunkte, nur gestrichelte Grid-Linien
+- "Analytics 30d" hat gleiches Problem
+
+**Symptome:**
+- Chart-Container rendert
+- Achsen-Labels vorhanden (Datum)
+- Keine Datenpunkte/Kurven sichtbar
+- Andere Dashboard-Stats funktionieren (Bestellungen Heute: 4, etc.)
+
+**Mögliche Ursachen:**
+- Chart Library (Recharts?) fehlt nach Deploy?
+- Data Format stimmt nicht
+- Orders Aggregation defekt
+- Frontend Build-Issue (Chunk nicht geladen)
+
+**Next Steps:**
+- Console Errors checken
+- Network Tab: API Call erfolgreich?
+- Chart Component Code prüfen
+- Recharts Version/Import prüfen
+
+**Files:**
+- `/admin-frontend/app/dashboard/overview/page.tsx` (oder ähnlich)
+- Chart Component
+
+---
+
+#### Bug 5: Datenseeding nach Deploy fehlt 🟡 MEDIUM
+**Problem:**
+- Nach frischem Deploy sind DynamoDB Tabellen LEER
+- Früher hatte Deploy Workflow automatisches Seeding
+- Jetzt muss manuell `reseed-database.yml` gestartet werden
+
+**Expected Behavior:**
+- Deploy Workflow erstellt Tabellen (✅ funktioniert)
+- Deploy Workflow befüllt Tabellen mit Demo-Daten (❌ fehlt)
+- Produkte, Test-User, etc. sofort verfügbar
+
+**Actual Behavior:**
+- Tabellen existieren, aber leer
+- Manueller Reseed-Workflow nötig
+- Umständlich für frische Deploys
+
+**Fix:**
+- Deploy Workflow (.github/workflows/deploy.yml) erweitern
+- Nach Terraform Apply: Seed-Script aufrufen
+- Oder: `terraform/modules/dynamodb/seed.tf` reaktivieren
+- Sicherstellen dass Seeding idempotent ist
+
+**Files:**
+- `.github/workflows/deploy.yml`
+- `terraform/modules/dynamodb/seed.tf`
+- `terraform/scripts/seed-data.js`
+
+---
+
+### 🎯 Fix Priority:
+
+**Sprint 1 - Blocking Bugs (SOFORT):**
+1. 🔴 Bug 3: Profile Name Update (Backend/CORS)
+2. 🔴 Bug 2: Wishlist Warenkorb Button
+3. 🔴 Bug 1: User Dropdown Spacing
+
+**Sprint 2 - Quality Bugs (Diese Woche):**
+4. 🟡 Bug 5: Datenseeding Integration
+5. 🟡 Bug 4: Admin Dashboard Charts
+
+---
+
 **Let's go! 🚀**

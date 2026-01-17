@@ -33,7 +33,7 @@ export default function WishlistPage() {
   const handleAddToCart = async (productId: string) => {
     try {
       await addToCart(productId, 1);
-      // Optional: Show success toast or message
+      alert('✅ Produkt wurde zum Warenkorb hinzugefügt!');
     } catch (error: any) {
       alert(error.message || 'Produkt konnte nicht hinzugefügt werden');
     }
