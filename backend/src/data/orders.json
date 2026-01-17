@@ -19,9 +19,9 @@
         "zipCode": "97201",
         "country": "USA"
       },
-      "status": "pending",
-      "createdAt": "2025-10-25T13:42:41.655Z",
-      "updatedAt": "2025-10-25T13:42:41.655Z"
+      "status": "delivered",
+      "createdAt": "2026-01-10T13:42:41.655Z",
+      "updatedAt": "2026-01-10T13:42:41.655Z"
     },
     {
       "id": "1204da62-0481-4e40-9dd1-4950957f67d9",
@@ -42,9 +42,9 @@
         "zipCode": "12345",
         "country": "Deutschland"
       },
-      "status": "pending",
-      "createdAt": "2025-10-25T14:54:28.187Z",
-      "updatedAt": "2025-10-25T14:54:28.187Z"
+      "status": "shipped",
+      "createdAt": "2026-01-11T14:54:28.187Z",
+      "updatedAt": "2026-01-11T14:54:28.187Z"
     },
     {
       "id": "16859c62-1af6-4219-9e56-e45cdb87bf34",
@@ -65,9 +65,9 @@
         "zipCode": "12345",
         "country": "Deutschland"
       },
-      "status": "pending",
-      "createdAt": "2025-10-25T14:59:13.875Z",
-      "updatedAt": "2025-10-25T14:59:13.875Z"
+      "status": "processing",
+      "createdAt": "2026-01-12T14:59:13.875Z",
+      "updatedAt": "2026-01-12T14:59:13.875Z"
     },
     {
       "id": "f20ead2a-7cbb-48d9-b09b-5bbaf64e48e9",
@@ -88,9 +88,9 @@
         "zipCode": "12345",
         "country": "Deutschland"
       },
-      "status": "pending",
-      "createdAt": "2025-10-25T15:12:02.497Z",
-      "updatedAt": "2025-10-25T15:12:02.497Z"
+      "status": "delivered",
+      "createdAt": "2026-01-13T15:12:02.497Z",
+      "updatedAt": "2026-01-13T15:12:02.497Z"
     },
     {
       "id": "69e56e39-4b28-4e67-bcb0-387f5711c4e8",
@@ -112,8 +112,8 @@
         "country": "Deutschland"
       },
       "status": "pending",
-      "createdAt": "2025-10-25T18:23:25.013Z",
-      "updatedAt": "2025-10-25T18:23:25.013Z"
+      "createdAt": "2026-01-14T18:23:25.013Z",
+      "updatedAt": "2026-01-14T18:23:25.013Z"
     },
     {
       "id": "4232da4b-5c59-42c7-bd14-c0f39e8ec32c",
@@ -149,8 +149,8 @@
         "country": "Deutschland"
       },
       "status": "pending",
-      "createdAt": "2025-10-26T08:27:35.513Z",
-      "updatedAt": "2025-10-26T08:27:35.513Z"
+      "createdAt": "2026-01-15T08:27:35.513Z",
+      "updatedAt": "2026-01-15T08:27:35.513Z"
     },
     {
       "id": "6da061c9-9d09-46f7-90ef-212a67efc3a8",
@@ -178,9 +178,55 @@
         "zipCode": "33535",
         "country": "Deutschland"
       },
+      "status": "processing",
+      "createdAt": "2026-01-16T08:47:26.947Z",
+      "updatedAt": "2026-01-16T08:47:26.947Z"
+    },
+    {
+      "id": "8ea73f2b-6d1a-4c91-b6de-f4e8c7a9b213",
+      "userId": "007009b5-f9fb-460b-ab12-f2f1e045c261",
+      "items": [
+        {
+          "productId": "prod-001",
+          "name": "Air Performance Runner",
+          "price": 149.99,
+          "quantity": 1,
+          "imageUrl": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80"
+        }
+      ],
+      "total": 149.99,
+      "shippingAddress": {
+        "street": "Demo Street 42",
+        "city": "Hamburg",
+        "zipCode": "20095",
+        "country": "Deutschland"
+      },
+      "status": "delivered",
+      "createdAt": "2026-01-17T10:15:33.123Z",
+      "updatedAt": "2026-01-17T10:15:33.123Z"
+    },
+    {
+      "id": "9fb84c3d-7e2b-5da2-c7cf-a5f9d8b0c324",
+      "userId": "abc7b3b6-c60d-43f8-b6aa-f016bd580a57",
+      "items": [
+        {
+          "productId": "air-legacy-005",
+          "name": "Street Pulse Neon",
+          "price": 159.99,
+          "imageUrl": "/pics/sneakers-5578127_1280.jpg",
+          "quantity": 2
+        }
+      ],
+      "total": 319.98,
+      "shippingAddress": {
+        "street": "Testweg 7",
+        "city": "München",
+        "zipCode": "80331",
+        "country": "Deutschland"
+      },
       "status": "pending",
-      "createdAt": "2025-10-26T08:47:26.947Z",
-      "updatedAt": "2025-10-26T08:47:26.947Z"
+      "createdAt": "2026-01-17T14:32:18.456Z",
+      "updatedAt": "2026-01-17T14:32:18.456Z"
     }
   ]
 }
