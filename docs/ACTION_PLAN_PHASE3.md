@@ -1360,4 +1360,215 @@ GET https://api.aws.his4irness23.de/api/users/profile 404 (Not Found)
 
 ---
 
-**Let's go! 🚀**
+## 📊 POST-DEPLOY STATUS (17. Jan 2026, 15:40 Uhr)
+
+**Deploy Status:** ✅ Erfolgreich durchgelaufen (Nuclear + Deploy komplett)
+
+### ✅ WAS FUNKTIONIERT
+
+1. **E2E Flow + Email Service**
+   - Bestellungen funktionieren
+   - Bestätigungs-Emails werden versendet
+   - Bug #9 ist RESOLVED! 🎉
+
+2. **User Dropdown Spacing**
+   - Bug #1 fixed - 3rem gap sichtbar
+   - External CSS lösung funktioniert
+
+3. **Wishlist AddToCart Button**
+   - Bug #2 fixed - Success Alert wird gezeigt
+   - User bekommt Feedback
+
+4. **Auto-Refresh Loop**
+   - Bug #7 fixed - useEffect dependencies optimiert
+   - Keine endlosen API Calls mehr
+   - AWS Free Tier safe
+
+5. **Database Seeding**
+   - Bug #5 fixed - Deploy Workflow seedet automatisch
+   - Products werden geladen
+
+6. **Backend Tests**
+   - Alle 80 Tests passing
+   - Coverage über 40% Threshold
+   - orderController Tests gefixt
+
+### ❌ WAS NICHT FUNKTIONIERT
+
+#### 🔴 Bug #3: Profile Name Update (CRITICAL)
+
+**Status:** NICHT FIXED (Terraform Apply fehlt!)
+
+**Problem:**
+- User kann Namen im Profil NICHT aktualisieren
+- PATCH Request schlägt fehl
+- CORS PATCH Method fehlt in API Gateway
+
+**Root Cause:**
+- Fix war in Terraform committed (`terraform/modules/lambda/api_gateway_authorizer.tf` line 182)
+- **ABER:** Terraform Apply wurde NICHT ausgeführt
+- Infrastructure change braucht Deploy Workflow Re-Run
+
+**Fix Required:**
+- Deploy Workflow nochmal starten (Terraform wendet CORS PATCH an)
+- ODER: Manuell `terraform apply` im backend
+
+**Code bereits gefixt in:**
+- Commit: `29aefa4` - API Gateway CORS PATCH Method hinzugefügt
+
+---
+
+#### 🔴 Bug #8: Wishlist Size Selection (TODO)
+
+**Status:** NICHT IMPLEMENTIERT
+
+**Problem:**
+- Wishlist zeigt "+ Warenkorb" Button
+- Button funktioniert ABER keine Größenwahl für Schuhe
+- User kann nicht zwischen 40, 41, 42, etc. wählen
+
+**Required Implementation:**
+- QuickAddModal Component von Produktseite integrieren
+- Size Selection Dropdown in Wishlist einbauen
+- Analog zur Hauptseite Logik
+
+**Affected Files:**
+- `frontend/app/wishlist/page.tsx` - Button mit Size Selection ersetzen
+- `frontend/components/QuickAddModal.tsx` - Wiederverwenden
+
+**Estimated Effort:** ~30-45 Min
+
+---
+
+#### 🔴 Bug #10: Admin Dashboard Charts LEER (CRITICAL!)
+
+**Status:** UNBEKANNT - DEBUGGING NEEDED
+
+**Problem:**
+- Dashboard Overview (`/dashboard/overview`) zeigt "Keine Umsatzdaten verfügbar"
+- Analytics 7d und 30d beide leer
+- KPI Cards zeigen Daten (12 Bestellungen, etc.)
+- Top 5 Products funktioniert
+- **ABER:** Revenue Charts komplett leer
+
+**Was wurde versucht:**
+- ✅ orders.json mit aktuellen Dates (10. Jan - 17. Jan 2026) updated
+- ✅ Deploy Workflow seedet automatisch (Bug #5 fix aktiv)
+- ✅ 9 Demo-Orders mit €1.859,85 Gesamt-Umsatz
+- ✅ Backend Tests passing (Analytics Service existiert)
+
+**Was NICHT funktioniert:**
+- Revenue 7d Chart: Leer
+- Revenue 30d Chart: Leer
+- "Keine Umsatzdaten verfügbar" Message
+
+**Debugging Steps (Nächste Session):**
+
+1. **Verify Seeding:**
+   ```bash
+   # Check if orders were actually seeded to DynamoDB
+   aws dynamodb scan --table-name ecokart-orders \
+     --profile personal --region eu-central-1 \
+     --max-items 5
+   ```
+
+2. **Check Lambda Logs:**
+   ```bash
+   # Check if /api/admin/analytics/* endpoints exist
+   aws logs tail /aws/lambda/ecokart-development-api \
+     --profile personal --region eu-central-1 --since 10m
+   ```
+
+3. **Test Analytics Endpoints:**
+   ```bash
+   # Test if analytics endpoints return data
+   curl https://api.aws.his4irness23.de/api/admin/stats
+   curl https://api.aws.his4irness23.de/api/admin/analytics/revenue-7d
+   ```
+
+4. **Possible Root Causes:**
+   - Lambda not deployed (Bug #6 related?)
+   - Orders seeded but with wrong timestamp format
+   - Analytics Service Date Filtering Bug
+   - Frontend date parsing issue
+
+**Browser Console:**
+- User confirmed: KEINE Errors in DevTools Console
+- → Backend läuft, aber returnt leere Daten
+
+**Next Steps:**
+- DynamoDB Table scannen → Orders vorhanden?
+- CloudWatch Logs checken → Welche Daten returned Analytics Service?
+- Timestamps in DB vs. Analytics Date Filter vergleichen
+
+---
+
+### 📋 OPEN BUGS SUMMARY
+
+| Bug | Status | Severity | Estimated Fix Time |
+|-----|--------|----------|-------------------|
+| **#1** User Dropdown | ✅ FIXED | Low | - |
+| **#2** Wishlist Alert | ✅ FIXED | Low | - |
+| **#3** Profile Name Update | 🔴 BLOCKED | High | 5 min (Terraform Apply) |
+| **#4** Dashboard Empty State | ✅ FIXED | Low | - |
+| **#5** Auto-Seed Deploy | ✅ FIXED | Medium | - |
+| **#6** Lambda Force Deploy | ⚠️ UNKNOWN | High | Unknown (Terraform issue?) |
+| **#7** Auto-Refresh Loop | ✅ FIXED | Critical | - |
+| **#8** Wishlist Size Selection | 🔴 TODO | Medium | 30-45 min |
+| **#9** Email Service | ✅ FIXED | Critical | - |
+| **#10** Dashboard Charts | 🔴 CRITICAL | High | 30-60 min (debugging + fix) |
+
+---
+
+### 🚀 NEXT SESSION PRIORITIES
+
+**Must-Do (Session Start):**
+
+1. **Bug #10 Debugging** (30 Min)
+   - DynamoDB orders table scannen
+   - CloudWatch Logs für Analytics Endpoints
+   - Date Filtering Bug im Analytics Service?
+   - Fix implementieren
+
+2. **Bug #3 - Terraform Apply** (5 Min)
+   - Deploy Workflow nochmal starten ODER
+   - Manual `terraform apply` in backend/
+
+3. **Bug #8 - Wishlist Size Selection** (30-45 Min)
+   - QuickAddModal in Wishlist integrieren
+   - Size Dropdown implementieren
+   - Testing
+
+**Nice-to-Have:**
+
+4. **Bug #6 Investigation** (15 Min)
+   - Warum deployed Lambda ZIP nicht automatisch?
+   - Terraform source_code_hash hinzufügen?
+
+---
+
+### 📝 SESSION NOTES
+
+**Was gut lief:**
+- ✅ Backend Tests erfolgreich gefixt (Coverage 40.66%)
+- ✅ orders.json mit aktuellen Dates updated
+- ✅ Systematisches Debugging der Test-Failures
+- ✅ Alle Commits sauber dokumentiert
+
+**Was gelernt:**
+- Backend Tests triggern bei jedem `backend/**` File Change
+- orders.json ist Teil von backend/ → Test-Workflow triggered
+- Coverage Thresholds wichtig für CI/CD
+- orders.json Dates müssen aktuell sein für Dashboard
+
+**Offene Fragen:**
+- Warum zeigt Dashboard KEINE Daten obwohl orders.json geseeded?
+- Ist Lambda richtig deployed? (Bug #6 related?)
+- Werden Orders mit korrektem Timestamp Format geseeded?
+
+---
+
+**Bereit für nächste Session! 🎯**
+
+**Total Context Usage:** ~81% (noch genug Platz für Debugging Session)
+**Empfohlener Start:** Dashboard Debugging (Bug #10) - höchste Prio!
