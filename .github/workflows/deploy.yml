@@ -502,6 +502,25 @@ jobs:
       # ======================================================================
 
       # ======================================================================
+      # 16.6. Database Seeding (Auto-Seed after Terraform Apply)
+      # ======================================================================
+      - name: 🌱 Seed Database with Demo Data
+        if: github.event.inputs.destroy != 'true'
+        working-directory: backend
+        run: |
+          echo "🌱 Starting automatic database seeding..."
+
+          # Install backend dependencies (needed for seed script)
+          echo "📦 Installing backend dependencies..."
+          npm ci
+
+          # Run seed script
+          echo "📋 Seeding products to DynamoDB..."
+          npm run dynamodb:migrate:single -- --region ${{ env.AWS_REGION }}
+
+          echo "✅ Database seeded successfully with demo data!"
+
+      # ======================================================================
       # 17. Terraform Destroy (if requested, mit Environment-Config!)
       # ======================================================================
       - name: 💥 Terraform Destroy
