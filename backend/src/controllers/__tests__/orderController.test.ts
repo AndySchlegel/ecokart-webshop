@@ -39,7 +39,7 @@ const mockOrder = {
       quantity: 2
     }
   ],
-  total: 39.98,
+  totalAmount: 39.98,
   shippingAddress: {
     street: '123 Test St',
     city: 'Test City',
@@ -100,7 +100,7 @@ describe('OrderController - createOrder', () => {
           quantity: 2
         }
       ],
-      total: 39.98,
+      totalAmount: 39.98,
       shippingAddress: {
         street: '123 Test St',
         city: 'Test City',
@@ -125,7 +125,7 @@ describe('OrderController - createOrder', () => {
       expect.objectContaining({
         userId: mockUserId,
         items: orderInput.items,
-        total: orderInput.total,
+        totalAmount: orderInput.totalAmount,
         shippingAddress: orderInput.shippingAddress,
         status: 'pending'
       })
@@ -236,7 +236,7 @@ describe('OrderController - createOrder', () => {
           quantity: 2
         }
       ],
-      total: 39.98,
+      totalAmount: 39.98,
       shippingAddress: {
         street: '123 Test St',
         city: 'Test City',
@@ -281,7 +281,7 @@ describe('OrderController - getOrders', () => {
 
     // ASSERT
     expect(database.getOrdersByUserId).toHaveBeenCalledWith(mockUserId);
-    expect(res.json).toHaveBeenCalledWith(mockOrders);
+    expect(res.json).toHaveBeenCalledWith({ orders: mockOrders });
   });
 
   it('should return 401 if user not authenticated', async () => {
@@ -335,7 +335,12 @@ describe('OrderController - getOrderById', () => {
 
     // ASSERT
     expect(database.getOrderById).toHaveBeenCalledWith(mockOrderId);
-    expect(res.json).toHaveBeenCalledWith(mockOrder);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ...mockOrder,
+        totalAmount: mockOrder.totalAmount
+      })
+    );
   });
 
   it('should return 401 if user not authenticated', async () => {
