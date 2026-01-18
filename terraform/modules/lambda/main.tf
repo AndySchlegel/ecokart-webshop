@@ -90,7 +90,12 @@ resource "aws_lambda_function" "api" {
   architectures    = ["x86_64"]
 
   filename         = "${path.module}/builds/${var.function_name}.zip"
-  source_code_hash = filebase64sha256("${path.module}/builds/${var.function_name}.zip")
+  # Use try() to handle case where ZIP doesn't exist yet (first run)
+  # Falls back to timestamp hash to force update
+  source_code_hash = try(
+    filebase64sha256("${path.module}/builds/${var.function_name}.zip"),
+    base64sha256(timestamp())
+  )
 
   # Environment Variables
   environment {
