@@ -369,6 +369,11 @@ jobs:
           # Create ZIP from dist/ folder with production node_modules
           echo "🗜️ Creating ZIP archive..."
           cd dist
+
+          # Add deployment timestamp file to make ZIP unique on every deploy
+          # This ensures source_code_hash changes and Lambda gets updated
+          echo "${{ github.run_id }}-${{ github.run_number }}" > .deploy-timestamp
+
           zip -r ../../terraform/modules/lambda/builds/ecokart-${{ steps.env.outputs.environment }}-api.zip . ../node_modules ../package.json -x "*.test.js" -q
 
           echo "✅ Lambda ZIP created: terraform/modules/lambda/builds/ecokart-${{ steps.env.outputs.environment }}-api.zip"
