@@ -185,10 +185,11 @@ async function migrateOrders() {
             id: order.id,
             userId: order.userId,
             items: order.items,
-            total: order.total,
+            totalAmount: order.totalAmount || order.total || 0,  // Support both schemas (totalAmount is preferred)
             shippingAddress: order.shippingAddress,
             status: order.status || 'pending',
             createdAt: order.createdAt,
+            updatedAt: order.updatedAt || order.createdAt,
           }
         }));
         successCount++;
