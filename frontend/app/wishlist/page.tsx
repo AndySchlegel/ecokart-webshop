@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useWishlist } from '../../contexts/WishlistContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
+import { QuickSelectModal } from '../../components/QuickSelectModal';
+import { Article } from '../components/types';
 import './wishlist.css';
 
 export default function WishlistPage() {
@@ -14,6 +16,8 @@ export default function WishlistPage() {
   const router = useRouter();
   const { wishlistItems, removeFromWishlist, loading } = useWishlist();
   const { addToCart } = useCart();
+  const [selectedProduct, setSelectedProduct] = useState<Article | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -30,12 +34,20 @@ export default function WishlistPage() {
     }
   };
 
-  const handleAddToCart = async (productId: string) => {
+  const handleOpenModal = (product: Article) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const handleAddToCart = async (quantity: number, size?: string, color?: string) => {
+    if (!selectedProduct) return;
+
     try {
-      await addToCart(productId, 1);
+      await addToCart(selectedProduct.id, quantity);
       alert('✅ Produkt wurde zum Warenkorb hinzugefügt!');
     } catch (error: any) {
       alert(error.message || 'Produkt konnte nicht hinzugefügt werden');
+      throw error; // Re-throw to let modal handle it
     }
   };
 
@@ -185,7 +197,7 @@ export default function WishlistPage() {
 
                   <button
                     className="btn-add-to-cart"
-                    onClick={() => handleAddToCart(product.id)}
+                    onClick={() => handleOpenModal(product)}
                     disabled={isOutOfStock}
                   >
                     {isOutOfStock ? 'Ausverkauft' : '+ Warenkorb'}
@@ -196,6 +208,14 @@ export default function WishlistPage() {
           );
         })}
       </div>
+
+      {/* Quick Select Modal */}
+      <QuickSelectModal
+        product={selectedProduct}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddToCart={handleAddToCart}
+      />
     </div>
   );
 }
