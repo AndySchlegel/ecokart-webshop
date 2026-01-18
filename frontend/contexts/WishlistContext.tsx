@@ -116,7 +116,7 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setWishlistItems([]);
       setWishlistIds(new Set());
     }
-  }, [user]);
+  }, [user?.userId]); // Bug Fix: Only depend on userId to prevent endless re-renders
 
   /**
    * Fetch user's wishlist from backend
