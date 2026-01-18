@@ -4,21 +4,68 @@
 # Erstellt Lambda Function, API Gateway und notwendige IAM Permissions.
 
 # ----------------------------------------------------------------------------
-# Lambda Deployment Package
+# Lambda Deployment Package - AUTO BUILD
 # ----------------------------------------------------------------------------
-# ZIP wird vom GitHub Actions Workflow erstellt (NICHT von Terraform!)
-# Das verhindert Chicken-Egg Probleme wo terraform plan die ZIP lesen will
-# bevor sie von terraform apply erstellt wird.
+# Terraform baut Lambda ZIP automatisch bei jedem Apply.
+# Das stellt sicher, dass Nuclear + Deploy IMMER den aktuellsten Code hat!
 #
-# Die ZIP-Erstellung erfolgt im Deploy Workflow in diesem Step:
-# - "Create Lambda ZIP" (nach Backend Build, VOR Terraform Plan)
+# Build-Prozess:
+# 1. npm install im Backend
+# 2. npm run build (TypeScript → JavaScript)
+# 3. ZIP erstellen mit .deploy-timestamp
+# 4. Lambda Function verwendet dieses ZIP
 #
-# WICHTIG: ZIP muss in ${path.module}/builds/${var.function_name}.zip existieren!
+# VORTEIL: 100% reproduzierbar, kein manueller Build nötig!
+
+resource "null_resource" "lambda_build" {
+  # Trigger rebuild bei jedem Apply (via timestamp)
+  # So ist der Code IMMER aktuell!
+  triggers = {
+    always_rebuild = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      set -e
+      echo "🔨 Building Lambda backend..."
+
+      # Navigate to backend directory
+      cd "${var.source_path}"
+
+      # Install all dependencies (including dev dependencies for build)
+      echo "📦 Installing dependencies..."
+      npm ci --production=false
+
+      # Build TypeScript to JavaScript
+      echo "🏗️  Compiling TypeScript..."
+      npm run build
+
+      # Create builds directory if it doesn't exist
+      mkdir -p "${path.module}/builds"
+
+      # Create ZIP with deployment timestamp
+      echo "📦 Creating Lambda ZIP..."
+      cd dist
+
+      # Add deployment timestamp to make ZIP unique
+      echo "terraform-build-$(date +%s)" > .deploy-timestamp
+
+      # Create ZIP in terraform builds folder
+      zip -r "${path.module}/builds/${var.function_name}.zip" . ../node_modules ../package.json -x "*.test.js" -q
+
+      echo "✅ Lambda ZIP created: ${var.function_name}.zip"
+    EOT
+
+    # Working directory ist terraform/modules/lambda/
+    working_dir = path.module
+  }
+}
 
 # ----------------------------------------------------------------------------
 # Lambda Function
 # ----------------------------------------------------------------------------
 # Express.js App als Lambda Function (via serverless-http)
+# WICHTIG: depends_on lambda_build - wartet bis Build fertig ist!
 
 resource "aws_lambda_function" "api" {
   function_name    = var.function_name
@@ -38,8 +85,9 @@ resource "aws_lambda_function" "api" {
     variables = var.environment_variables
   }
 
-  # CloudWatch Logs Retention (14 Tage)
+  # Dependencies: Build muss fertig sein + CloudWatch Logs müssen existieren
   depends_on = [
+    null_resource.lambda_build,
     aws_cloudwatch_log_group.lambda_logs,
     aws_iam_role_policy_attachment.lambda_logs
   ]
