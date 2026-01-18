@@ -29,19 +29,17 @@ resource "null_resource" "lambda_build" {
       set -e
       echo "🔨 Building Lambda backend..."
 
-      # We are in: terraform/modules/lambda/
-      # Backend is at: ../../../backend/
-      # So we need to go up 3 levels, then into backend
-
-      BACKEND_DIR="${var.source_path}"
-      BUILDS_DIR="${path.module}/builds"
+      # Get absolute paths to avoid issues when changing directories
+      TERRAFORM_ROOT="$(pwd)"
+      BACKEND_DIR="$TERRAFORM_ROOT/${var.source_path}"
+      BUILDS_DIR="$TERRAFORM_ROOT/modules/lambda/builds"
       ZIP_NAME="${var.function_name}.zip"
 
-      echo "📍 Current dir: $(pwd)"
+      echo "📍 Terraform root: $TERRAFORM_ROOT"
       echo "📍 Backend dir: $BACKEND_DIR"
       echo "📍 Builds dir: $BUILDS_DIR"
 
-      # Navigate to backend directory (absolute or relative from terraform root)
+      # Navigate to backend directory
       cd "$BACKEND_DIR"
       echo "📍 Now in: $(pwd)"
 
@@ -63,10 +61,11 @@ resource "null_resource" "lambda_build" {
       # Add deployment timestamp to make ZIP unique
       echo "terraform-build-$(date +%s)" > .deploy-timestamp
 
-      # Create ZIP in terraform builds folder
+      # Create ZIP in terraform builds folder (using absolute path!)
       zip -r "$BUILDS_DIR/$ZIP_NAME" . ../node_modules ../package.json -x "*.test.js" -q
 
-      echo "✅ Lambda ZIP created: $ZIP_NAME in $BUILDS_DIR"
+      echo "✅ Lambda ZIP created: $ZIP_NAME"
+      echo "📦 Location: $BUILDS_DIR/$ZIP_NAME"
     EOT
 
     # Working directory is terraform root (where we run terraform apply)
