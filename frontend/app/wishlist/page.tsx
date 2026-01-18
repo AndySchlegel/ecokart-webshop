@@ -103,6 +103,7 @@ export default function WishlistPage() {
             article={product}
             showRemoveButton={true}
             onRemove={() => handleRemove(product.id)}
+            showFavoriteButton={false}
             showRating={false}
             buttonText="+ Warenkorb"
             maxDescriptionLength={80}

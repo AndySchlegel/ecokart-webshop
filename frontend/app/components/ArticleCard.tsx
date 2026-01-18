@@ -15,6 +15,7 @@ type ArticleCardProps = {
   article: Article;
   showRemoveButton?: boolean; // ✅ Wishlist: Show X button to remove
   onRemove?: () => void; // ✅ Wishlist: Callback when X is clicked
+  showFavoriteButton?: boolean; // ✅ Optional: Hide favorite heart (default: true)
   showRating?: boolean; // ✅ Optional: Hide ratings (default: true)
   buttonText?: string; // ✅ Optional: Custom button text (default: "In den Warenkorb")
   maxDescriptionLength?: number; // ✅ Optional: Truncate description (default: no limit)
@@ -24,6 +25,7 @@ export function ArticleCard({
   article,
   showRemoveButton = false,
   onRemove,
+  showFavoriteButton = true,
   showRating = true,
   buttonText = "In den Warenkorb",
   maxDescriptionLength
@@ -112,7 +114,7 @@ export function ArticleCard({
       )}
 
       {/* Favorite Button (Heart Icon) */}
-      <FavoriteButton productId={article.id} />
+      {showFavoriteButton && <FavoriteButton productId={article.id} />}
 
       <Link href={detailHrefWithAnchor} className="card__link">
         <div className="card__image">
