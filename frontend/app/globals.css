@@ -349,6 +349,32 @@ body {
   cursor: pointer;
 }
 
+/* ✅ Remove Button (Wishlist X) */
+.card__remove-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #333;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 11; /* Above sale badge (z-index: 10) and favorite button */
+  color: #999;
+}
+
+.card__remove-btn:hover {
+  background: rgba(220, 38, 38, 0.9);
+  border-color: #dc2626;
+  color: white;
+  transform: scale(1.1);
+}
+
 .card::before {
   content: '';
   position: absolute;
@@ -563,6 +589,41 @@ body {
 
 .card__cta:hover::before {
   left: 0;
+}
+
+/* ✅ SKELETON LOADING STATES */
+.card.skeleton {
+  pointer-events: none;
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(90deg, #111 25%, #1a1a1a 50%, #111 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-text {
+  height: 1.25rem;
+  background: linear-gradient(90deg, #111 25%, #1a1a1a 50%, #111 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin: 1rem 1.5rem;
+}
+
+.skeleton-text.short {
+  width: 60%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 a {

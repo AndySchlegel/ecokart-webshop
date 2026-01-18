@@ -13,9 +13,21 @@ import { Article } from './types';
 
 type ArticleCardProps = {
   article: Article;
+  showRemoveButton?: boolean; // ✅ Wishlist: Show X button to remove
+  onRemove?: () => void; // ✅ Wishlist: Callback when X is clicked
+  showRating?: boolean; // ✅ Optional: Hide ratings (default: true)
+  buttonText?: string; // ✅ Optional: Custom button text (default: "In den Warenkorb")
+  maxDescriptionLength?: number; // ✅ Optional: Truncate description (default: no limit)
 };
 
-export function ArticleCard({ article }: ArticleCardProps) {
+export function ArticleCard({
+  article,
+  showRemoveButton = false,
+  onRemove,
+  showRating = true,
+  buttonText = "In den Warenkorb",
+  maxDescriptionLength
+}: ArticleCardProps) {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const router = useRouter();
@@ -75,8 +87,30 @@ export function ArticleCard({ article }: ArticleCardProps) {
     ? Math.round(((article.originalPrice - article.price) / article.originalPrice) * 100)
     : null;
 
+  // ✅ Truncate description if maxDescriptionLength is provided
+  const displayDescription = maxDescriptionLength && article.description
+    ? article.description.length > maxDescriptionLength
+      ? `${article.description.substring(0, maxDescriptionLength)}...`
+      : article.description
+    : article.description;
+
   return (
     <article className="card" id={`product-${article.id}`}>
+      {/* Remove Button (Wishlist X) */}
+      {showRemoveButton && onRemove && (
+        <button
+          className="card__remove-btn"
+          onClick={onRemove}
+          aria-label="Aus Favoriten entfernen"
+          type="button"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      )}
+
       {/* Favorite Button (Heart Icon) */}
       <FavoriteButton productId={article.id} />
 
@@ -103,7 +137,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
         </Link>
 
         {/* Star Rating */}
-        {article.rating && (
+        {showRating && article.rating && (
           <div className="card__rating">
             <div className="stars">
               {renderStars()}
@@ -115,7 +149,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
         )}
 
         <p className="card__description">
-          {article.description}
+          {displayDescription}
         </p>
 
         {/* ✅ INVENTORY: Stock Display */}
@@ -163,7 +197,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
             ) : isOutOfStock ? (
               'Ausverkauft'
             ) : (
-              'In den Warenkorb'
+              buttonText
             )}
           </button>
         </div>

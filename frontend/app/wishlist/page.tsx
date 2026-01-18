@@ -1,23 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useWishlist } from '../../contexts/WishlistContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { useCart } from '../../contexts/CartContext';
-import { QuickSelectModal } from '../../components/QuickSelectModal';
-import { Article } from '../components/types';
+import { ArticleCard } from '../components/ArticleCard';
 import './wishlist.css';
 
 export default function WishlistPage() {
   const { user } = useAuth();
   const router = useRouter();
   const { wishlistItems, removeFromWishlist, loading } = useWishlist();
-  const { addToCart } = useCart();
-  const [selectedProduct, setSelectedProduct] = useState<Article | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -31,23 +25,6 @@ export default function WishlistPage() {
       await removeFromWishlist(productId);
     } catch (error) {
       console.error('Failed to remove from wishlist', error);
-    }
-  };
-
-  const handleOpenModal = (product: Article) => {
-    setSelectedProduct(product);
-    setIsModalOpen(true);
-  };
-
-  const handleAddToCart = async (quantity: number, size?: string, color?: string) => {
-    if (!selectedProduct) return;
-
-    try {
-      await addToCart(selectedProduct.id, quantity);
-      alert('✅ Produkt wurde zum Warenkorb hinzugefügt!');
-    } catch (error: any) {
-      alert(error.message || 'Produkt konnte nicht hinzugefügt werden');
-      throw error; // Re-throw to let modal handle it
     }
   };
 
@@ -65,9 +42,9 @@ export default function WishlistPage() {
           <h1 className="wishlist-title">MEINE FAVORITEN</h1>
           <p className="wishlist-subtitle">Lade deine Favoriten...</p>
         </div>
-        <div className="wishlist-grid">
+        <div className="card-grid">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="wishlist-card skeleton">
+            <div key={i} className="card skeleton">
               <div className="skeleton-image"></div>
               <div className="skeleton-text"></div>
               <div className="skeleton-text short"></div>
@@ -119,103 +96,19 @@ export default function WishlistPage() {
         <p className="wishlist-subtitle">{wishlistItems.length} {wishlistItems.length === 1 ? 'Produkt' : 'Produkte'}</p>
       </div>
 
-      <div className="wishlist-grid">
-        {wishlistItems.map((product) => {
-          const availableStock = product.stock !== undefined
-            ? product.stock - (product.reserved || 0)
-            : null;
-          const isOutOfStock = availableStock !== null && availableStock <= 0;
-          const isLowStock = availableStock !== null && availableStock > 0 && availableStock <= 5;
-
-          return (
-            <div key={product.id} className="wishlist-card">
-              <button
-                className="remove-btn"
-                onClick={() => handleRemove(product.id)}
-                aria-label="Aus Favoriten entfernen"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-
-              <Link href={`/product/${product.id}`} className="wishlist-card__link">
-                <div className="wishlist-card__image">
-                  <Image
-                    alt={`Produktbild von ${product.name}`}
-                    src={product.imageUrl}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 320px"
-                    style={{ objectFit: 'cover' }}
-                  />
-                </div>
-              </Link>
-
-              <div className="wishlist-card__content">
-                <Link href={`/product/${product.id}`}>
-                  <h3 className="wishlist-card__name">{product.name}</h3>
-                </Link>
-
-                {product.description && (
-                  <p className="wishlist-card__description">
-                    {product.description.length > 80
-                      ? `${product.description.substring(0, 80)}...`
-                      : product.description}
-                  </p>
-                )}
-
-                {/* Stock Display */}
-                {availableStock !== null && (
-                  <div className="wishlist-card__stock">
-                    {isOutOfStock ? (
-                      <span className="stock-badge out-of-stock">❌ Ausverkauft</span>
-                    ) : isLowStock ? (
-                      <span className="stock-badge low-stock">⚠️ Nur noch {availableStock} auf Lager</span>
-                    ) : (
-                      <span className="stock-badge in-stock">✅ {availableStock} auf Lager</span>
-                    )}
-                  </div>
-                )}
-
-                <div className="wishlist-card__footer">
-                  {/* Sale Price Display */}
-                  {product.originalPrice ? (
-                    <div className="price-container">
-                      <span className="price-original">
-                        €{product.originalPrice.toFixed(2)}
-                      </span>
-                      <span className="price-sale">
-                        €{product.price.toFixed(2)}
-                      </span>
-                    </div>
-                  ) : (
-                    <span className="price">
-                      €{product.price.toFixed(2)}
-                    </span>
-                  )}
-
-                  <button
-                    className="btn-add-to-cart"
-                    onClick={() => handleOpenModal(product)}
-                    disabled={isOutOfStock}
-                  >
-                    {isOutOfStock ? 'Ausverkauft' : '+ Warenkorb'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+      <div className="card-grid">
+        {wishlistItems.map((product) => (
+          <ArticleCard
+            key={product.id}
+            article={product}
+            showRemoveButton={true}
+            onRemove={() => handleRemove(product.id)}
+            showRating={false}
+            buttonText="+ Warenkorb"
+            maxDescriptionLength={80}
+          />
+        ))}
       </div>
-
-      {/* Quick Select Modal */}
-      <QuickSelectModal
-        product={selectedProduct}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onAddToCart={handleAddToCart}
-      />
     </div>
   );
 }
