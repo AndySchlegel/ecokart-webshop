@@ -2,7 +2,7 @@ export type Article = {
   id: string;
   name: string;
   price: number;
-  description: string;
+  description?: string; // ✅ Optional (compatible with Product type from WishlistContext)
   imageUrl: string;
   category?: string;
   stock?: number; // ✅ NEU: Available inventory
