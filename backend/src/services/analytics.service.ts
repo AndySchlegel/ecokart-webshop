@@ -34,7 +34,13 @@ export async function getAdminStats(): Promise<AdminStats> {
     logger.info('Fetching admin stats');
 
     // Get all orders
-    const allOrders = await database.getAllOrders();
+    const rawOrders = await database.getAllOrders();
+
+    // Map old 'total' field to 'totalAmount' for backward compatibility
+    const allOrders = rawOrders.map((order: any) => ({
+      ...order,
+      totalAmount: order.totalAmount ?? order.total ?? 0
+    }));
 
     // Get date strings for filtering
     const today = new Date().toISOString().split('T')[0];
@@ -104,7 +110,13 @@ export async function getRevenue7d(): Promise<RevenueDataPoint[]> {
   try {
     logger.info('Fetching revenue for last 7 days');
 
-    const allOrders = await database.getAllOrders();
+    const rawOrders = await database.getAllOrders();
+
+    // Map old 'total' field to 'totalAmount' for backward compatibility
+    const allOrders = rawOrders.map((order: any) => ({
+      ...order,
+      totalAmount: order.totalAmount ?? order.total ?? 0
+    }));
 
     // Get date strings for last 7 days
     const dates: string[] = [];
@@ -140,7 +152,13 @@ export async function getRevenue30d(): Promise<RevenueDataPoint[]> {
   try {
     logger.info('Fetching revenue for last 30 days');
 
-    const allOrders = await database.getAllOrders();
+    const rawOrders = await database.getAllOrders();
+
+    // Map old 'total' field to 'totalAmount' for backward compatibility
+    const allOrders = rawOrders.map((order: any) => ({
+      ...order,
+      totalAmount: order.totalAmount ?? order.total ?? 0
+    }));
 
     // Get date strings for last 30 days
     const dates: string[] = [];
