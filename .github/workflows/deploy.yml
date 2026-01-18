@@ -454,6 +454,7 @@ jobs:
           TF_VAR_stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
           TF_VAR_stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
           TF_VAR_resend_api_key: ${{ secrets.RESEND_API_KEY }}
+          TF_VAR_deploy_timestamp: ${{ github.run_id }}-${{ github.run_number }}
         run: |
           echo "📋 Planning deployment for: ${{ steps.env.outputs.environment }}"
           echo "📁 Using config: environments/${{ steps.env.outputs.environment }}.tfvars"
@@ -479,6 +480,8 @@ jobs:
       - name: 🚀 Terraform Apply
         if: github.event.inputs.destroy != 'true'
         working-directory: terraform
+        env:
+          TF_VAR_deploy_timestamp: ${{ github.run_id }}-${{ github.run_number }}
         run: |
           echo "🚀 Applying infrastructure for: ${{ steps.env.outputs.environment }}"
 
@@ -530,6 +533,7 @@ jobs:
           TF_VAR_stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
           TF_VAR_stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
           TF_VAR_resend_api_key: ${{ secrets.RESEND_API_KEY }}
+          TF_VAR_deploy_timestamp: ${{ github.run_id }}-${{ github.run_number }}
         run: |
           echo "💥 Destroying infrastructure for: ${{ steps.env.outputs.environment }}"
 

@@ -515,3 +515,25 @@ variable "additional_tags" {
   type        = map(string)
   default     = {}
 }
+
+# ----------------------------------------------------------------------------
+# Deploy Timestamp (Force Lambda Update)
+# ----------------------------------------------------------------------------
+
+variable "deploy_timestamp" {
+  description = <<EOT
+    Unix timestamp of deployment
+
+    Purpose: Forces Lambda function update on every deploy by changing environment variables.
+
+    Without this, Terraform might not detect code changes even with source_code_hash,
+    because hash calculation can be unreliable across different environments.
+
+    This ensures Lambda gets updated whenever Terraform apply runs, guaranteeing
+    that the latest backend code is always deployed.
+
+    Set in CI/CD: export TF_VAR_deploy_timestamp=$(date +%s)
+  EOT
+  type        = string
+  default     = "0"
+}

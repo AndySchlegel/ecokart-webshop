@@ -214,6 +214,9 @@ module "lambda" {
     # Used for product images in emails and frontend
     # Converts relative image paths (/images/product.jpg) to absolute CloudFront URLs
     ASSETS_BASE_URL         = module.assets.assets_base_url
+    # Deploy Timestamp - Forces Lambda update on every deploy
+    # Without this, Terraform might not detect code changes (source_code_hash can be unreliable)
+    DEPLOY_TIMESTAMP        = var.deploy_timestamp
   }
 
   # DynamoDB Table Names für IAM Permissions
