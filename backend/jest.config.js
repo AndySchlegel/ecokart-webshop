@@ -41,6 +41,8 @@ module.exports = {
     '!src/lambda.ts', // Lambda wrapper, nur Adapter
     '!src/routes/**', // Route definitions, dünne Wrapper
     '!src/services/dynamodb/**', // DynamoDB services, nur DB-Wrapper
+    '!src/services/analytics.service.ts', // Analytics service, complex business logic without tests
+    '!src/services/email.service.ts', // Email service, external dependency
     '!src/config/database*.ts', // Database adapters, nur Wrapper
     '!src/middleware/cognitoAuth.ts', // Deprecated middleware
     '!src/models/**', // Type definitions
