@@ -179,12 +179,6 @@ export default function ProfilePage() {
             {profile.name ? profile.name.charAt(0).toUpperCase() : profile.email.charAt(0).toUpperCase()}
           </div>
 
-          {/* Name */}
-          <div className="profile-field">
-            <label>Name</label>
-            <div className="profile-value">{profile.name || 'Noch nicht festgelegt'}</div>
-          </div>
-
           {/* Email */}
           <div className="profile-field">
             <label>E-Mail</label>
