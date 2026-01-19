@@ -36,9 +36,6 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [editedName, setEditedName] = useState('');
-  const [savingName, setSavingName] = useState(false);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -88,7 +85,6 @@ export default function ProfilePage() {
             name: profileData.name,
             createdAt: profileData.createdAt || new Date().toISOString(),
           });
-          setEditedName(profileData.name || '');
         } else {
           // Fallback to user context if backend fails
           setProfile({
@@ -97,7 +93,6 @@ export default function ProfilePage() {
             name: undefined,
             createdAt: new Date().toISOString(),
           });
-          setEditedName('');
         }
       } catch (error) {
         logger.error('Failed to fetch profile data', { component: 'ProfilePage' }, error as Error);
@@ -108,50 +103,6 @@ export default function ProfilePage() {
 
     fetchData();
   }, [user?.userId]); // Bug Fix: Only depend on userId to prevent endless re-renders
-
-  const handleSaveName = async () => {
-    if (!editedName.trim() || editedName === profile?.name) {
-      setIsEditingName(false);
-      return;
-    }
-
-    try {
-      setSavingName(true);
-      const session = await fetchAuthSession();
-      const token = session.tokens?.idToken?.toString();
-
-      if (!token) {
-        throw new Error('No authentication token');
-      }
-
-      const response = await fetch(`${API_BASE_URL}/api/users/profile`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: editedName }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update name');
-      }
-
-      // Update local state
-      setProfile(prev => prev ? { ...prev, name: editedName } : null);
-      setIsEditingName(false);
-    } catch (error) {
-      logger.error('Failed to update name', { component: 'ProfilePage' }, error as Error);
-      alert('Name konnte nicht aktualisiert werden');
-    } finally {
-      setSavingName(false);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setEditedName(profile?.name || '');
-    setIsEditingName(false);
-  };
 
   const handleLogout = async () => {
     await signOut();
@@ -231,48 +182,7 @@ export default function ProfilePage() {
           {/* Name */}
           <div className="profile-field">
             <label>Name</label>
-            {isEditingName ? (
-              <div className="edit-name-container">
-                <input
-                  type="text"
-                  value={editedName}
-                  onChange={(e) => setEditedName(e.target.value)}
-                  className="edit-name-input"
-                  autoFocus
-                  disabled={savingName}
-                />
-                <div className="edit-name-actions">
-                  <button
-                    onClick={handleSaveName}
-                    className="btn-save"
-                    disabled={savingName}
-                  >
-                    {savingName ? 'Speichern...' : 'Speichern'}
-                  </button>
-                  <button
-                    onClick={handleCancelEdit}
-                    className="btn-cancel"
-                    disabled={savingName}
-                  >
-                    Abbrechen
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="profile-value-editable">
-                <span>{profile.name || 'Noch nicht festgelegt'}</span>
-                <button
-                  onClick={() => setIsEditingName(true)}
-                  className="btn-edit"
-                  aria-label="Name bearbeiten"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                  </svg>
-                </button>
-              </div>
-            )}
+            <div className="profile-value">{profile.name || 'Noch nicht festgelegt'}</div>
           </div>
 
           {/* Email */}
