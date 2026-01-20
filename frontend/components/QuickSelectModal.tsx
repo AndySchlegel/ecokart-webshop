@@ -60,6 +60,8 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
       document.addEventListener('keydown', handleEsc);
       // Prevent body scroll
       document.body.style.overflow = 'hidden';
+      // Scroll to top when modal opens (so modal is fully visible)
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     return () => {
       document.removeEventListener('keydown', handleEsc);
