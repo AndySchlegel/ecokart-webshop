@@ -61,10 +61,12 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
       document.addEventListener('keydown', handleEsc);
       // Prevent body scroll
       document.body.style.overflow = 'hidden';
-      // Scroll modal content to top (ensures size selection is visible)
-      if (modalContentRef.current) {
-        modalContentRef.current.scrollTop = 0;
-      }
+      // Scroll modal content to top - use RAF to ensure DOM is ready
+      requestAnimationFrame(() => {
+        if (modalContentRef.current) {
+          modalContentRef.current.scrollTop = 0;
+        }
+      });
     }
     return () => {
       document.removeEventListener('keydown', handleEsc);
@@ -250,13 +252,11 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
           border-radius: 8px;
           max-width: 600px;
           width: 100%;
-          max-height: calc(100vh - 8rem);
+          max-height: 85vh;
           overflow-y: auto;
           padding: 2rem;
           position: relative;
           box-shadow: 0 20px 60px rgba(255, 107, 0, 0.3);
-          animation: slideUp 0.3s ease;
-          margin-bottom: 2rem;
         }
 
         .modal-close {
