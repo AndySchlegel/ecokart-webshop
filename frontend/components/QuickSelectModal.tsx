@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Article } from '../app/components/types';
 import { QuantitySelector } from './QuantitySelector';
@@ -43,6 +43,7 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
   const [selectedColor, setSelectedColor] = useState(COLORS[0].name);
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
+  const modalContainerRef = useRef<HTMLDivElement>(null);
 
   // Reset selections when product changes
   useEffect(() => {
@@ -51,7 +52,7 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
     setQuantity(1);
   }, [product]);
 
-  // Close on ESC key
+  // Close on ESC key and scroll modal to top when opened
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -60,6 +61,10 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
       document.addEventListener('keydown', handleEsc);
       // Prevent body scroll
       document.body.style.overflow = 'hidden';
+      // Scroll modal container to top when it opens
+      if (modalContainerRef.current) {
+        modalContainerRef.current.scrollTop = 0;
+      }
     }
     return () => {
       document.removeEventListener('keydown', handleEsc);
@@ -99,7 +104,7 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
       <div className="modal-backdrop" onClick={onClose} />
 
       {/* Modal */}
-      <div className="modal-container">
+      <div className="modal-container" ref={modalContainerRef}>
         <div className="modal-content">
           {/* Close Button */}
           <button className="modal-close" onClick={onClose} aria-label="Schließen">
