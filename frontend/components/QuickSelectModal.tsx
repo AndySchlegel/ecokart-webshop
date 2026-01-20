@@ -43,7 +43,7 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
   const [selectedColor, setSelectedColor] = useState(COLORS[0].name);
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
-  const modalContainerRef = useRef<HTMLDivElement>(null);
+  const modalContentRef = useRef<HTMLDivElement>(null);
 
   // Reset selections when product changes
   useEffect(() => {
@@ -52,7 +52,7 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
     setQuantity(1);
   }, [product]);
 
-  // Close on ESC key and scroll modal to top when opened
+  // Close on ESC key and scroll modal content to top when opened
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -61,9 +61,9 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
       document.addEventListener('keydown', handleEsc);
       // Prevent body scroll
       document.body.style.overflow = 'hidden';
-      // Scroll modal container to top when it opens
-      if (modalContainerRef.current) {
-        modalContainerRef.current.scrollTop = 0;
+      // Scroll modal content to top (ensures size selection is visible)
+      if (modalContentRef.current) {
+        modalContentRef.current.scrollTop = 0;
       }
     }
     return () => {
@@ -104,8 +104,8 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
       <div className="modal-backdrop" onClick={onClose} />
 
       {/* Modal */}
-      <div className="modal-container" ref={modalContainerRef}>
-        <div className="modal-content">
+      <div className="modal-container">
+        <div className="modal-content" ref={modalContentRef}>
           {/* Close Button */}
           <button className="modal-close" onClick={onClose} aria-label="Schließen">
             ✕
@@ -236,12 +236,11 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
           right: 0;
           bottom: 0;
           display: flex;
-          align-items: flex-start;
+          align-items: center;
           justify-content: center;
           z-index: 9999;
           padding: 2rem;
-          padding-top: 4rem;
-          overflow-y: auto;
+          overflow: hidden;
           animation: fadeIn 0.2s ease;
         }
 
@@ -251,12 +250,13 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
           border-radius: 8px;
           max-width: 600px;
           width: 100%;
-          max-height: 90vh;
+          max-height: calc(100vh - 8rem);
           overflow-y: auto;
           padding: 2rem;
           position: relative;
           box-shadow: 0 20px 60px rgba(255, 107, 0, 0.3);
           animation: slideUp 0.3s ease;
+          margin-bottom: 2rem;
         }
 
         .modal-close {
