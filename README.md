@@ -12,7 +12,7 @@
 
 **Live Demo:** [🛍️ Customer Shop](https://shop.aws.his4irness23.de) | [⚙️ Admin Dashboard](https://admin.aws.his4irness23.de)
 
-![Shop Homepage](docs/screenshots/01-shop-homepage.png)
+![Shop Homepage](docs/screenshots/01-shop-homepage.jpg)
 
 ---
 
@@ -70,28 +70,33 @@ AIR LEGACY is a full-stack e-commerce platform built to demonstrate:
 
 ### Customer Experience
 - 🛍️ **Product Browsing** with real-time stock levels (green/orange/red indicators)
-- 🔢 **Quantity Selector** - Choose quantity before adding to cart (stock-aware)
+- 🔢 **Quantity Selector** - Choose quantity before adding to cart (stock-aware with warnings)
 - 🛒 **Shopping Cart** with persistent storage (DynamoDB-backed)
 - 💳 **Secure Checkout** via Stripe (PCI-compliant payment processing)
 - 📧 **Order Confirmations** via Resend email service (beautiful HTML templates)
 - 👤 **User Authentication** with AWS Cognito (email verification, JWT tokens)
+- 👤 **User Profile** - Personal information, order statistics, favorites management
+- 📦 **Order History** - Track past orders with detailed information
 - 🌍 **Global CDN** - CloudFront for product images (fast worldwide delivery)
 
 ### Admin Dashboard
-- 📊 **Real-time Analytics** (revenue, orders, customers with trends)
-- 📦 **Product Management** (CRUD operations, stock management)
+- 📊 **Real-time Analytics** - 7d and 30d views with revenue, orders, customer trends
+- 📦 **Product Management** - Card-based grid layout with CRUD operations
+- 🎨 **Modern UI Design** - iOS-style top navigation with responsive grid layout
 - 🖼️ **Image Management** - Upload product images via Terraform
 - 👥 **Customer Overview** with registration trends
-- 📈 **Sales Reports** with time-series data
+- 📈 **Order Management** - Complete order history with status tracking
 - 🔒 **Basic Auth Protection** - Optional HTTP Basic Auth for staging
 
 ### Technical Excellence
 - ⚡ **Serverless**: Auto-scaling, pay-per-use, zero infrastructure management
 - 🔒 **Security**: Cognito JWT validation, HTTPS everywhere, encrypted data at rest
+- 🛡️ **Security Monitoring**: 5 CloudWatch Alarms + Daily compliance scans ($0/month)
+- 🚨 **Real-time Detection**: Unauthorized calls, root usage, policy changes (<5min response)
 - 🚀 **CI/CD**: GitHub Actions with OIDC (no long-lived credentials)
 - 📊 **Monitoring**: CloudWatch Logs + 9 Alarms (Lambda errors, API 5xx, DynamoDB throttling)
 - 🌍 **CDN**: CloudFront for global asset delivery
-- 🧪 **Testing**: 63 unit tests with Jest, 60-69% coverage
+- 🧪 **Testing**: 63 unit tests with Jest, 30-40% coverage (realistic for portfolio)
 - 📝 **Documentation**: 39 documented learnings, architecture guides
 
 ---
@@ -330,84 +335,85 @@ Password: [Create admin user via Cognito or contact]
 ### Customer Shop
 
 #### Homepage
-![Shop Homepage](docs/screenshots/01-shop-homepage.png)
-*Modern product catalog with real-time stock levels and clean design*
+![Shop Homepage](docs/screenshots/01-shop-homepage.jpg)
+*Modern product catalog with real-time stock levels, clean design, and featured products*
 
-#### Product Detail
-![Product Detail](docs/screenshots/02-product-detail.png)
-*Detailed product view with color selection and quantity selector*
+#### Product Tagging System
+![Product Tagging](docs/screenshots/02-tagging.jpg)
+*Smart product categorization and tagging for better discovery*
+
+#### Product Overview
+![Products Main](docs/screenshots/03-products-main.jpg)
+*Complete product catalog with filtering and search capabilities*
+
+#### Product with Cart Integration
+![Product Cart](docs/screenshots/04-product-cart.jpg)
+*Product detail view with integrated add-to-cart functionality*
 
 #### Quick Select Modal
-![Quick Select](docs/screenshots/03-quick-select-modal.png)
-*Fast product selection with size/color options directly from catalog*
+![Product Modal](docs/screenshots/05-product-modal.jpg)
+*Fast product selection modal with size/color options and quantity selector*
 
-#### Shopping Cart
-![Shopping Cart](docs/screenshots/04-shopping-cart.png)
-*Cart overview with item management and checkout button*
+#### Shopping Cart Sidebar
+![Shopping Cart Side](docs/screenshots/06-shopping-cart-side.jpg)
+*Slide-out cart sidebar for quick cart review and management*
+
+#### Checkout Page
+![Checkout](docs/screenshots/07-checkout.jpg)
+*Streamlined checkout process with shipping and billing information*
+
+#### Shopping Cart Full View
+![Shopping Cart](docs/screenshots/08-shopping-cart.jpg)
+*Complete cart overview with item management and quantity adjustments*
 
 #### Stripe Checkout
-![Stripe Checkout](docs/screenshots/05-checkout-stripe.png)
-*Secure payment processing via Stripe*
+![Stripe Checkout](docs/screenshots/09-stripe-checkout.jpg)
+*Secure Stripe payment processing with card details*
 
-#### Order Confirmation
-![Order Confirmation](docs/screenshots/06-order-confirmation.png)
-*Success page after successful payment*
+#### Payment Success
+![Success Payment](docs/screenshots/10-success-payment.jpg)
+*Order confirmation page after successful payment*
+
+#### Email Confirmation - Desktop View
+![Email Confirmation Desktop](docs/screenshots/11-email-confirmation.jpg)
+*Professional HTML email confirmation with order details and tracking link*
+
+#### Email Confirmation - Mobile View
+![Email Confirmation Mobile](docs/screenshots/13-email-confirmation.jpg)
+*Responsive email template optimized for mobile devices*
+
+#### Email Confirmation - Details
+![Email Confirmation Details](docs/screenshots/14-email-confirmation.jpg)
+*Order summary with product details and shipping information*
+
+### User Account
+
+#### User Profile
+![User Profile](docs/screenshots/18-user-profile.jpg)
+*Personal user profile with order statistics, account info, and quick actions*
+
+#### My Orders
+![My Orders](docs/screenshots/19-my-orders.jpg)
+*Complete order history with tracking and detailed information*
 
 ### Admin Dashboard
 
-#### Analytics Dashboard
-![Admin Dashboard](docs/screenshots/07-admin-dashboard.png)
-*Real-time analytics: revenue, orders, customers with trend indicators*
-
-#### Product Management
-![Admin Products](docs/screenshots/08-admin-products.png)
-*Product CRUD operations with stock management*
-
 #### Order Management
-![Orders](docs/screenshots/09-admin-orders.png)
-*Order history with status and details*
+![Admin Orders](docs/screenshots/15-admin-orders.jpg)
+*Admin order management with status tracking and customer details*
 
-#### Category Management
-![Categories](docs/screenshots/10-admin-categories.png)
-*Product category organization and management*
+#### Create New Product
+![Admin New Product](docs/screenshots/16-admin-new-product.jpg)
+*Product creation interface with image upload and inventory management*
 
-### Infrastructure
+#### Analytics - 7 Day View
+![Analytics 7d](docs/screenshots/17-analytics-7d.jpg)
+*Real-time analytics dashboard with 7-day revenue, orders, and customer trends*
 
-#### Terraform Modules
-![Terraform Modules](docs/screenshots/11-terraform-modules.png)
-*Infrastructure as Code modules overview*
+#### Analytics - 30 Day View
+![Analytics 30d](docs/screenshots/12-Analytics 30d.jpg)
+*Extended analytics view showing 30-day business performance and trends*
 
-#### GitHub Actions CI/CD
-![GitHub Actions](docs/screenshots/12-github-actions.png)
-*Automated deployment pipeline with Terraform*
-
-#### AWS Lambda
-![AWS Lambda](docs/screenshots/13-aws-lambda.png)
-*Lambda function configuration*
-
-#### AWS DynamoDB
-![AWS DynamoDB](docs/screenshots/14-aws-dynamodb.png)
-*DynamoDB tables overview*
-
-#### AWS Cognito
-![AWS Cognito](docs/screenshots/15-aws-cognito.png)
-*Cognito User Pool configuration*
-
-#### AWS Amplify
-![AWS Amplify](docs/screenshots/16-aws-amplify.png)
-*Amplify hosting configuration*
-
-#### AWS CloudFront
-![AWS CloudFront](docs/screenshots/17-aws-cloudfront.png)
-*CloudFront CDN distribution for global asset delivery*
-
-#### AWS Route53
-![AWS Route53](docs/screenshots/18-aws-route53.png)
-*Route53 DNS configuration for custom domains*
-
-#### Stripe Dashboard
-![Stripe Dashboard](docs/screenshots/19-stripe-dashboard.png)
-*Stripe payment integration and webhook configuration*
 
 ---
 
@@ -833,22 +839,33 @@ npm run dev
 - ✅ User Registration & Authentication (Cognito)
 - ✅ Product Catalog with Stock Management
 - ✅ Shopping Cart (persistent, DynamoDB-backed)
-- ✅ Quantity Selector (stock-aware)
+- ✅ Quantity Selector (stock-aware with warnings at 80% stock)
 - ✅ Secure Checkout (Stripe integration)
 - ✅ Order Management (webhook-driven)
-- ✅ Email Notifications (Resend)
-- ✅ Admin Dashboard (analytics + CRUD)
+- ✅ Email Notifications (Resend API with professional HTML templates)
+- ✅ User Profile (personal info, order stats, favorites)
+- ✅ Order History (complete order tracking for customers)
+- ✅ Admin Dashboard (modern card-based UI with iOS-style navigation)
+- ✅ Admin Analytics (7-day and 30-day views with trends)
 - ✅ Stock Reservation System (prevent overselling)
+- ✅ Security Monitoring (5 CloudWatch Alarms + daily compliance scans)
 - ✅ CloudWatch Monitoring (9 alarms)
 
-**Phase 2 Features (Planned):**
-- ⏳ Security Scanning (tfsec, Checkov, Trufflehog)
-- ⏳ Runtime Security Monitoring (CloudWatch + Lambda)
+**Phase 2 Features (Completed):**
+- ✅ Security Scanning (tfsec, Checkov, Trufflehog)
+- ✅ Runtime Security Monitoring (CloudWatch + Lambda)
+- ✅ Real-time Dashboard Analytics (7d and 30d views)
+- ✅ Order History for Customers (My Orders page)
+- ✅ User Profile Management
+- ✅ Admin UI Redesign (modern card-based layout)
+- ✅ Quantity Selector (pre-cart quantity selection)
+
+**Future Enhancements (Nice-to-Have):**
 - ⏳ E2E Testing (Playwright)
-- ⏳ Real-time Dashboard Analytics (replace dummy trends)
-- ⏳ Order History for Customers
-- ⏳ Product Search & Filtering
+- ⏳ Product Search & Filtering (advanced)
 - ⏳ PWA Features (Progressive Web App)
+- ⏳ Product Reviews & Ratings
+- ⏳ Wishlist Feature
 
 **[Phase 2 Roadmap →](docs/ACTION_PLAN_PHASE2.md)**
 
@@ -1139,10 +1156,10 @@ Cloud Engineer | Full-Stack Developer | DevOps Enthusiast
 
 ---
 
-**Project Status:** ✅ Production-Ready (with Phase 2 enhancements in progress)
-**Last Updated:** 9. Januar 2026
+**Project Status:** ✅ Production-Ready (Phase 2 Complete!)
+**Last Updated:** 21. Januar 2026
 **Environment:** Development (Deployed)
-**AWS Region:** eu-north-1 (Stockholm)
+**AWS Region:** eu-central-1 (Frankfurt)
 
 ⭐ **If this project helped you learn serverless architecture, Terraform, or full-stack development, please consider starring the repository!**
 
@@ -1150,18 +1167,22 @@ Cloud Engineer | Full-Stack Developer | DevOps Enthusiast
 
 ### 🚀 What's Next?
 
-**Phase 2: Portfolio & Showcase Excellence** *(in progress)*
+**Phase 2: Portfolio & Showcase Excellence** ✅ **COMPLETED!**
 
-See [docs/ACTION_PLAN_PHASE2.md](docs/ACTION_PLAN_PHASE2.md) for details on:
-- ✅ Security Scanning Integration (tfsec, Checkov, Trufflehog) - COMPLETED
-- ✅ Runtime Security Monitoring (CloudWatch + Lambda) - COMPLETED
-- ✅ Real-time Dashboard Analytics - COMPLETED
-- ✅ Quantity Selector Implementation - COMPLETED
-- ✅ Interactive Architecture Diagram (3-Tab Presentation) - COMPLETED
+Completed Features:
+- ✅ Security Scanning Integration (tfsec, Checkov, Trufflehog)
+- ✅ Runtime Security Monitoring (CloudWatch + Lambda)
+- ✅ Real-time Dashboard Analytics (7d and 30d views)
+- ✅ Quantity Selector Implementation (stock-aware)
+- ✅ Interactive Architecture Diagram (3-Tab Presentation)
+- ✅ User Profile & Order History
+- ✅ Admin UI Redesign (modern card-based layout)
+- ✅ Resend Email Integration (professional HTML templates)
+
+**Future Enhancements (Optional):**
 - E2E Testing with Playwright
 - PWA Implementation
-
-**Estimated Timeline:** 2-3 weeks
+- Advanced Product Search & Filtering
 
 ---
 
