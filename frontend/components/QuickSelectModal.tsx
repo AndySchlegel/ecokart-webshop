@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Article } from '../app/components/types';
 import { QuantitySelector } from './QuantitySelector';
@@ -52,27 +52,25 @@ export function QuickSelectModal({ product, isOpen, onClose, onAddToCart }: Quic
     setQuantity(1);
   }, [product]);
 
-  // Close on ESC key and scroll modal content to top when opened
+  // Close on ESC key
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     if (isOpen) {
       document.addEventListener('keydown', handleEsc);
-      // Prevent body scroll
-      document.body.style.overflow = 'hidden';
-      // Scroll modal content to top - use RAF to ensure DOM is ready
-      requestAnimationFrame(() => {
-        if (modalContentRef.current) {
-          modalContentRef.current.scrollTop = 0;
-        }
-      });
     }
     return () => {
       document.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
+
+  // Scroll modal content to top synchronously BEFORE paint
+  useLayoutEffect(() => {
+    if (isOpen && modalContentRef.current) {
+      modalContentRef.current.scrollTop = 0;
+    }
+  }, [isOpen]);
 
   if (!isOpen || !product) return null;
 
