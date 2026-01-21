@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { useModal } from '../../contexts/ModalContext';
 import { QuickSelectModal } from '../../components/QuickSelectModal';
 import FavoriteButton from '../../components/wishlist/FavoriteButton';
 
@@ -33,15 +34,17 @@ export function ArticleCard({
   const { addToCart } = useCart();
   const { user } = useAuth();
   const router = useRouter();
+  const { openModal, closeModal, isModalOpen } = useModal();
   const [showSuccess, setShowSuccess] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const modalId = `modal-${article.id}`;
 
   const handleOpenModal = () => {
     if (!user) {
       router.push('/login');
       return;
     }
-    setIsModalOpen(true);
+    openModal(modalId);
   };
 
   const handleAddToCart = async (quantity: number, size?: string, color?: string) => {
@@ -208,8 +211,8 @@ export function ArticleCard({
       {/* Quick Select Modal */}
       <QuickSelectModal
         product={article}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isModalOpen(modalId)}
+        onClose={closeModal}
         onAddToCart={handleAddToCart}
       />
     </article>
