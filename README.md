@@ -69,41 +69,41 @@ AIR LEGACY is a full-stack e-commerce platform built to demonstrate:
 ## Key Features
 
 ### Customer Experience
-- 🛍️ **Product Browsing** with real-time stock levels (green/orange/red indicators)
-- 🔢 **Quantity Selector** - Choose quantity before adding to cart (stock-aware with warnings)
-- 🛒 **Shopping Cart** with persistent storage (DynamoDB-backed)
-- 💳 **Secure Checkout** via Stripe (PCI-compliant payment processing)
-- 📧 **Order Confirmations** via Resend email service (beautiful HTML templates)
-- 👤 **User Authentication** with AWS Cognito (email verification, JWT tokens)
-- 👤 **User Profile** - Personal information, order statistics, favorites management
-- 📦 **Order History** - Track past orders with detailed information
-- 🌍 **Global CDN** - CloudFront for product images (fast worldwide delivery)
+- **Product Browsing** with real-time stock levels (green/orange/red indicators)
+- **Quantity Selector** - Choose quantity before adding to cart (stock-aware with warnings)
+- **Shopping Cart** with persistent storage (DynamoDB-backed)
+- **Secure Checkout** via Stripe (PCI-compliant payment processing)
+- **Order Confirmations** via Resend email service (beautiful HTML templates)
+- **User Authentication** with AWS Cognito (email verification, JWT tokens)
+- **User Profile** - Personal information, order statistics, favorites management
+- **Order History** - Track past orders with detailed information
+- **Global CDN** - CloudFront for product images (fast worldwide delivery)
 
 ### Admin Dashboard
-- 📊 **Real-time Analytics** - 7d and 30d views with revenue, orders, customer trends
-- 📦 **Product Management** - Card-based grid layout with CRUD operations
-- 🎨 **Modern UI Design** - iOS-style top navigation with responsive grid layout
-- 🖼️ **Image Management** - Upload product images via Terraform
-- 👥 **Customer Overview** with registration trends
-- 📈 **Order Management** - Complete order history with status tracking
-- 🔒 **Basic Auth Protection** - Optional HTTP Basic Auth for staging
+- **Real-time Analytics** - 7d and 30d views with revenue, orders, customer trends
+- **Product Management** - Card-based grid layout with CRUD operations
+- **Modern UI Design** - iOS-style top navigation with responsive grid layout
+- **Image Management** - Upload product images via Terraform
+- **Customer Overview** with registration trends
+- **Order Management** - Complete order history with status tracking
+- **Basic Auth Protection** - Optional HTTP Basic Auth for staging
 
 ### Technical Excellence
-- ⚡ **Serverless**: Auto-scaling, pay-per-use, zero infrastructure management
-- 🔒 **Security**: Cognito JWT validation, HTTPS everywhere, encrypted data at rest
-- 🛡️ **Security Monitoring**: 5 CloudWatch Alarms + Daily compliance scans ($0/month)
-- 🚨 **Real-time Detection**: Unauthorized calls, root usage, policy changes (<5min response)
-- 🚀 **CI/CD**: GitHub Actions with OIDC (no long-lived credentials)
-- 📊 **Monitoring**: CloudWatch Logs + 9 Alarms (Lambda errors, API 5xx, DynamoDB throttling)
-- 🌍 **CDN**: CloudFront for global asset delivery
-- 🧪 **Testing**: 63 unit tests with Jest, 30-40% coverage (realistic for portfolio)
-- 📝 **Documentation**: 39 documented learnings, architecture guides
+- **Serverless**: Auto-scaling, pay-per-use, zero infrastructure management
+- **Security**: Cognito JWT validation, HTTPS everywhere, encrypted data at rest
+- **Security Monitoring**: 5 CloudWatch Alarms + Daily compliance scans ($0/month)
+- **Real-time Detection**: Unauthorized calls, root usage, policy changes (<5min response)
+- **CI/CD**: GitHub Actions with OIDC (no long-lived credentials)
+- **Monitoring**: CloudWatch Logs + 9 Alarms (Lambda errors, API 5xx, DynamoDB throttling)
+- **CDN**: CloudFront for global asset delivery
+- **Testing**: 63 unit tests with Jest, 30-40% coverage (realistic for portfolio)
+- **Documentation**: 39 documented learnings, architecture guides
 
 ---
 
 ## Architecture
 
-> **💡 Interactive Architecture Diagram Available!**
+> **Interactive Architecture Diagram Available!**
 > Explore the full architecture with interactive tooltips, AWS service details, and cost breakdown:
 > **[View Interactive Architecture Presentation](docs/architecture-tabs.html)**
 > _(3-tab presentation: Architecture Diagram, Technical Details, Top 10 Lessons Learned - Open locally in browser)_
@@ -424,19 +424,19 @@ This project implements **automated security scanning** on every pull request an
 
 #### Automated Security Scanners
 
-**🔍 tfsec** - Terraform Security Scanner
+**tfsec** - Terraform Security Scanner
 - Scans Terraform code for security misconfigurations
 - Checks for AWS best practices violations
 - Identifies potential security risks before deployment
 - **Minimum Severity:** MEDIUM
 
-**🛡️ Checkov** - Policy Compliance Validation
+**Checkov** - Policy Compliance Validation
 - Infrastructure as Code security analysis
 - Policy-as-Code compliance checks
 - Multi-framework support (Terraform, CloudFormation, etc.)
 - Validates against CIS benchmarks
 
-**🔐 Trufflehog** - Secret Detection
+**Trufflehog** - Secret Detection
 - Scans git history for accidentally committed secrets
 - Detects API keys, passwords, tokens
 - Prevents credential leaks
@@ -455,9 +455,9 @@ Trigger: PR/Push to develop, staging, main
 #### GitHub Security Integration
 
 All security findings are automatically uploaded to the **GitHub Security Tab** using SARIF format:
-- 📊 Centralized security dashboard
-- 🔍 Code scanning alerts
-- 📈 Security trend tracking
+- Centralized security dashboard
+- Code scanning alerts
+- Security trend tracking
 - ✅ PR blocking on critical findings (configurable)
 
 #### Security Configuration
@@ -496,7 +496,7 @@ This project implements **24/7 automated security monitoring** for the productio
 
 #### Real-Time CloudWatch Alarms (<5 min detection)
 
-**🚨 Critical Security Events:**
+**Critical Security Events:**
 - **Unauthorized API Calls** - Detects 403/401 errors
 - **Root Account Usage** - Alerts when root user is used (should NEVER happen)
 - **IAM Policy Changes** - Monitors privilege escalation attempts
@@ -1074,10 +1074,10 @@ resource "null_resource" "seed_database" {
 This is a portfolio project, but feedback and suggestions are welcome!
 
 **Ways to Contribute:**
-- 🐛 Report bugs or issues
-- 💡 Suggest improvements
-- 📝 Improve documentation
-- ✨ Propose new features
+- Report bugs or issues
+- Suggest improvements
+- Improve documentation
+- Propose new features
 
 **Contributing Process:**
 1. Fork the repository
@@ -1087,7 +1087,7 @@ This is a portfolio project, but feedback and suggestions are welcome!
 5. Push to your fork (`git push origin feature/your-feature`)
 6. Open a Pull Request
 
-[📝 Full Contributing Guidelines →](CONTRIBUTING.md)
+[Full Contributing Guidelines →](CONTRIBUTING.md)
 
 ---
 
@@ -1105,7 +1105,7 @@ Cloud Engineer | Full-Stack Developer | DevOps Enthusiast
 - 🌐 Blog: [blog.his4irness23.de](https://blog.his4irness23.de) *(launching March 2026)*
 - 💼 LinkedIn: [Andy Schlegel](https://linkedin.com/in/andy-schlegel-4874852bb)
 - 🐙 GitHub: [@AndySchlegel](https://github.com/AndySchlegel)
-- ✉️ Email: andy.schlegel@chakademie.org
+- Email: andy.schlegel@chakademie.org
 
 ---
 
