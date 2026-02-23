@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: 'Alle Felder müssen korrekt gefüllt werden.' }, { status: 400 });
   }
   try {
-    const localRoot = '/Users/his4irness23/GitHub/Repositories/Ecokart-Webshop/pics/';
+    const localRoot = '/Users/his4irness23/git-repos-public/ecokart-webshop/pics/';
     let imageUrl = body.imageUrl.trim();
     if (imageUrl.startsWith(localRoot)) {
       imageUrl = `/pics/${imageUrl.slice(localRoot.length)}`;
@@ -76,7 +76,7 @@ export async function PUT(request: Request) {
     return NextResponse.json({ message: 'Alle Felder müssen korrekt gefüllt werden.' }, { status: 400 });
   }
   try {
-    const localRoot = '/Users/his4irness23/GitHub/Repositories/Ecokart-Webshop/pics/';
+    const localRoot = '/Users/his4irness23/git-repos-public/ecokart-webshop/pics/';
     let imageUrl = body.imageUrl.trim();
     if (imageUrl.startsWith(localRoot)) {
       imageUrl = `/pics/${imageUrl.slice(localRoot.length)}`;

@@ -36,7 +36,7 @@ export default function DashboardPage() {
   }, []);
 
   async function handleAddArticle(values: { name: string; price: string; originalPrice: string; description: string; imageUrl: string; category: string; rating: string; reviewCount: string; stock: string; targetGroup: string; tags: string; searchTerms: string }, articleId?: string) {
-    const localRoot = '/Users/his4irness23/GitHub/Repositories/Ecokart-Webshop/pics/';
+    const localRoot = '/Users/his4irness23/git-repos-public/ecokart-webshop/pics/';
     let imageUrl = values.imageUrl.trim();
     if (imageUrl.startsWith(localRoot)) {
       imageUrl = `/pics/${imageUrl.slice(localRoot.length)}`;
