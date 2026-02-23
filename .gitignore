@@ -35,6 +35,12 @@ yarn-error.log*
 
 # Claude Code
 Project Info Claude Code/
+CLAUDE.md
+CLAUDE_ECOKART.md
+.claude/
+
+# Internal documentation (local only, not for public repo)
+docs/internal/
 
 # Terraform
 *.tfstate

@@ -58,8 +58,8 @@ amplify_monorepo_app_root = "frontend"
 
 # Basic Auth - Schutz vor neugierigen Augen (nicht Production-ready!)
 basic_auth_enabled  = true
-basic_auth_user     = "demo"
-basic_auth_password = "test1234"  # Schwaches Passwort OK für Dev
+basic_auth_user     = "reviewer"
+basic_auth_password = "Ecokart2026!"
 
 # ----------------------------------------------------------------------------
 # Admin Frontend Amplify Konfiguration

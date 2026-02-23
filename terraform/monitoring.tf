@@ -15,7 +15,7 @@
 # SNS Topic für Alarm Notifications
 # ----------------------------------------------------------------------------
 # TODO: Temporarily disabled - IAM permissions needed for GitHub Actions
-# See ACTION_PLAN.md - Will be re-enabled once IAM policy is extended
+# Will be re-enabled once IAM policy is extended for GitHub Actions role
 
 # resource "aws_sns_topic" "monitoring_alerts" {
 #   name = "${local.name_prefix}-monitoring-alerts"

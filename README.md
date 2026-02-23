@@ -230,7 +230,6 @@ AIR LEGACY is a full-stack e-commerce platform built to demonstrate:
 - **GitHub Actions**: CI/CD with OIDC authentication
 - **CloudWatch**: 9 alarms for proactive monitoring
 
-[📚 Detailed Architecture Documentation →](docs/ARCHITECTURE.md) *(coming soon)*
 
 ---
 
@@ -867,8 +866,6 @@ npm run dev
 - ⏳ Product Reviews & Ratings
 - ⏳ Wishlist Feature
 
-**[Phase 2 Roadmap →](docs/ACTION_PLAN_PHASE2.md)**
-
 ---
 
 ## 💰 Cost Analysis
@@ -925,28 +922,12 @@ aws budgets create-budget \
 
 ## 📚 Documentation
 
-### Project Documentation
-
-- **[Action Plan Phase 1](docs/ACTION_PLAN.md)** - Original development roadmap
-- **[Action Plan Phase 2](docs/ACTION_PLAN_PHASE2.md)** - Portfolio & showcase enhancement
 - **[Lessons Learned](docs/LESSONS_LEARNED.md)** - 39 documented learnings from implementation
 - **[Development Guide](docs/DEVELOPMENT.md)** - Local development setup
+- **[Security Policy](docs/SECURITY.md)** - Security architecture & vulnerability reporting
 - **[DevSecOps Analysis](docs/DEVSECOPS_ANALYSIS.md)** - Security integration plan
 - **[Mobile Readiness](docs/MOBILE_READINESS.md)** - PWA implementation guide
-
-### Session Documentation
-
-- **[Resend Migration](docs/TODO_RESEND_MIGRATION.md)** - Email service migration (AWS SES → Resend)
-- **[Recurring Issues](docs/RECURRING_ISSUES.md)** - Common problems & solutions
 - **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute
-
-### Architecture Documentation *(coming soon)*
-
-- Architecture Overview
-- API Documentation
-- Database Schema
-- Deployment Guide
-- Security Architecture
 
 ---
 
@@ -1121,8 +1102,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Andy Schlegel**
 Cloud Engineer | Full-Stack Developer | DevOps Enthusiast
 
-- 🌐 Website: [coming soon]
-- 💼 LinkedIn: [Andy Schlegel](https://linkedin.com/in/andy-schlegel) *(update link)*
+- 🌐 Blog: [blog.his4irness23.de](https://blog.his4irness23.de) *(launching March 2026)*
+- 💼 LinkedIn: [Andy Schlegel](https://linkedin.com/in/andy-schlegel-4874852bb)
 - 🐙 GitHub: [@AndySchlegel](https://github.com/AndySchlegel)
 - ✉️ Email: andy.schlegel@chakademie.org
 
