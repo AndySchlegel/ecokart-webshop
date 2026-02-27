@@ -13,7 +13,7 @@
 set -e  # Exit on error
 
 # Configuration
-BUCKET_NAME="ecokart-terraform-state-729403197965"
+BUCKET_NAME="ecokart-terraform-state-805160323349"
 DYNAMODB_TABLE="ecokart-terraform-state-lock"
 AWS_REGION="eu-north-1"
 

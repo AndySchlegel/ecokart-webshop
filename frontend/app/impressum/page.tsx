@@ -36,11 +36,11 @@ export default function ImpressumPage() {
             <br />
             <strong>GitHub:</strong>{' '}
             <a
-              href="https://github.com/AndySchlegel/Ecokart-Webshop"
+              href="https://github.com/AndySchlegel/ecokart-webshop"
               target="_blank"
               rel="noopener noreferrer"
             >
-              github.com/AndySchlegel/Ecokart-Webshop
+              github.com/AndySchlegel/ecokart-webshop
             </a>
           </p>
         </section>
@@ -130,12 +130,12 @@ export default function ImpressumPage() {
             Dieses Projekt ist Open Source und auf GitHub verfügbar:
             <br />
             <a
-              href="https://github.com/AndySchlegel/Ecokart-Webshop"
+              href="https://github.com/AndySchlegel/ecokart-webshop"
               target="_blank"
               rel="noopener noreferrer"
               className="github-link"
             >
-              github.com/AndySchlegel/Ecokart-Webshop
+              github.com/AndySchlegel/ecokart-webshop
             </a>
           </p>
           <p>

@@ -26,7 +26,7 @@ provider "aws" {
   region = var.aws_region
 
   # Optional: AWS Profile für lokale Entwicklung
-  # profile = "Teilnehmer-729403197965"
+  # profile = "Teilnehmer-805160323349"
 }
 
 # ----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ module "ecokart" {
 
   # Amplify - Frontend Hosting
   enable_amplify      = true
-  github_repository   = "https://github.com/AndySchlegel/Ecokart-Webshop"
+  github_repository   = "https://github.com/AndySchlegel/ecokart-webshop"
   github_branch       = "main"
   github_access_token = var.github_access_token
 

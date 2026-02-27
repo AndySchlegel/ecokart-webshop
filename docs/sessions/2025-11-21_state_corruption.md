@@ -90,13 +90,13 @@ After all automated approaches failed, manual cleanup via AWS CLI was the only o
 ### Step 1: Delete Corrupted State & Lock
 ```bash
 # Delete corrupted state file
-aws s3 rm s3://ecokart-terraform-state-729403197965/development/terraform.tfstate \
+aws s3 rm s3://ecokart-terraform-state-805160323349/development/terraform.tfstate \
   --region eu-north-1
 
 # Delete corrupted lock entry
 aws dynamodb delete-item \
   --table-name ecokart-terraform-state-lock \
-  --key '{"LockID": {"S": "ecokart-terraform-state-729403197965/development/terraform.tfstate"}}' \
+  --key '{"LockID": {"S": "ecokart-terraform-state-805160323349/development/terraform.tfstate"}}' \
   --region eu-north-1
 ```
 
@@ -207,7 +207,7 @@ Updated `.github/workflows/deploy.yml` with new step:
 ```yaml
 - name: 🧹 Force Clear State & Lock
   run: |
-    BUCKET_NAME="ecokart-terraform-state-729403197965"
+    BUCKET_NAME="ecokart-terraform-state-805160323349"
     STATE_KEY="development/terraform.tfstate"
     LOCK_TABLE="ecokart-terraform-state-lock"
     LOCK_ID="$BUCKET_NAME/$STATE_KEY"
@@ -519,7 +519,7 @@ const fullUrl = `${apiUrl}/api/cart`;
 
 **AWS Resources:**
 - Region: eu-north-1
-- S3 Bucket: ecokart-terraform-state-729403197965
+- S3 Bucket: ecokart-terraform-state-805160323349
 - DynamoDB Lock Table: ecokart-terraform-state-lock
 
 **Current Live URLs:**

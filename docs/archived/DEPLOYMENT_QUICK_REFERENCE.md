@@ -8,7 +8,7 @@
 
 **Wenn die IAM Role gelöscht wurde:**
 
-1. Gehe zu: [GitHub Actions](https://github.com/AndySchlegel/Ecokart-Webshop/actions)
+1. Gehe zu: [GitHub Actions](https://github.com/AndySchlegel/ecokart-webshop/actions)
 2. Wähle Workflow: **"Bootstrap OIDC Infrastructure"**
 3. Klicke **"Run workflow"**
 4. Gib `bootstrap` ein zur Bestätigung
@@ -99,7 +99,7 @@ terraform apply -auto-approve
 
 **Automatisches Löschen aller Ressourcen:**
 
-1. Gehe zu [GitHub Actions](https://github.com/AndySchlegel/Ecokart-Webshop/actions)
+1. Gehe zu [GitHub Actions](https://github.com/AndySchlegel/ecokart-webshop/actions)
 2. Wähle Workflow: **"Destroy Infrastructure"**
 3. Klicke **"Run workflow"**
 4. Gib `destroy` ein zur Bestätigung

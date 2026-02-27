@@ -33,7 +33,7 @@
         "dynamodb:DeleteItem",
         "dynamodb:DescribeTimeToLive"
       ],
-      "Resource": "arn:aws:dynamodb:eu-north-1:729403197965:table/ecokart-terraform-state-lock"
+      "Resource": "arn:aws:dynamodb:eu-north-1:805160323349:table/ecokart-terraform-state-lock"
     }
   ]
 }

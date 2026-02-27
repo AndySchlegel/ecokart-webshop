@@ -39,8 +39,8 @@ aws sts get-caller-identity
 ```json
 {
     "UserId": "AROA...",
-    "Account": "729403197965",
-    "Arn": "arn:aws:sts::729403197965:assumed-role/..."
+    "Account": "805160323349",
+    "Arn": "arn:aws:sts::805160323349:assumed-role/..."
 }
 ```
 
@@ -82,7 +82,7 @@ Apply complete! Resources: 15 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-github_actions_role_arn = "arn:aws:iam::729403197965:role/ecokart-github-actions-role"
+github_actions_role_arn = "arn:aws:iam::805160323349:role/ecokart-github-actions-role"
 next_steps = <<EOT
 
   ✅ OIDC Setup erfolgreich!
@@ -164,7 +164,7 @@ aws ssm get-parameter \
 Jetzt sagst du GitHub, welche AWS Role es nutzen soll.
 
 **5.1 Gehe zu GitHub Repository Settings:**
-https://github.com/AndySchlegel/Ecokart-Webshop/settings/secrets/actions
+https://github.com/AndySchlegel/ecokart-webshop/settings/secrets/actions
 
 **5.2 Klicke:** `New repository secret`
 
@@ -172,7 +172,7 @@ https://github.com/AndySchlegel/Ecokart-Webshop/settings/secrets/actions
 - **Name:** `AWS_ROLE_ARN`
 - **Secret:** (Füge die ARN aus Schritt 2 ein)
   ```
-  arn:aws:iam::729403197965:role/ecokart-github-actions-role
+  arn:aws:iam::805160323349:role/ecokart-github-actions-role
   ```
 
 **5.4 Klicke:** `Add secret`
@@ -187,7 +187,7 @@ Jetzt pushen wir die neuen Dateien zu GitHub!
 
 ```bash
 # Zurück zum Repository Root
-cd /path/to/Ecokart-Webshop
+cd /path/to/ecokart-webshop
 
 # Prüfe welche neuen Dateien erstellt wurden
 git status
@@ -212,7 +212,7 @@ git push origin main
 Jetzt kommt der Moment der Wahrheit!
 
 **7.1 Gehe zu GitHub Actions:**
-https://github.com/AndySchlegel/Ecokart-Webshop/actions
+https://github.com/AndySchlegel/ecokart-webshop/actions
 
 **7.2 Du solltest sehen:**
 - ✅ Ein neuer Workflow: `Deploy Ecokart Infrastructure`
@@ -293,7 +293,7 @@ git push origin develop
 Du kannst auch manuell deployen:
 
 **Gehe zu:**
-https://github.com/AndySchlegel/Ecokart-Webshop/actions/workflows/deploy.yml
+https://github.com/AndySchlegel/ecokart-webshop/actions/workflows/deploy.yml
 
 **Klicke:** `Run workflow`
 

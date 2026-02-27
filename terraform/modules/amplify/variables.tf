@@ -22,7 +22,7 @@ variable "app_name" {
 # ----------------------------------------------------------------------------
 
 variable "repository" {
-  description = "GitHub Repository URL (vollständige HTTPS URL, z.B. 'https://github.com/AndySchlegel/Ecokart-Webshop')"
+  description = "GitHub Repository URL (vollständige HTTPS URL, z.B. 'https://github.com/AndySchlegel/ecokart-webshop')"
   type        = string
 
   validation {

@@ -748,11 +748,11 @@ its original provider configuration at module.ecokart.provider["..."] is require
 **Kompletter manueller Cleanup via AWS CLI:**
 ```bash
 # 1. Korrupten State löschen
-aws s3 rm s3://ecokart-terraform-state-729403197965/development/terraform.tfstate
+aws s3 rm s3://ecokart-terraform-state-805160323349/development/terraform.tfstate
 
 # 2. Alle Lock-Entries löschen
 aws dynamodb delete-item --table-name ecokart-terraform-state-lock \
-  --key '{"LockID": {"S": "ecokart-terraform-state-729403197965/development/terraform.tfstate"}}'
+  --key '{"LockID": {"S": "ecokart-terraform-state-805160323349/development/terraform.tfstate"}}'
 
 # 3. ALLE AWS Ressourcen manuell löschen:
 # - 4 DynamoDB Tables (products, users, carts, orders)
@@ -994,7 +994,7 @@ State-File existiert, aber Terraform init schlägt fehl mit "expected content" E
 ```yaml
 - name: 🧹 Force Clear State & Lock
   run: |
-    BUCKET_NAME="ecokart-terraform-state-729403197965"
+    BUCKET_NAME="ecokart-terraform-state-805160323349"
     STATE_KEY="development/terraform.tfstate"
     LOCK_TABLE="ecokart-terraform-state-lock"
     LOCK_ID="$BUCKET_NAME/$STATE_KEY"
@@ -4112,10 +4112,10 @@ enable_admin_amplify = true   ✅
 ```hcl
 # FALSCH:
 github_owner = "AndySchlegel"  ❌
-github_repo  = "Ecokart-Webshop"  ❌
+github_repo  = "ecokart-webshop"  ❌
 
 # RICHTIG:
-github_repository = "https://github.com/AndySchlegel/Ecokart-Webshop"  ✅
+github_repository = "https://github.com/AndySchlegel/ecokart-webshop"  ✅
 
 # Basic Auth (Amplify requires min 7 chars):
 admin_basic_auth_password = "admin1234"  ✅ (nicht "admin" ❌)

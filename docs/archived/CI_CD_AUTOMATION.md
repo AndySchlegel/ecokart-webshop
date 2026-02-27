@@ -280,7 +280,7 @@ jobs:
 # Siehe: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
 
 # 2. In GitHub Repository → Settings → Secrets and variables → Actions:
-# Neues Secret: AWS_ROLE_ARN = arn:aws:iam::729403197965:role/GitHubActionsRole
+# Neues Secret: AWS_ROLE_ARN = arn:aws:iam::805160323349:role/GitHubActionsRole
 ```
 
 ---

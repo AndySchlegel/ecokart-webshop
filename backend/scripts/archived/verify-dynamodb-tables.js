@@ -94,7 +94,7 @@ async function verifyTables() {
 
     if (error.name === 'CredentialsProviderError') {
       console.log('\n💡 Tip: Make sure you\'re logged in to AWS SSO:');
-      console.log('   aws sso login --profile Teilnehmer-729403197965\n');
+      console.log('   aws sso login --profile Teilnehmer-805160323349\n');
     }
 
     process.exit(1);

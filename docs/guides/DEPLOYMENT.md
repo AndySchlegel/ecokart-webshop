@@ -25,7 +25,7 @@ Ecokart nutzt ein **100% reproduzierbares Deployment-System**:
 git push origin develop  # → Auto-deploys to development
 
 # 2. Beobachte Deployment
-# https://github.com/AndySchlegel/Ecokart-Webshop/actions
+# https://github.com/AndySchlegel/ecokart-webshop/actions
 
 # 3. URLs checken (nach ~8-10 Minuten)
 # - Customer Shop: https://main.dyoqwczz7hfmn.amplifyapp.com
@@ -37,7 +37,7 @@ git push origin develop  # → Auto-deploys to development
 
 ```bash
 # 1. Gehe zu GitHub Actions
-# https://github.com/AndySchlegel/Ecokart-Webshop/actions
+# https://github.com/AndySchlegel/ecokart-webshop/actions
 
 # 2. Wähle Workflow: "Destroy Infrastructure"
 # 3. Klicke "Run workflow"
@@ -69,7 +69,7 @@ aws lambda list-functions --region eu-north-1 | grep ecokart
 
 ```bash
 # 1. Gehe zu GitHub Actions
-https://github.com/AndySchlegel/Ecokart-Webshop/actions
+https://github.com/AndySchlegel/ecokart-webshop/actions
 
 # 2. Wähle Workflow: "Bootstrap OIDC Infrastructure"
 # 3. Klicke "Run workflow"
@@ -101,7 +101,7 @@ terraform init
 terraform apply
 
 # 4. Copy Output (für GitHub Secret)
-# github_actions_role_arn = "arn:aws:iam::729403197965:role/ecokart-github-actions-role"
+# github_actions_role_arn = "arn:aws:iam::805160323349:role/ecokart-github-actions-role"
 ```
 
 ### 2. GitHub Personal Access Token Setup
@@ -147,13 +147,13 @@ aws ssm get-parameter \
 
 ```bash
 # 1. Öffne im Browser:
-https://github.com/AndySchlegel/Ecokart-Webshop/settings/secrets/actions
+https://github.com/AndySchlegel/ecokart-webshop/settings/secrets/actions
 
 # 2. Klicke "New repository secret"
 
 # 3. Fülle aus:
 # - Name: AWS_ROLE_ARN
-# - Secret: arn:aws:iam::729403197965:role/ecokart-github-actions-role
+# - Secret: arn:aws:iam::805160323349:role/ecokart-github-actions-role
 
 # 4. Klicke "Add secret"
 ```
@@ -169,7 +169,7 @@ git commit -m "Initial deployment setup"
 git push origin develop
 
 # 3. Beobachte Deployment
-https://github.com/AndySchlegel/Ecokart-Webshop/actions
+https://github.com/AndySchlegel/ecokart-webshop/actions
 
 # 4. Warte ~8-10 Minuten
 
@@ -277,7 +277,7 @@ terraform output
 
 ```bash
 # 1. Gehe zu GitHub Actions
-https://github.com/AndySchlegel/Ecokart-Webshop/actions
+https://github.com/AndySchlegel/ecokart-webshop/actions
 
 # 2. Wähle Workflow: "Nuclear Cleanup - Delete Everything"
 
@@ -306,7 +306,7 @@ https://github.com/AndySchlegel/Ecokart-Webshop/actions
 
 ```bash
 # 1. Gehe zu GitHub Actions
-https://github.com/AndySchlegel/Ecokart-Webshop/actions
+https://github.com/AndySchlegel/ecokart-webshop/actions
 
 # 2. Wähle Workflow: "Destroy Infrastructure"
 
@@ -425,7 +425,7 @@ cd terraform
 terraform output
 
 # Option 2: Aus GitHub Actions Workflow Summary
-# https://github.com/AndySchlegel/Ecokart-Webshop/actions
+# https://github.com/AndySchlegel/ecokart-webshop/actions
 # → Letzter Deploy Run → Summary Tab
 ```
 
@@ -566,7 +566,7 @@ npm run build
 # Lösung 1: Via AWS CLI (schnell)
 aws dynamodb delete-item \
   --table-name ecokart-terraform-state-lock \
-  --key '{"LockID": {"S": "ecokart-terraform-state-729403197965/development/terraform.tfstate"}}' \
+  --key '{"LockID": {"S": "ecokart-terraform-state-805160323349/development/terraform.tfstate"}}' \
   --region eu-north-1
 
 # Lösung 2: Via Terraform (langsam)

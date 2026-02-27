@@ -9,7 +9,7 @@ variable "role_name" {
 }
 
 variable "github_repo" {
-  description = "GitHub repository in format 'owner/repo' (e.g., 'AndySchlegel/Ecokart-Webshop')"
+  description = "GitHub repository in format 'owner/repo' (e.g., 'AndySchlegel/ecokart-webshop')"
   type        = string
 }
 

@@ -32,7 +32,7 @@ aws sso login
 aws sts get-caller-identity
 ```
 
-**Erwarte:** Deine Account ID `729403197965` wird angezeigt
+**Erwarte:** Deine Account ID `805160323349` wird angezeigt
 
 ---
 
@@ -53,7 +53,7 @@ terraform apply
 
 **WICHTIG:** Kopiere die Ausgabe:
 ```
-github_actions_role_arn = "arn:aws:iam::729403197965:role/ecokart-github-actions-role"
+github_actions_role_arn = "arn:aws:iam::805160323349:role/ecokart-github-actions-role"
 ```
 
 ---
@@ -102,13 +102,13 @@ aws ssm get-parameter \
 ### ✅ Schritt 5: GitHub Secret (1 Minute)
 
 **Öffne im Browser:**
-https://github.com/AndySchlegel/Ecokart-Webshop/settings/secrets/actions
+https://github.com/AndySchlegel/ecokart-webshop/settings/secrets/actions
 
 **Klicke:** `New repository secret`
 
 **Fülle aus:**
 - Name: `AWS_ROLE_ARN`
-- Secret: `arn:aws:iam::729403197965:role/ecokart-github-actions-role`
+- Secret: `arn:aws:iam::805160323349:role/ecokart-github-actions-role`
 
 **Klicke:** `Add secret`
 
@@ -145,7 +145,7 @@ git push origin claude/review-documentation-01Hi3Exv7MvFRzHEo57Edhek
 ### ✅ Schritt 7: Ersten Deployment beobachten! 🎉
 
 **Öffne im Browser:**
-https://github.com/AndySchlegel/Ecokart-Webshop/actions
+https://github.com/AndySchlegel/ecokart-webshop/actions
 
 **Du solltest sehen:**
 - ✅ Workflow: `Deploy Ecokart Infrastructure`

@@ -60,7 +60,7 @@ enable_api_gateway_access_logs = false  # Auf true setzen für Production
 enable_amplify = false
 
 # Falls enable_amplify = true, folgende Werte setzen:
-# github_repository   = "username/Ecokart-Webshop"
+# github_repository   = "username/ecokart-webshop"
 # github_branch       = "main"
 # github_access_token = "ghp_YourGitHubPersonalAccessToken"
 

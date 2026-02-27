@@ -5,7 +5,7 @@
 variable "aws_account_id" {
   description = "AWS Account ID"
   type        = string
-  default     = "729403197965"
+  default     = "805160323349"
 }
 
 variable "aws_region" {
@@ -23,7 +23,7 @@ variable "project_name" {
 variable "github_repo" {
   description = "GitHub repository in format 'owner/repo'"
   type        = string
-  default     = "AndySchlegel/Ecokart-Webshop"
+  default     = "AndySchlegel/ecokart-webshop"
 }
 
 variable "environment" {

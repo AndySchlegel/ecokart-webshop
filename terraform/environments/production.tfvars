@@ -54,7 +54,7 @@ enable_api_gateway_access_logs = true
 # ----------------------------------------------------------------------------
 
 enable_amplify    = true
-github_repository = "https://github.com/AndySchlegel/Ecokart-Webshop"
+github_repository = "https://github.com/AndySchlegel/ecokart-webshop"
 github_branch     = "main"  # WICHTIG: Production Branch!
 
 # Basic Auth - NUR FÜR SOFT-LAUNCH!

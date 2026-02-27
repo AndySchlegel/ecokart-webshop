@@ -50,7 +50,7 @@ enable_api_gateway_access_logs = false
 # ----------------------------------------------------------------------------
 
 enable_amplify    = true
-github_repository = "https://github.com/AndySchlegel/Ecokart-Webshop"
+github_repository = "https://github.com/AndySchlegel/ecokart-webshop"
 github_branch     = "develop"  # WICHTIG: Dieser Branch!
 amplify_framework = "Next.js - SSR"
 amplify_build_command = "npm run build"

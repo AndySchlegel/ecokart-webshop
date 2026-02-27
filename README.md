@@ -47,22 +47,22 @@ AIR LEGACY is a full-stack e-commerce platform built to demonstrate:
 
 ### Project Goals
 
-1. ✅ Build production-ready e-commerce platform on AWS
-2. ✅ Demonstrate Infrastructure as Code mastery (Terraform)
-3. ✅ Showcase full-stack development skills (Next.js + Express.js + TypeScript)
-4. ✅ Implement modern DevOps practices (CI/CD, automated testing, monitoring)
-5. ✅ Document architectural decisions and learnings (39 documented learnings)
+1. [x] Build production-ready e-commerce platform on AWS
+2. [x] Demonstrate Infrastructure as Code mastery (Terraform)
+3. [x] Showcase full-stack development skills (Next.js + Express.js + TypeScript)
+4. [x] Implement modern DevOps practices (CI/CD, automated testing, monitoring)
+5. [x] Document architectural decisions and learnings (39 documented learnings)
 
 ### Why This Project Stands Out
 
 **Portfolio Differentiators:**
-- ✅ **100% Reproducible** - Complete infrastructure in Terraform, auto-seeding included
-- ✅ **Multi-Environment** - Dev, Staging, Production with branch-based deployments
-- ✅ **Real Payments** - Stripe integration with webhooks (not a mock)
-- ✅ **Email Integration** - Resend for transactional emails (production-ready)
-- ✅ **Automated Testing** - 63 unit tests, 60-69% coverage
-- ✅ **CloudWatch Monitoring** - 9 alarms for proactive issue detection
-- ✅ **Documented Journey** - 39 learnings from real implementation challenges
+- [x] **100% Reproducible** - Complete infrastructure in Terraform, auto-seeding included
+- [x] **Multi-Environment** - Dev, Staging, Production with branch-based deployments
+- [x] **Real Payments** - Stripe integration with webhooks (not a mock)
+- [x] **Email Integration** - Resend for transactional emails (production-ready)
+- [x] **Automated Testing** - 63 unit tests, 60-69% coverage
+- [x] **CloudWatch Monitoring** - 9 alarms for proactive issue detection
+- [x] **Documented Journey** - 39 learnings from real implementation challenges
 
 ---
 
@@ -458,7 +458,7 @@ All security findings are automatically uploaded to the **GitHub Security Tab** 
 - Centralized security dashboard
 - Code scanning alerts
 - Security trend tracking
-- ✅ PR blocking on critical findings (configurable)
+- [x] PR blocking on critical findings (configurable)
 
 #### Security Configuration
 
@@ -474,19 +474,19 @@ All security findings are automatically uploaded to the **GitHub Security Tab** 
 
 #### View Security Results
 
-- **GitHub Security Tab**: `https://github.com/AndySchlegel/Ecokart-Webshop/security`
+- **GitHub Security Tab**: `https://github.com/AndySchlegel/ecokart-webshop/security`
 - **Workflow Runs**: Actions → Security Scanning
 - **PR Checks**: Automated comments on pull requests
 
 #### Security Best Practices Implemented
 
-- ✅ No secrets in git history (verified by Trufflehog)
-- ✅ Terraform security best practices (tfsec validated)
-- ✅ Infrastructure policy compliance (Checkov validated)
-- ✅ HTTPS everywhere (ACM certificates)
-- ✅ Encryption at rest (DynamoDB, S3)
-- ✅ Least privilege IAM (minimal permissions)
-- ✅ VPC isolation (future enhancement planned)
+- [x] No secrets in git history (verified by Trufflehog)
+- [x] Terraform security best practices (tfsec validated)
+- [x] Infrastructure policy compliance (Checkov validated)
+- [x] HTTPS everywhere (ACM certificates)
+- [x] Encryption at rest (DynamoDB, S3)
+- [x] Least privilege IAM (minimal permissions)
+- [x] VPC isolation (future enhancement planned)
 
 **Cost:** $0.00/month (GitHub Actions free tier)
 
@@ -509,10 +509,10 @@ This project implements **24/7 automated security monitoring** for the productio
 #### Daily Security Compliance Scan (8 AM UTC)
 
 **Lambda Security Monitor** performs automated daily checks:
-- ✅ **Public S3 Buckets** - Ensures no buckets are publicly accessible
-- ✅ **Security Groups with 0.0.0.0/0** - Detects overly permissive firewall rules
-- ✅ **IAM Users without MFA** - Enforces multi-factor authentication
-- ✅ **IAM Access Analyzer** - Detects resources shared outside account
+- [x] **Public S3 Buckets** - Ensures no buckets are publicly accessible
+- [x] **Security Groups with 0.0.0.0/0** - Detects overly permissive firewall rules
+- [x] **IAM Users without MFA** - Enforces multi-factor authentication
+- [x] **IAM Access Analyzer** - Detects resources shared outside account
 
 **Email Reports:** Daily summary (only sends if issues found)
 
@@ -609,8 +609,8 @@ Topics covered:
 #### 1. Clone Repository
 
 ```bash
-git clone https://github.com/AndySchlegel/Ecokart-Webshop.git
-cd Ecokart-Webshop
+git clone https://github.com/AndySchlegel/ecokart-webshop.git
+cd ecokart-webshop
 ```
 
 #### 2. Backend Setup
@@ -741,7 +741,7 @@ npm run dev
 
    # Amplify (optional)
    enable_amplify         = true
-   github_repository      = "https://github.com/AndySchlegel/Ecokart-Webshop"
+   github_repository      = "https://github.com/AndySchlegel/ecokart-webshop"
    github_access_token    = "ghp_..."
 
    # Custom Domains (optional)
@@ -820,51 +820,51 @@ npm run dev
 
 | Metric | Status | Details |
 |--------|--------|---------|
-| **Deployment** | ✅ Automated | GitHub Actions CI/CD |
-| **Authentication** | ✅ Production-Ready | AWS Cognito JWT |
-| **Payments** | ✅ Complete | Stripe Checkout + Webhooks |
-| **Email Notifications** | ✅ Production-Ready | Resend (3k emails/month) |
-| **Inventory Management** | ✅ Working | Reserved/Available stock tracking |
-| **CloudWatch Monitoring** | ✅ Active | 9 alarms configured |
-| **Unit Tests** | ✅ 63 passing | 60-69% coverage |
-| **E2E Tests** | ✅ 63 passing | Jest + integration tests |
-| **AWS Monthly Cost** | ✅ <$15 | Cost-optimized architecture |
-| **Documentation** | ✅ Excellent | 39 documented learnings |
-| **Last Deploy** | ✅ 2. Jan 2026 | Develop branch |
+| **Deployment** | Automated | GitHub Actions CI/CD |
+| **Authentication** | Production-Ready | AWS Cognito JWT |
+| **Payments** | Complete | Stripe Checkout + Webhooks |
+| **Email Notifications** | Production-Ready | Resend (3k emails/month) |
+| **Inventory Management** | Working | Reserved/Available stock tracking |
+| **CloudWatch Monitoring** | Active | 9 alarms configured |
+| **Unit Tests** | 63 passing | 60-69% coverage |
+| **E2E Tests** | 63 passing | Jest + integration tests |
+| **AWS Monthly Cost** | <$15 | Cost-optimized architecture |
+| **Documentation** | Excellent | 39 documented learnings |
+| **Last Deploy** | 2. Jan 2026 | Develop branch |
 
 ### Feature Completeness
 
 **Core Features (100% Complete):**
-- ✅ User Registration & Authentication (Cognito)
-- ✅ Product Catalog with Stock Management
-- ✅ Shopping Cart (persistent, DynamoDB-backed)
-- ✅ Quantity Selector (stock-aware with warnings at 80% stock)
-- ✅ Secure Checkout (Stripe integration)
-- ✅ Order Management (webhook-driven)
-- ✅ Email Notifications (Resend API with professional HTML templates)
-- ✅ User Profile (personal info, order stats, favorites)
-- ✅ Order History (complete order tracking for customers)
-- ✅ Admin Dashboard (modern card-based UI with iOS-style navigation)
-- ✅ Admin Analytics (7-day and 30-day views with trends)
-- ✅ Stock Reservation System (prevent overselling)
-- ✅ Security Monitoring (5 CloudWatch Alarms + daily compliance scans)
-- ✅ CloudWatch Monitoring (9 alarms)
+- [x] User Registration & Authentication (Cognito)
+- [x] Product Catalog with Stock Management
+- [x] Shopping Cart (persistent, DynamoDB-backed)
+- [x] Quantity Selector (stock-aware with warnings at 80% stock)
+- [x] Secure Checkout (Stripe integration)
+- [x] Order Management (webhook-driven)
+- [x] Email Notifications (Resend API with professional HTML templates)
+- [x] User Profile (personal info, order stats, favorites)
+- [x] Order History (complete order tracking for customers)
+- [x] Admin Dashboard (modern card-based UI with iOS-style navigation)
+- [x] Admin Analytics (7-day and 30-day views with trends)
+- [x] Stock Reservation System (prevent overselling)
+- [x] Security Monitoring (5 CloudWatch Alarms + daily compliance scans)
+- [x] CloudWatch Monitoring (9 alarms)
 
 **Phase 2 Features (Completed):**
-- ✅ Security Scanning (tfsec, Checkov, Trufflehog)
-- ✅ Runtime Security Monitoring (CloudWatch + Lambda)
-- ✅ Real-time Dashboard Analytics (7d and 30d views)
-- ✅ Order History for Customers (My Orders page)
-- ✅ User Profile Management
-- ✅ Admin UI Redesign (modern card-based layout)
-- ✅ Quantity Selector (pre-cart quantity selection)
+- [x] Security Scanning (tfsec, Checkov, Trufflehog)
+- [x] Runtime Security Monitoring (CloudWatch + Lambda)
+- [x] Real-time Dashboard Analytics (7d and 30d views)
+- [x] Order History for Customers (My Orders page)
+- [x] User Profile Management
+- [x] Admin UI Redesign (modern card-based layout)
+- [x] Quantity Selector (pre-cart quantity selection)
 
 **Future Enhancements (Nice-to-Have):**
-- ⏳ E2E Testing (Playwright)
-- ⏳ Product Search & Filtering (advanced)
-- ⏳ PWA Features (Progressive Web App)
-- ⏳ Product Reviews & Ratings
-- ⏳ Wishlist Feature
+- [ ] E2E Testing (Playwright)
+- [ ] Product Search & Filtering (advanced)
+- [ ] PWA Features (Progressive Web App)
+- [ ] Product Reviews & Ratings
+- [ ] Wishlist Feature
 
 ---
 
@@ -898,12 +898,12 @@ npm run dev
 
 ### Cost Optimization Strategies
 
-- ✅ **Serverless** = Pay-per-use (no idle costs)
-- ✅ **DynamoDB Provisioned** mode (cheaper than on-demand for steady traffic)
-- ✅ **CloudFront Caching** (reduces origin requests)
-- ✅ **S3 Lifecycle Policies** (delete old versions after 30 days)
-- ✅ **No NAT Gateway** or EC2 instances
-- ✅ **Resend Free Tier** (3K emails vs. SendGrid 100/day)
+- [x] **Serverless** = Pay-per-use (no idle costs)
+- [x] **DynamoDB Provisioned** mode (cheaper than on-demand for steady traffic)
+- [x] **CloudFront Caching** (reduces origin requests)
+- [x] **S3 Lifecycle Policies** (delete old versions after 30 days)
+- [x] **No NAT Gateway** or EC2 instances
+- [x] **Resend Free Tier** (3K emails vs. SendGrid 100/day)
 
 ### Cost Monitoring
 
@@ -1102,9 +1102,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Andy Schlegel**
 Cloud Engineer | Full-Stack Developer | DevOps Enthusiast
 
-- 🌐 Blog: [blog.his4irness23.de](https://blog.his4irness23.de) *(launching March 2026)*
-- 💼 LinkedIn: [Andy Schlegel](https://linkedin.com/in/andy-schlegel-4874852bb)
-- 🐙 GitHub: [@AndySchlegel](https://github.com/AndySchlegel)
+- Blog: [blog.his4irness23.de](https://blog.his4irness23.de) *(launching March 2026)*
+- LinkedIn: [Andy Schlegel](https://linkedin.com/in/andy-schlegel-4874852bb)
+- GitHub: [@AndySchlegel](https://github.com/AndySchlegel)
 - Email: andy.schlegel@chakademie.org
 
 ---
@@ -1137,7 +1137,7 @@ Cloud Engineer | Full-Stack Developer | DevOps Enthusiast
 
 ---
 
-**Project Status:** ✅ Production-Ready (Phase 2 Complete!)
+**Project Status:** Production-Ready (Phase 2 Complete!)
 **Last Updated:** 21. Januar 2026
 **Environment:** Development (Deployed)
 **AWS Region:** eu-central-1 (Frankfurt)
@@ -1148,17 +1148,17 @@ Cloud Engineer | Full-Stack Developer | DevOps Enthusiast
 
 ### What's Next?
 
-**Phase 2: Portfolio & Showcase Excellence** ✅ **COMPLETED!**
+**Phase 2: Portfolio & Showcase Excellence** - **COMPLETED!**
 
 Completed Features:
-- ✅ Security Scanning Integration (tfsec, Checkov, Trufflehog)
-- ✅ Runtime Security Monitoring (CloudWatch + Lambda)
-- ✅ Real-time Dashboard Analytics (7d and 30d views)
-- ✅ Quantity Selector Implementation (stock-aware)
-- ✅ Interactive Architecture Diagram (3-Tab Presentation)
-- ✅ User Profile & Order History
-- ✅ Admin UI Redesign (modern card-based layout)
-- ✅ Resend Email Integration (professional HTML templates)
+- [x] Security Scanning Integration (tfsec, Checkov, Trufflehog)
+- [x] Runtime Security Monitoring (CloudWatch + Lambda)
+- [x] Real-time Dashboard Analytics (7d and 30d views)
+- [x] Quantity Selector Implementation (stock-aware)
+- [x] Interactive Architecture Diagram (3-Tab Presentation)
+- [x] User Profile & Order History
+- [x] Admin UI Redesign (modern card-based layout)
+- [x] Resend Email Integration (professional HTML templates)
 
 **Future Enhancements (Optional):**
 - E2E Testing with Playwright

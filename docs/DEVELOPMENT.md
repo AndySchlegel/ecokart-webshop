@@ -84,7 +84,7 @@ Ecokart ist eine **vollständig serverlose E-Commerce-Plattform** auf AWS mit fo
 ## Repository-Struktur
 
 ```
-Ecokart-Webshop/
+ecokart-webshop/
 │
 ├── frontend/                      # Customer Shop (Next.js 15)
 │   ├── app/
@@ -219,8 +219,8 @@ Ecokart-Webshop/
 
 **1. Repository clonen**
 ```bash
-git clone https://github.com/AndySchlegel/Ecokart-Webshop.git
-cd Ecokart-Webshop
+git clone https://github.com/AndySchlegel/ecokart-webshop.git
+cd ecokart-webshop
 ```
 
 **2. Dependencies installieren**
@@ -757,7 +757,7 @@ Production:  https://zzz.execute-api.eu-north-1.amazonaws.com/Prod
 ### Option 1: Via GitHub Actions (Empfohlen)
 
 ```
-1. Go to: https://github.com/AndySchlegel/Ecokart-Webshop/actions
+1. Go to: https://github.com/AndySchlegel/ecokart-webshop/actions
 2. Select: "Deploy Ecokart Infrastructure"
 3. Click: "Run workflow"
 4. Choose:

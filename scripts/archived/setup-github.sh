@@ -27,12 +27,12 @@ if [ -z "$REMOTE" ]; then
 
   echo "Erstelle zuerst ein Repository auf GitHub:"
   echo "1. Gehe zu https://github.com/new"
-  echo "2. Repository Name: Ecokart-Webshop"
+  echo "2. Repository Name: ecokart-webshop"
   echo "3. Private oder Public (deine Wahl)"
   echo "4. NICHT initialisieren mit README"
   echo ""
   echo "Wenn fertig, gib die Repository URL ein:"
-  echo "(z.B. https://github.com/username/Ecokart-Webshop.git)"
+  echo "(z.B. https://github.com/username/ecokart-webshop.git)"
   echo ""
   read -p "Repository URL: " REPO_URL
 

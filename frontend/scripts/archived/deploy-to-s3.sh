@@ -20,7 +20,7 @@ if [ -z "$1" ]; then
 fi
 
 BUCKET_NAME=$1
-PROFILE=${AWS_PROFILE:-"Teilnehmer-729403197965"}
+PROFILE=${AWS_PROFILE:-"Teilnehmer-805160323349"}
 REGION=${AWS_REGION:-"eu-north-1"}
 
 echo -e "${YELLOW}🚀 Deploying Frontend to S3...${NC}\n"

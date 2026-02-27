@@ -159,7 +159,7 @@ module "ecokart" {
 module "ecokart" {
   # ...
   enable_amplify      = true
-  github_repository   = "username/Ecokart-Webshop"
+  github_repository   = "username/ecokart-webshop"
   github_branch       = "main"
   github_access_token = var.github_access_token
 }

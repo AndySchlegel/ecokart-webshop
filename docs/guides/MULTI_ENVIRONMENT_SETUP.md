@@ -441,7 +441,7 @@ git branch
 # Sollte zeigen: * develop
 
 # 2. Check: GitHub Actions Log
-# Gehe zu: https://github.com/AndySchlegel/Ecokart-Webshop/actions
+# Gehe zu: https://github.com/AndySchlegel/ecokart-webshop/actions
 # Klicke auf letzten Workflow-Run
 # Suche nach: "🎯 Deploying to: ???"
 # Sollte zeigen: development

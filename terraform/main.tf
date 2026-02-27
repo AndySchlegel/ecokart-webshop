@@ -52,7 +52,7 @@ locals {
 #   source = "./modules/github-actions-role"
 #
 #   role_name   = "ecokart-github-actions-role"
-#   github_repo = "AndySchlegel/Ecokart-Webshop"
+#   github_repo = "AndySchlegel/ecokart-webshop"
 #   aws_region  = var.aws_region
 #
 #   tags = local.common_tags

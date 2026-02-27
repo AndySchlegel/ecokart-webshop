@@ -188,13 +188,13 @@ variable "enable_amplify" {
 }
 
 variable "github_repository" {
-  description = "GitHub Repository URL (z.B. 'https://github.com/AndySchlegel/Ecokart-Webshop')"
+  description = "GitHub Repository URL (z.B. 'https://github.com/AndySchlegel/ecokart-webshop')"
   type        = string
   default     = ""
 
   validation {
     condition     = can(regex("^https://github\\.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$", var.github_repository)) || var.github_repository == ""
-    error_message = "Repository muss eine vollständige GitHub URL sein (z.B. 'https://github.com/AndySchlegel/Ecokart-Webshop')"
+    error_message = "Repository muss eine vollständige GitHub URL sein (z.B. 'https://github.com/AndySchlegel/ecokart-webshop')"
   }
 }
 

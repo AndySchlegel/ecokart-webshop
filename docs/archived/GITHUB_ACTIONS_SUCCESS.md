@@ -79,7 +79,7 @@
 **Komponenten:**
 - **OIDC Provider:** Vertraut GitHub's Token-System
 - **IAM Role:** `ecokart-github-actions-role`
-- **Trust Policy:** Erlaubt nur dem Repository `AndySchlegel/Ecokart-Webshop`
+- **Trust Policy:** Erlaubt nur dem Repository `AndySchlegel/ecokart-webshop`
 
 **8 IAM Policies mit granularen Berechtigungen:**
 
@@ -199,7 +199,7 @@ Löscht **ALLE** Amplify Apps in der Region. Nützlich zum Aufräumen alter/kapu
 
 **Via GitHub Actions:**
 ```
-1. Gehe zu: https://github.com/AndySchlegel/Ecokart-Webshop/actions
+1. Gehe zu: https://github.com/AndySchlegel/ecokart-webshop/actions
 2. Klicke "Deploy Infrastructure"
 3. Klicke "Run workflow" → "Run workflow"
 4. Warten (~10-12 Min)
@@ -214,7 +214,7 @@ Löscht **ALLE** Amplify Apps in der Region. Nützlich zum Aufräumen alter/kapu
 ### Infrastructure Destruction (Automated)
 **Via GitHub Actions Destroy Workflow:**
 ```
-1. Gehe zu: https://github.com/AndySchlegel/Ecokart-Webshop/actions/workflows/destroy.yml
+1. Gehe zu: https://github.com/AndySchlegel/ecokart-webshop/actions/workflows/destroy.yml
 2. Klicke "Run workflow"
 3. Tippe "destroy" ins Bestätigungsfeld
 4. ✅ "Also delete Amplify apps?" → true (empfohlen)
@@ -421,7 +421,7 @@ aws iam delete-role --role-name ecokart-development-api-exec-role
 ## 📚 Wichtige Dateien
 
 ```
-Ecokart-Webshop/
+ecokart-webshop/
 ├── .github/workflows/
 │   ├── deploy.yml                          # Deploy Workflow (automatisch)
 │   └── destroy.yml                         # Destroy Workflow (manuell)
@@ -450,7 +450,7 @@ Ecokart-Webshop/
 
 **Bei Problemen:**
 1. Check Troubleshooting-Sektion oben
-2. Schaue in GitHub Actions Logs: https://github.com/AndySchlegel/Ecokart-Webshop/actions
+2. Schaue in GitHub Actions Logs: https://github.com/AndySchlegel/ecokart-webshop/actions
 3. AWS CloudWatch Logs: `/aws/lambda/ecokart-development-api`
 
 **Erfolgreich deployed?** 🎉

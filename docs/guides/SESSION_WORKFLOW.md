@@ -39,7 +39,7 @@ cat docs/SESSION_NOTES.txt  # Deine persönlichen Notizen
 **Option A: Via GitHub Actions (empfohlen!)**
 
 ```
-1. Gehe zu: https://github.com/AndySchlegel/Ecokart-Webshop/actions
+1. Gehe zu: https://github.com/AndySchlegel/ecokart-webshop/actions
 2. Klicke: "Deploy Ecokart Infrastructure"
 3. Klicke: "Run workflow"
 4. Wähle:
@@ -160,7 +160,7 @@ Offene Probleme:
 **WICHTIG: Immer destroyen vor Session-Ende!** 💰
 
 ```
-1. Gehe zu: https://github.com/AndySchlegel/Ecokart-Webshop/actions
+1. Gehe zu: https://github.com/AndySchlegel/ecokart-webshop/actions
 2. Klicke: "Destroy Infrastructure"
 3. Klicke: "Run workflow"
 4. Eingaben:

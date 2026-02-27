@@ -40,12 +40,12 @@ export default function Footer() {
           <h4>Projekt</h4>
           <ul>
             <li>
-              <a href="https://github.com/AndySchlegel/Ecokart-Webshop" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/AndySchlegel/ecokart-webshop" target="_blank" rel="noopener noreferrer">
                 GitHub
               </a>
             </li>
             <li>
-              <a href="https://github.com/AndySchlegel/Ecokart-Webshop#readme" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/AndySchlegel/ecokart-webshop#readme" target="_blank" rel="noopener noreferrer">
                 Dokumentation
               </a>
             </li>

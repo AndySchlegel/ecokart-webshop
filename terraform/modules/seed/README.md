@@ -75,7 +75,7 @@ node --version  # Sollte v20.x.x sein
 ```hcl
 module "database_seeding" {
   # ...
-  aws_profile = "Teilnehmer-729403197965"
+  aws_profile = "Teilnehmer-805160323349"
 }
 ```
 

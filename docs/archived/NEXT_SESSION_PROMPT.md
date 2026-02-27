@@ -31,7 +31,7 @@ fb80e1a - fix: Correct URL construction in PUT route and add debug logging
 
 **Merge-URL:**
 ```
-https://github.com/AndySchlegel/Ecokart-Webshop/compare/main...claude/admin-stock-management-015aciWWHqNcb14KFAQpRcM6
+https://github.com/AndySchlegel/ecokart-webshop/compare/main...claude/admin-stock-management-015aciWWHqNcb14KFAQpRcM6
 ```
 
 **Schritte:**
@@ -57,7 +57,7 @@ git checkout -b develop origin/develop
 #### 3. Infrastructure Re-Deploy (optional)
 Falls du testen willst:
 ```
-https://github.com/AndySchlegel/Ecokart-Webshop/actions/workflows/deploy.yml
+https://github.com/AndySchlegel/ecokart-webshop/actions/workflows/deploy.yml
 → Run workflow
 → Branch: main (nach Merge!)
 → Environment: development
@@ -74,7 +74,7 @@ Trotz des Auto-Cleanup-Steps in `.github/workflows/destroy.yml` musste die Lambd
 **Workaround:**
 Nach jedem Destroy den Lambda-Cleanup-Workflow manuell ausführen:
 ```
-https://github.com/AndySchlegel/Ecokart-Webshop/actions/workflows/cleanup-lambda.yml
+https://github.com/AndySchlegel/ecokart-webshop/actions/workflows/cleanup-lambda.yml
 → Run workflow
 → Lambda name: ecokart-development-api
 ```
@@ -184,9 +184,9 @@ Details siehe: docs/SESSION_INVENTORY_MANAGEMENT.md
 
 ## 🔗 Quick Links
 
-- **Repo:** https://github.com/AndySchlegel/Ecokart-Webshop
-- **Actions:** https://github.com/AndySchlegel/Ecokart-Webshop/actions
-- **Branch Compare:** https://github.com/AndySchlegel/Ecokart-Webshop/compare/main...claude/admin-stock-management-015aciWWHqNcb14KFAQpRcM6
+- **Repo:** https://github.com/AndySchlegel/ecokart-webshop
+- **Actions:** https://github.com/AndySchlegel/ecokart-webshop/actions
+- **Branch Compare:** https://github.com/AndySchlegel/ecokart-webshop/compare/main...claude/admin-stock-management-015aciWWHqNcb14KFAQpRcM6
 - **Session Docs:** `docs/SESSION_INVENTORY_MANAGEMENT.md`
 - **Customer URL:** https://main.dyoqwczz7hfmn.amplifyapp.com
 - **Admin URL:** https://main.d3ds92499cafzo.amplifyapp.com

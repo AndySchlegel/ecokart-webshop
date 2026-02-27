@@ -69,20 +69,20 @@ terraform {
 # 1. S3 Bucket erstellen:
 # -----------------------
 # aws s3api create-bucket \
-#   --bucket ecokart-terraform-state-729403197965 \
+#   --bucket ecokart-terraform-state-805160323349 \
 #   --region eu-north-1 \
 #   --create-bucket-configuration LocationConstraint=eu-north-1
 #
 # 2. S3 Versioning aktivieren:
 # -----------------------------
 # aws s3api put-bucket-versioning \
-#   --bucket ecokart-terraform-state-729403197965 \
+#   --bucket ecokart-terraform-state-805160323349 \
 #   --versioning-configuration Status=Enabled
 #
 # 3. S3 Encryption aktivieren:
 # -----------------------------
 # aws s3api put-bucket-encryption \
-#   --bucket ecokart-terraform-state-729403197965 \
+#   --bucket ecokart-terraform-state-805160323349 \
 #   --server-side-encryption-configuration '{
 #     "Rules": [{
 #       "ApplyServerSideEncryptionByDefault": {
@@ -94,7 +94,7 @@ terraform {
 # 4. S3 Public Access blockieren:
 # --------------------------------
 # aws s3api put-public-access-block \
-#   --bucket ecokart-terraform-state-729403197965 \
+#   --bucket ecokart-terraform-state-805160323349 \
 #   --public-access-block-configuration \
 #     BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 #
@@ -126,7 +126,7 @@ terraform {
 # VERIFY STATE IN S3
 # ============================================================================
 #
-# aws s3 ls s3://ecokart-terraform-state-729403197965/development/
+# aws s3 ls s3://ecokart-terraform-state-805160323349/development/
 #
 # Du solltest sehen:
 # terraform.tfstate

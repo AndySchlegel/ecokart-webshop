@@ -27,7 +27,7 @@ aws ssm get-parameter --name "/ecokart/development/github-token" --region eu-nor
 ### 2. Browser Tabs vorbereiten
 
 Öffne folgende Tabs:
-1. GitHub Repository: `https://github.com/AndySchlegel/Ecokart-Webshop`
+1. GitHub Repository: `https://github.com/AndySchlegel/ecokart-webshop`
 2. AWS Console - Amplify: `https://eu-north-1.console.aws.amazon.com/amplify/`
 3. AWS Console - Lambda: `https://eu-north-1.console.aws.amazon.com/lambda/`
 4. AWS Console - DynamoDB: `https://eu-north-1.console.aws.amazon.com/dynamodb/`
@@ -585,7 +585,7 @@ curl https://xxx.execute-api.eu-north-1.amazonaws.com/Prod/products
 - ⚠️ WAF für API Gateway
 
 **Code verfügbar:**
-https://github.com/AndySchlegel/Ecokart-Webshop"
+https://github.com/AndySchlegel/ecokart-webshop"
 
 ---
 

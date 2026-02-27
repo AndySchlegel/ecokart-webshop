@@ -111,7 +111,7 @@ npm run build
 
 ```bash
 # 1. AWS SSO Login
-aws sso login --profile Teilnehmer-729403197965
+aws sso login --profile Teilnehmer-805160323349
 
 # 2. Terraform initialisieren
 cd terraform/examples/basic

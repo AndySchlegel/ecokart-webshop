@@ -21,7 +21,7 @@ aws_region   = "eu-central-1"
 # ----------------------------------------------------------------------------
 # GitHub Configuration
 # ----------------------------------------------------------------------------
-github_repository = "https://github.com/AndySchlegel/Ecokart-Webshop"
+github_repository = "https://github.com/AndySchlegel/ecokart-webshop"
 
 # ----------------------------------------------------------------------------
 # Custom Domain Configuration (Subdomain Delegation)
