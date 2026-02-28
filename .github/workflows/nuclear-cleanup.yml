@@ -198,6 +198,44 @@ jobs:
           done
         continue-on-error: true
 
+      - name: 🗑️ Revoke Lambda KMS Grants
+        run: |
+          echo "🗑️ Revoking KMS grants for Lambda functions..."
+          echo "   (Prevents stale grants after IAM role recreation)"
+
+          # Find the aws/lambda managed KMS key
+          KMS_KEY_ID=$(aws kms list-aliases \
+            --region ${{ env.AWS_REGION }} \
+            --query "Aliases[?AliasName=='alias/aws/lambda'].TargetKeyId" \
+            --output text)
+
+          if [ -z "$KMS_KEY_ID" ] || [ "$KMS_KEY_ID" = "None" ]; then
+            echo "   ℹ️  No aws/lambda KMS key found (OK if Lambda was never created)"
+          else
+            echo "   Found KMS key: $KMS_KEY_ID"
+
+            # Find and revoke grants for ecokart Lambda functions
+            GRANT_IDS=$(aws kms list-grants \
+              --key-id "$KMS_KEY_ID" \
+              --region ${{ env.AWS_REGION }} \
+              --query "Grants[?contains(Name, 'ecokart-${{ inputs.environment }}')].GrantId" \
+              --output text)
+
+            if [ -z "$GRANT_IDS" ] || [ "$GRANT_IDS" = "None" ]; then
+              echo "   ℹ️  No KMS grants to revoke"
+            else
+              for GRANT_ID in $GRANT_IDS; do
+                echo "   - Revoking grant: $GRANT_ID"
+                aws kms revoke-grant \
+                  --key-id "$KMS_KEY_ID" \
+                  --grant-id "$GRANT_ID" \
+                  --region ${{ env.AWS_REGION }} || true
+              done
+              echo "   ✅ KMS grants revoked"
+            fi
+          fi
+        continue-on-error: true
+
       - name: 🗑️ Delete Lambda Functions
         run: |
           echo "🗑️ Deleting Lambda functions for ${{ inputs.environment }}..."
@@ -607,12 +645,65 @@ jobs:
           echo "   → Next deploy will automatically seed database!"
         continue-on-error: true
 
+      - name: ✅ Verify Critical Deletions
+        run: |
+          echo "Verifying critical resources were actually deleted..."
+          FAILED=0
+
+          # Check Lambda
+          if aws lambda get-function --function-name "ecokart-${{ inputs.environment }}-api" --region ${{ env.AWS_REGION }} &>/dev/null; then
+            echo "FAIL: Lambda function still exists!"
+            FAILED=1
+          else
+            echo "OK: Lambda function deleted"
+          fi
+
+          # Check DynamoDB tables
+          for table in ecokart-products ecokart-users ecokart-orders ecokart-carts ecokart-wishlists; do
+            if aws dynamodb describe-table --table-name "$table" --region ${{ env.AWS_REGION }} &>/dev/null; then
+              echo "FAIL: DynamoDB table $table still exists!"
+              FAILED=1
+            else
+              echo "OK: $table deleted"
+            fi
+          done
+
+          # Check Cognito
+          POOLS=$(aws cognito-idp list-user-pools --max-results 60 --region ${{ env.AWS_REGION }} \
+            --query "UserPools[?contains(Name, 'ecokart-${{ inputs.environment }}')].Id" --output text 2>/dev/null || echo "")
+          if [ -n "$POOLS" ] && [ "$POOLS" != "None" ]; then
+            echo "FAIL: Cognito User Pool still exists: $POOLS"
+            FAILED=1
+          else
+            echo "OK: Cognito User Pools deleted"
+          fi
+
+          # Check API Gateway
+          APIS=$(aws apigateway get-rest-apis --region ${{ env.AWS_REGION }} \
+            --query "items[?contains(name, 'ecokart-${{ inputs.environment }}')].id" --output text 2>/dev/null || echo "")
+          if [ -n "$APIS" ] && [ "$APIS" != "None" ]; then
+            echo "FAIL: API Gateway still exists: $APIS"
+            FAILED=1
+          else
+            echo "OK: API Gateways deleted"
+          fi
+
+          if [ $FAILED -eq 1 ]; then
+            echo ""
+            echo "WARNING: Some resources were not deleted! Check the logs above."
+            echo "The deploy workflow may produce unexpected results."
+            exit 1
+          else
+            echo ""
+            echo "All critical resources verified as deleted."
+          fi
+
       - name: 📊 Cleanup Summary
         if: always()
         run: |
           echo ""
           echo "╔═══════════════════════════════════════════════════════════════════╗"
-          echo "║                    💥 NUCLEAR CLEANUP COMPLETE                    ║"
+          echo "║                    NUCLEAR CLEANUP COMPLETE                      ║"
           echo "╚═══════════════════════════════════════════════════════════════════╝"
           echo ""
           echo "Environment: ${{ inputs.environment }}"
