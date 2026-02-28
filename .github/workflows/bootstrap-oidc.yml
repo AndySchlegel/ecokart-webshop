@@ -27,7 +27,7 @@ on:
 env:
   AWS_REGION: eu-north-1
   ROLE_NAME: ecokart-github-actions-role
-  GITHUB_REPO: AndySchlegel/Ecokart-Webshop
+  GITHUB_REPO: AndySchlegel/ecokart-webshop
 
 jobs:
   bootstrap:
