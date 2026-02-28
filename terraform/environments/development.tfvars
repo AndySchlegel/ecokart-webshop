@@ -71,8 +71,8 @@ admin_amplify_build_command   = "npm run build"
 admin_amplify_monorepo_app_root = "admin-frontend"
 
 admin_basic_auth_enabled  = true
-admin_basic_auth_user     = "admin"
-admin_basic_auth_password = "admin1234"
+admin_basic_auth_user     = "admin-reviewer"
+admin_basic_auth_password = "Ekocartdashboard!"
 
 # ----------------------------------------------------------------------------
 # Cognito Konfiguration
