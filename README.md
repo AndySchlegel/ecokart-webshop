@@ -826,11 +826,11 @@ npm run dev
 | **Email Notifications** | Production-Ready | Resend (3k emails/month) |
 | **Inventory Management** | Working | Reserved/Available stock tracking |
 | **CloudWatch Monitoring** | Active | 9 alarms configured |
-| **Unit Tests** | 63 passing | 60-69% coverage |
-| **E2E Tests** | 63 passing | Jest + integration tests |
+| **Unit Tests** | 63 passing | Jest, 60-69% coverage |
+| **Integration Tests** | Available | Supertest + LocalStack (CI disabled) |
 | **AWS Monthly Cost** | <$15 | Cost-optimized architecture |
 | **Documentation** | Excellent | 39 documented learnings |
-| **Last Deploy** | 2. Jan 2026 | Develop branch |
+| **Last Deploy** | 28. Feb 2026 | Develop branch |
 
 ### Feature Completeness
 
@@ -1138,7 +1138,7 @@ Cloud Engineer | Full-Stack Developer | DevOps Enthusiast
 ---
 
 **Project Status:** Production-Ready (Phase 2 Complete!)
-**Last Updated:** 21. Januar 2026
+**Last Updated:** 28. February 2026
 **Environment:** Development (Deployed)
 **AWS Region:** eu-central-1 (Frankfurt)
 
