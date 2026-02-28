@@ -576,7 +576,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Basic Auth (Amplify):" >> $GITHUB_STEP_SUMMARY
           echo "- **Customer Frontend:** reviewer / Ecokart2026!" >> $GITHUB_STEP_SUMMARY
-          echo "- **Admin Frontend:** admin-reviewer / Ekocartdashboard!" >> $GITHUB_STEP_SUMMARY
+          echo "- **Admin Frontend:** admin-reviewer / Ecokartdashboard!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### App Login:" >> $GITHUB_STEP_SUMMARY
           echo "- No user accounts are pre-created." >> $GITHUB_STEP_SUMMARY
