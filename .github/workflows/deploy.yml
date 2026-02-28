@@ -54,18 +54,21 @@ jobs:
   # ==========================================================================
 
   tfsec:
-    name: 🔒 tfsec Security Scan
+    name: 🔒 tfsec Security Scan (Trivy)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run tfsec
-        uses: aquasecurity/tfsec-action@v1.0.3
+      - name: Run Trivy (tfsec replacement)
+        uses: aquasecurity/trivy-action@master
         with:
-          working_directory: terraform
-          soft_fail: true  # Warn but don't block (change to false to block)
-          additional_args: --minimum-severity MEDIUM --format sarif --out results.sarif
+          scan-type: config
+          scan-ref: terraform
+          format: sarif
+          output: results.sarif
+          severity: MEDIUM,HIGH,CRITICAL
+          exit-code: 0
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v3
@@ -77,8 +80,8 @@ jobs:
       - name: tfsec Summary
         if: always()
         run: |
-          echo "### 🔒 tfsec Security Scan Results" >> $GITHUB_STEP_SUMMARY
-          echo "Terraform security scan completed. Check the Security tab for detailed findings." >> $GITHUB_STEP_SUMMARY
+          echo "### 🔒 Trivy IaC Security Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "Terraform security scan completed (via Trivy, tfsec successor). Check the Security tab for findings." >> $GITHUB_STEP_SUMMARY
 
   checkov:
     name: 🛡️ Checkov Policy Scan
